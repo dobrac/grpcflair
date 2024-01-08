@@ -1,15 +1,33 @@
 "use client";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import Image from "next/image";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { useSourceContext } from "@/contexts/SourceContext";
+import { DEFAULT_URL } from "@/types/constants";
 
 export default function Navbar() {
-  const [search, setSearch] = useState("");
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [search, setSearch] = useState(DEFAULT_URL);
+
+  const { setContext } = useSourceContext();
+
+  const fetchUrl = async (url: string) => {
+    const content = await fetch(url).then((r) => r.json());
+    setContext(content);
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // TODO load url
     console.log("search", search);
+
+    await fetchUrl(search);
   };
+
+  useEffect(() => {
+    if (search) {
+      fetchUrl(search);
+    }
+  }, []);
 
   return (
     <nav

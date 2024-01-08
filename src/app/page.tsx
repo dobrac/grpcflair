@@ -1,10 +1,11 @@
 import Endpoint from "@/components/Endpoint";
+import { Form } from "react-bootstrap";
 
 export default function Home() {
-  const title = "Swagger Petstore";
+  const title = "gRPCFlair Petstore";
   const description =
-    "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.";
-  const url = "https://petstore.swagger.io/v2/swagger.json";
+    "This is a sample server Petstore server. You can find out more about gRPCFlair at https://grpcflair.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.";
+  const url = "https://petstore.grpcflair.io/v2/grpcflair.json";
 
   return (
     <main>
@@ -18,7 +19,20 @@ export default function Home() {
         </div>
       </div>
       <div className="container py-3">
-        <Endpoint />
+        <div className="d-inline-block">
+          Method
+          <Form.Select aria-label="Method selection">
+            <option value="web">grpc-web</option>
+            <option value="server" disabled={true}>
+              grpc-server (NOT IMPLEMENTED)
+            </option>
+          </Form.Select>
+        </div>
+      </div>
+      <div className="py-3" style={{ backgroundColor: "whitesmoke" }}>
+        <div className="container">
+          <Endpoint />
+        </div>
       </div>
     </main>
   );

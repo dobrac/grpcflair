@@ -1,5 +1,13 @@
 # grpcflair
 
+## json Generation
+docker run --rm \                                                                                                                                                                                       1 х
+-v $(pwd)/doc:/out \
+-v $(pwd)/proto:/protos \
+pseudomuto/protoc-gen-doc --doc_opt=json,helloworld.json *.proto
+
+## Introduction
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
