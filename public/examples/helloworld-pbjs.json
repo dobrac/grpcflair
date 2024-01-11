@@ -1,0 +1,49 @@
+{
+  "nested": {
+    "helloworld": {
+      "nested": {
+        "Greeter": {
+          "methods": {
+            "SayHello": {
+              "requestType": "HelloRequest",
+              "responseType": "HelloReply"
+            },
+            "SayRepeatHello": {
+              "requestType": "RepeatHelloRequest",
+              "responseType": "HelloReply",
+              "responseStream": true
+            }
+          }
+        },
+        "HelloRequest": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        },
+        "RepeatHelloRequest": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1
+            },
+            "count": {
+              "type": "int32",
+              "id": 2
+            }
+          }
+        },
+        "HelloReply": {
+          "fields": {
+            "message": {
+              "type": "string",
+              "id": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

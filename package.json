@@ -6,24 +6,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve@latest out",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generateExample": "cd ./public/examples; pbjs -t json ./proto/helloworld.proto > helloworld-pbjs.json"
   },
   "dependencies": {
     "bootstrap": "^5.3.2",
+    "grpc-web": "^1.5.0",
     "next": "14.0.4",
+    "protobufjs": "^7.2.5",
     "react": "^18",
     "react-bootstrap": "^2.9.2",
     "react-dom": "^18",
     "sass": "^1.69.7"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/long": "^5.0.0",
+    "@types/node": "^20.10.8",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "3.1.1",
+    "proto3-json-serializer": "^2.0.0",
+    "protobufjs-cli": "^1.1.2",
     "typescript": "^5"
   }
 }

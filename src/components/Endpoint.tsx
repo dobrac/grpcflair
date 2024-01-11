@@ -1,15 +1,22 @@
 "use client";
 import { useSourceContext } from "@/contexts/SourceContext";
 import Loading from "@/components/Loading";
+import { Button } from "react-bootstrap";
+import { run } from "@/types/grpc-web";
 
 export default function Endpoint() {
   const { context } = useSourceContext();
+
+  const runTest = () => {
+    run();
+  };
 
   if (!context) return <Loading />;
 
   return (
     <div>
       Endpoint:
+      <Button onClick={runTest}>runTest</Button>
       {context.files.map((file) => (
         <div key={file.name}>
           <h2>{file.name}</h2>
