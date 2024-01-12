@@ -1,4 +1,4 @@
-import Endpoint from "@/components/Endpoint";
+import Endpoints from "@/components/Endpoints";
 import { Form } from "react-bootstrap";
 
 export default function Home() {
@@ -31,7 +31,7 @@ export default function Home() {
       </div>
       <div className="py-3" style={{ backgroundColor: "whitesmoke" }}>
         <div className="container">
-          <Endpoint />
+          <Endpoints />
         </div>
       </div>
     </main>

@@ -1,6 +1,5 @@
 import protobuf from "protobufjs";
 import { GrpcWebClientBase, MethodDescriptor, MethodType } from "grpc-web";
-import { getTypesFromContext } from "@/types/protobufjs";
 
 class DummyRPCType {
   constructor(...args: unknown[]) {}
@@ -12,11 +11,11 @@ export function makeGrpcCall<MessageData extends object = object>(
   typeEncode: protobuf.Type,
   typeDecode: protobuf.Type,
   message: protobuf.Message,
-  callback: (
+  callback?: (
     err: Error | null,
     response: protobuf.Message<MessageData>,
   ) => void,
-) {
+): Promise<protobuf.Message<MessageData>> {
   const hostname = "http://localhost:8080";
   const client = new GrpcWebClientBase({ format: "text" });
 
@@ -25,27 +24,36 @@ export function makeGrpcCall<MessageData extends object = object>(
     service.fullName.replace(".", "")
   }/${method.name}`;
 
-  client.rpcCall(
-    methodPath,
-    // Ignored, using protobufjs directly
-    {},
-    {},
-    new MethodDescriptor(
-      method.name,
-      MethodType.UNARY,
+  return new Promise((resolve, reject) => {
+    client.rpcCall(
+      methodPath,
       // Ignored, using protobufjs directly
-      DummyRPCType,
-      // Ignored, using protobufjs directly
-      DummyRPCType,
-      () => {
-        return typeEncode.encode(message).finish();
+      {},
+      {},
+      new MethodDescriptor(
+        method.name,
+        MethodType.UNARY,
+        // Ignored, using protobufjs directly
+        DummyRPCType,
+        // Ignored, using protobufjs directly
+        DummyRPCType,
+        () => {
+          return typeEncode.encode(message).finish();
+        },
+        (bytes: Uint8Array) => {
+          return typeDecode.decode(bytes);
+        },
+      ),
+      (err, response: protobuf.Message<MessageData>) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(response);
+        }
+        callback?.(err, response);
       },
-      (bytes: Uint8Array) => {
-        return typeDecode.decode(bytes);
-      },
-    ),
-    callback,
-  );
+    );
+  });
 }
 
 export async function run(root: protobuf.Root) {

@@ -1,12 +1,6 @@
 # grpcflair
 
 ## json Generation
-docker run --rm \
--v $(pwd)/doc:/out \
--v $(pwd)/proto:/protos \
-pseudomuto/protoc-gen-doc --doc_opt=json,helloworld.json *.proto
-
-
 cd ./public/examples; pbjs -t json ./proto/helloworld.proto > helloworld-pbjs.json; cd ../..
 
 
