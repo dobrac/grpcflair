@@ -1,7 +1,7 @@
 # grpcflair
 
 ## json Generation
-docker run --rm \                                                                                                                                                                                       1 х
+docker run --rm \
 -v $(pwd)/doc:/out \
 -v $(pwd)/proto:/protos \
 pseudomuto/protoc-gen-doc --doc_opt=json,helloworld.json *.proto

@@ -6,42 +6,52 @@
           "methods": {
             "SayHello": {
               "requestType": "HelloRequest",
-              "responseType": "HelloReply"
+              "responseType": "HelloReply",
+              "comment": "Hello, how are you?"
             },
             "SayRepeatHello": {
               "requestType": "RepeatHelloRequest",
               "responseType": "HelloReply",
-              "responseStream": true
+              "responseStream": true,
+              "comment": null
             }
-          }
+          },
+          "comment": null
         },
         "HelloRequest": {
           "fields": {
             "name": {
               "type": "string",
-              "id": 1
+              "id": 1,
+              "comment": "Oj, how are you?"
             }
-          }
+          },
+          "comment": "Hello, how are you?"
         },
         "RepeatHelloRequest": {
           "fields": {
             "name": {
               "type": "string",
-              "id": 1
+              "id": 1,
+              "comment": null
             },
             "count": {
               "type": "int32",
-              "id": 2
+              "id": 2,
+              "comment": null
             }
-          }
+          },
+          "comment": null
         },
         "HelloReply": {
           "fields": {
             "message": {
               "type": "string",
-              "id": 1
+              "id": 1,
+              "comment": null
             }
-          }
+          },
+          "comment": null
         }
       }
     }
