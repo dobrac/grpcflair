@@ -1,10 +1,10 @@
 "use client";
 import { createContext, useContext, useMemo, useState } from "react";
-import { DocContext } from "@/types/doc";
+import { Root } from "protobufjs";
 
 interface SourceContextData {
-  context?: DocContext;
-  setContext: (context: DocContext) => void;
+  context?: Root;
+  setContext: (context: Root) => void;
 }
 
 const SourceContext = createContext<SourceContextData>({
@@ -21,7 +21,7 @@ export default function SourceContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [context, setContext] = useState<DocContext>();
+  const [context, setContext] = useState<Root>();
 
   const contextValue = useMemo(
     () => ({

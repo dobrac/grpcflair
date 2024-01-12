@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 import { useSourceContext } from "@/contexts/SourceContext";
 import { DEFAULT_URL } from "@/types/constants";
+import protobuf from "protobufjs";
 
 export default function Navbar() {
   const [search, setSearch] = useState(DEFAULT_URL);
@@ -11,14 +12,13 @@ export default function Navbar() {
   const { setContext } = useSourceContext();
 
   const fetchUrl = async (url: string) => {
-    const content = await fetch(url).then((r) => r.json());
+    const source = await fetch(url).then((res) => res.json());
+    const content = protobuf.Root.fromJSON(source);
     setContext(content);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // TODO load url
-    console.log("search", search);
 
     await fetchUrl(search);
   };

@@ -1,102 +1,73 @@
 import protobuf from "protobufjs";
 import { GrpcWebClientBase, MethodDescriptor, MethodType } from "grpc-web";
-
-function isNamespaceBase(
-  current: protobuf.NamespaceBase | protobuf.ReflectionObject,
-): current is protobuf.NamespaceBase {
-  return (current as protobuf.NamespaceBase).nestedArray !== undefined;
-}
-
-// Source: https://github.com/protobufjs/protobuf.js/blob/master/examples/traverse-types.js
-function traverseTypes(
-  current: protobuf.NamespaceBase | protobuf.ReflectionObject,
-  fn: (type: protobuf.Type) => void,
-) {
-  if (current instanceof protobuf.Type) {
-    // and/or protobuf.Enum, protobuf.Service etc.
-    fn(current);
-  }
-  if (isNamespaceBase(current)) {
-    current.nestedArray.forEach(function (nested) {
-      traverseTypes(nested, fn);
-    });
-  }
-}
+import { getTypesFromContext } from "@/types/protobufjs";
 
 class DummyRPCType {
   constructor(...args: unknown[]) {}
 }
 
-/*
-Plan:
-- Use proto files directly
-- Convert structure to own format, including comments
- */
-
-export async function run() {
-  const root = await protobuf.load("/examples/helloworld-pbjs.json");
-  if (!root) throw new Error("No root");
-
-  traverseTypes(root, function (type) {
-    console.log(
-      type.constructor.name +
-        " " +
-        type.name +
-        "\n  fully qualified name: " +
-        type.fullName +
-        "\n  defined in: " +
-        type.filename +
-        "\n  parent: " +
-        type.parent +
-        " in " +
-        type.parent?.filename,
-    );
-    // Obtain a message type
-    const Type = root.lookupType(type.fullName);
-    console.log("Comment:", Type.comment);
-  });
-
+export function makeGrpcCall<MessageData extends object = object>(
+  service: protobuf.Service,
+  method: protobuf.Method,
+  typeEncode: protobuf.Type,
+  typeDecode: protobuf.Type,
+  message: protobuf.Message,
+  callback: (
+    err: Error | null,
+    response: protobuf.Message<MessageData>,
+  ) => void,
+) {
   const hostname = "http://localhost:8080";
   const client = new GrpcWebClientBase({ format: "text" });
 
-  const makeGrpcCall = function <MessageData extends object = object>(
-    service: protobuf.Service,
-    method: protobuf.Method,
-    typeEncode: protobuf.Type,
-    typeDecode: protobuf.Type,
-    message: protobuf.Message,
-    callback: (
-      err: Error | null,
-      response: protobuf.Message<MessageData>,
-    ) => void,
-  ) {
-    const methodPath = `${hostname}/${
-      // Replace starting dot "."
-      service.fullName.replace(".", "")
-    }/${method.name}`;
+  const methodPath = `${hostname}/${
+    // Replace starting dot "."
+    service.fullName.replace(".", "")
+  }/${method.name}`;
 
-    client.rpcCall(
-      methodPath,
+  client.rpcCall(
+    methodPath,
+    // Ignored, using protobufjs directly
+    {},
+    {},
+    new MethodDescriptor(
+      method.name,
+      MethodType.UNARY,
       // Ignored, using protobufjs directly
-      {},
-      {},
-      new MethodDescriptor(
-        method.name,
-        MethodType.UNARY,
-        // Ignored, using protobufjs directly
-        DummyRPCType,
-        // Ignored, using protobufjs directly
-        DummyRPCType,
-        () => {
-          return typeEncode.encode(message).finish();
-        },
-        (bytes: Uint8Array) => {
-          return typeDecode.decode(bytes);
-        },
-      ),
-      callback,
-    );
-  };
+      DummyRPCType,
+      // Ignored, using protobufjs directly
+      DummyRPCType,
+      () => {
+        return typeEncode.encode(message).finish();
+      },
+      (bytes: Uint8Array) => {
+        return typeDecode.decode(bytes);
+      },
+    ),
+    callback,
+  );
+}
+
+export async function run(root: protobuf.Root) {
+  // const types = getTypesFromContext(root);
+  // types.forEach((type) => {
+  //   console.log(
+  //     type.constructor.name +
+  //       " " +
+  //       type.name +
+  //       "\n  fully qualified name: " +
+  //       type.fullName +
+  //       "\n  defined in: " +
+  //       type.filename +
+  //       "\n  parent: " +
+  //       type.parent +
+  //       " in " +
+  //       type.parent?.filename,
+  //   );
+  //   // Obtain a message type
+  //   const Type = root.lookupType(type.fullName);
+  //   console.log("Comment:", Type.comment);
+  // });
 
   /*const greeter = GreeterService.create(rpcImpl);
     greeter.sayHello({ name: "you" }, function (err, response) {
