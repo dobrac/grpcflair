@@ -1,0 +1,13 @@
+diff --git a/node_modules/protobufjs/src/enum.js b/node_modules/protobufjs/src/enum.js
+index 1c01620..730b8e4 100644
+--- a/node_modules/protobufjs/src/enum.js
++++ b/node_modules/protobufjs/src/enum.js
+@@ -87,7 +87,7 @@ function Enum(name, values, options, comment, comments, valuesOptions) {
+  * @throws {TypeError} If arguments are invalid
+  */
+ Enum.fromJSON = function fromJSON(name, json) {
+-    var enm = new Enum(name, json.values, json.options, json.comment, json.comments);
++    var enm = new Enum(name, json.values, json.options, json.comment, json.comments, json.valuesOptions);
+     enm.reserved = json.reserved;
+     return enm;
+ };
