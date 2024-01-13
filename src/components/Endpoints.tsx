@@ -1,17 +1,20 @@
 "use client";
 import { useSourceContext } from "@/contexts/SourceContext";
 import {
+  getEnumsFromContext,
   getServicesFromContext,
   getTypesFromContext,
 } from "@/types/protobufjs";
 import Service from "@/components/Service";
 import Type from "@/components/Type";
+import EnumType from "@/components/EnumType";
 
 export default function Endpoints() {
   const { context } = useSourceContext();
 
   const services = context ? getServicesFromContext(context) : [];
   const types = context ? getTypesFromContext(context) : [];
+  const enums = context ? getEnumsFromContext(context) : [];
 
   return (
     <div>
@@ -29,6 +32,17 @@ export default function Endpoints() {
         <div className="d-grid gap-2">
           {types.map((type) => (
             <Type key={type.fullName} type={type} />
+          ))}
+        </div>
+        {types.length === 0 && (
+          <div className="text-secondary fst-italic">No types found</div>
+        )}
+      </div>
+      <div className="mt-5">
+        <h4>Enums</h4>
+        <div className="d-grid gap-2">
+          {enums.map((enumType) => (
+            <EnumType key={enumType.fullName} enumType={enumType} />
           ))}
         </div>
         {types.length === 0 && (

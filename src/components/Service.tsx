@@ -12,8 +12,6 @@ export interface ServiceProps {
 export default function Service({ service }: ServiceProps) {
   const [open, setOpen] = useState(true);
 
-  console.log(open);
-
   return (
     <div className="d-grid pb-1">
       <button

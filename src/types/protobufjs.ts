@@ -18,6 +18,14 @@ export function getTypesFromContext(context: protobuf.Root): protobuf.Type[] {
   return values;
 }
 
+export function getEnumsFromContext(context: protobuf.Root): protobuf.Enum[] {
+  const values: protobuf.Enum[] = [];
+  traverseStructure(context, isEnum, (type) => {
+    values.push(type);
+  });
+  return values;
+}
+
 function isNamespaceBase(
   current: protobuf.NamespaceBase | protobuf.ReflectionObject,
 ): current is protobuf.NamespaceBase {
@@ -33,6 +41,10 @@ type ProtobufJsType =
 
 function isType(value: ProtobufJsType): value is protobuf.Type {
   return value instanceof protobuf.Type;
+}
+
+function isEnum(value: ProtobufJsType): value is protobuf.Enum {
+  return value instanceof protobuf.Enum;
 }
 
 function isService(value: ProtobufJsType): value is protobuf.Service {
