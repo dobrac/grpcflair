@@ -18,12 +18,28 @@
           },
           "comment": null
         },
+        "GreeterSecond": {
+          "methods": {
+            "SayHello": {
+              "requestType": "HelloRequest",
+              "responseType": "HelloReply",
+              "comment": "Hello, how are you?"
+            },
+            "SayRepeatHello": {
+              "requestType": "RepeatHelloRequest",
+              "responseType": "HelloReply",
+              "responseStream": true,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
         "HelloRequest": {
           "fields": {
             "name": {
               "type": "string",
               "id": 1,
-              "comment": "Name of the being asking for a greeting"
+              "comment": "Oj, how are you?"
             }
           },
           "comment": "Hello, how are you?"
@@ -48,7 +64,7 @@
             "message": {
               "type": "string",
               "id": 1,
-              "comment": "Returned message"
+              "comment": null
             }
           },
           "comment": null

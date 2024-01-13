@@ -26,6 +26,16 @@ service Greeter {
   rpc SayRepeatHello(RepeatHelloRequest) returns (stream HelloReply);
 }
 
+service GreeterSecond {
+  /**
+  Hello, how are you?
+   */
+  rpc SayHello(HelloRequest) returns (HelloReply);
+  /// unary call
+  // server streaming call
+  rpc SayRepeatHello(RepeatHelloRequest) returns (stream HelloReply);
+}
+
 /**
 Hello, how are you?
  */

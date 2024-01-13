@@ -1,3 +1,12 @@
 $primary: green;
 
 @import "~bootstrap/scss/bootstrap";
+
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.hover-bg-darken:hover {
+  background-color: lightgray;
+}

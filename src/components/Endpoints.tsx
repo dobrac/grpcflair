@@ -4,7 +4,8 @@ import {
   getServicesFromContext,
   getTypesFromContext,
 } from "@/types/protobufjs";
-import Method from "@/components/Method";
+import Service from "@/components/Service";
+import Type from "@/components/Type";
 
 export default function Endpoints() {
   const { context } = useSourceContext();
@@ -15,39 +16,25 @@ export default function Endpoints() {
   return (
     <div>
       <div>
-        <h3>Services</h3>
+        <h4>Services</h4>
         {services.map((service) => (
-          <div key={service.name} className="card">
-            <h3>{service.name}</h3>
-            <div>
-              {Object.values(service.methods).map((method) => (
-                <Method key={method.name} service={service} method={method} />
-              ))}
-            </div>
-          </div>
+          <Service key={service.fullName} service={service} />
         ))}
+        {services.length === 0 && (
+          <div className="text-secondary fst-italic">No services found</div>
+        )}
       </div>
       <div className="mt-5">
-        <h3>Types</h3>
-        {types.map((type) => (
-          <div key={type.name} className="card">
-            <h4>{type.name}</h4>
-            <div className="card ps-3">
-              {Object.values(type.fields).map((field) => (
-                <div key={field.name}>
-                  <div className="text-secondary fst-italic">
-                    {field.comment}
-                  </div>
-                  <div>
-                    {field.name}: {field.type} (id: {field.id})
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+        <h4>Types</h4>
+        <div className="d-grid gap-2">
+          {types.map((type) => (
+            <Type key={type.fullName} type={type} />
+          ))}
+        </div>
+        {types.length === 0 && (
+          <div className="text-secondary fst-italic">No types found</div>
+        )}
       </div>
-      {/*<pre>{JSON.stringify(context, null, 2)}</pre>*/}
     </div>
   );
 }
