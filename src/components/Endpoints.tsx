@@ -1,7 +1,5 @@
 "use client";
 import { useSourceContext } from "@/contexts/SourceContext";
-import Loading from "@/components/Loading";
-import { run } from "@/types/grpc-web";
 import {
   getServicesFromContext,
   getTypesFromContext,
@@ -13,13 +11,6 @@ export default function Endpoints() {
 
   const services = context ? getServicesFromContext(context) : [];
   const types = context ? getTypesFromContext(context) : [];
-
-  const runTest = () => {
-    if (!context) return;
-    run(context);
-  };
-
-  if (!context) return <Loading />;
 
   return (
     <div>

@@ -1,7 +1,5 @@
-import { useSourceContext } from "@/contexts/SourceContext";
-import Loading from "@/components/Loading";
 import { Button, Form } from "react-bootstrap";
-import { makeGrpcCall, run } from "@/types/grpc-web";
+import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/types/grpc-web";
 import protobuf from "protobufjs";
 import { useState } from "react";
 
@@ -11,17 +9,9 @@ export interface ServiceProps {
 }
 
 export default function Method({ service, method }: ServiceProps) {
-  const { context } = useSourceContext();
-  const [processing, setProcessing] = useState<boolean>(false);
-  const [fieldValue, setFieldValue] = useState<string>("");
-  const [response, setResponse] = useState<unknown | undefined>(undefined);
-
-  const runTest = () => {
-    if (!context) return;
-    run(context);
-  };
-
-  if (!context) return <Loading />;
+  const [processing, setProcessing] = useState<(() => void) | null>(null);
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
+  const [response, setResponse] = useState<unknown[]>([]);
 
   const RequestType = service.lookupType(
     // TODO: Include full path?
@@ -36,9 +26,6 @@ export default function Method({ service, method }: ServiceProps) {
     <div key={method.name}>
       <div className="d-flex gap-3 align-items-center my-2">
         <h4 className="m-0">{method.name}</h4>
-        <Button size="sm" onClick={runTest}>
-          runTest
-        </Button>
       </div>
       <div className="card ps-4">
         <div>
@@ -53,8 +40,13 @@ export default function Method({ service, method }: ServiceProps) {
                 <div>
                   <Form.Control
                     as="input"
-                    onChange={(e) => setFieldValue(e.target.value)}
-                    value={fieldValue}
+                    onChange={(e) =>
+                      setFieldValues((fieldValues) => ({
+                        ...fieldValues,
+                        [field.name]: e.target.value,
+                      }))
+                    }
+                    value={fieldValues[field.name] ?? ""}
                   />
                 </div>
               </div>
@@ -63,10 +55,11 @@ export default function Method({ service, method }: ServiceProps) {
           <div className="mt-2">
             <Button
               size="sm"
-              disabled={processing}
+              disabled={!!processing}
               onClick={async () => {
                 try {
-                  setProcessing(true);
+                  setProcessing(() => {});
+                  setResponse([]);
 
                   // TODO: Support request streaming
                   if (method.requestStream) {
@@ -75,34 +68,78 @@ export default function Method({ service, method }: ServiceProps) {
                     );
                   }
 
-                  const message = RequestType.create({
-                    [Object.values(RequestType.fields)[0].name]: fieldValue,
-                  });
+                  const message = RequestType.create(fieldValues);
 
-                  const response = await makeGrpcCall(
-                    service,
-                    method,
-                    RequestType,
-                    ResponseType,
-                    message,
-                  );
+                  if (method.responseStream) {
+                    await new Promise<void>((resolve, reject) => {
+                      const stream = makeGrpcServerStreamingCall(
+                        service,
+                        method,
+                        RequestType,
+                        ResponseType,
+                        message,
+                      );
+                      const onCancel = () => {
+                        stream.cancel();
+                        reject(new Error("Cancelled"));
+                      };
 
-                  setResponse(ResponseType.toObject(response, {}));
+                      setProcessing((processing) => {
+                        return onCancel;
+                      });
+
+                      stream.on("data", (data) => {
+                        const response = ResponseType.toObject(data, {});
+                        setResponse((responses) => [...responses, response]);
+                      });
+
+                      stream.on("error", (error) => {
+                        console.log("error", error);
+                        reject(error);
+                      });
+
+                      stream.on("end", () => {
+                        resolve();
+                      });
+                    });
+                  } else {
+                    const response = await makeGrpcCall(
+                      service,
+                      method,
+                      RequestType,
+                      ResponseType,
+                      message,
+                    );
+
+                    setResponse([ResponseType.toObject(response, {})]);
+                  }
+                } catch (e) {
+                  console.error(e);
                 } finally {
-                  setProcessing(false);
+                  setProcessing(null);
                 }
               }}
             >
               Call
             </Button>
+            {!!processing && (
+              <Button
+                size="sm"
+                variant="danger"
+                onClick={() => {
+                  processing();
+                }}
+              >
+                Cancel
+              </Button>
+            )}
           </div>
         </div>
         <div className="mt-3">
           <h5>Response</h5>
+          <div>Processing: {(!!processing).toString()}</div>
           <pre>
-            {!processing && response
-              ? JSON.stringify(response, null, 2)
-              : "No response yet"}
+            {response ? JSON.stringify(response, null, 2) : "No response yet"}
           </pre>
           <div>Type: {method.responseType}</div>
           <div>Streaming: {(method.responseStream ?? false).toString()}</div>
