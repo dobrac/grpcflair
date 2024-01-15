@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Button,
-  Collapse,
-  Form,
-  Nav,
-  ProgressBar,
-  Table,
-} from "react-bootstrap";
+import { Badge, Button, Collapse, ProgressBar, Spinner } from "react-bootstrap";
 import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/types/grpc-web";
 import protobuf from "protobufjs";
 import { useState } from "react";
@@ -22,28 +14,49 @@ import InputFieldValue from "@/components/parts/inputfields/InputFieldValue";
 import { RpcError } from "grpc-web";
 import { useSourceContext } from "@/contexts/SourceContext";
 import InputFieldName from "@/components/parts/inputfields/InputFieldName";
+import PCancelable, { CancelError } from "p-cancelable";
+
+enum RequestType {
+  UNARY,
+  CLIENT_STREAMING,
+  SERVER_STREAMING,
+  BIDIRECTIONAL_STREAMING,
+}
+
+function getRequestType(method: protobuf.Method): RequestType {
+  if (method.requestStream && method.responseStream) {
+    return RequestType.BIDIRECTIONAL_STREAMING;
+  } else if (method.requestStream) {
+    return RequestType.CLIENT_STREAMING;
+  } else if (method.responseStream) {
+    return RequestType.SERVER_STREAMING;
+  } else {
+    return RequestType.UNARY;
+  }
+}
 
 function getColorFromMethod(method: protobuf.Method) {
-  if (method.requestStream && method.responseStream) {
-    return "danger";
-  } else if (method.requestStream) {
-    return "danger";
-  } else if (method.responseStream) {
-    return "dark";
-  } else {
-    return "success";
+  switch (getRequestType(method)) {
+    case RequestType.BIDIRECTIONAL_STREAMING:
+    case RequestType.CLIENT_STREAMING:
+      return "danger";
+    case RequestType.SERVER_STREAMING:
+      return "dark";
+    case RequestType.UNARY:
+      return "success";
   }
 }
 
 function getMethodType(method: protobuf.Method) {
-  if (method.requestStream && method.responseStream) {
-    return "Bi-directional streaming";
-  } else if (method.requestStream) {
-    return "Client streaming";
-  } else if (method.responseStream) {
-    return "Server streaming";
-  } else {
-    return "Unary";
+  switch (getRequestType(method)) {
+    case RequestType.BIDIRECTIONAL_STREAMING:
+      return "Bi-directional streaming";
+    case RequestType.CLIENT_STREAMING:
+      return "Client streaming";
+    case RequestType.SERVER_STREAMING:
+      return "Server streaming";
+    case RequestType.UNARY:
+      return "Unary";
   }
 }
 
@@ -57,7 +70,9 @@ export default function Method({ service, method }: ServiceProps) {
 
   const { hostname } = useSourceContext();
   const [open, setOpen] = useState(false);
-  const [processing, setProcessing] = useState<(() => void) | null>(null);
+  const [cancelFunction, setCancelFunction] = useState<(() => void) | null>(
+    null,
+  );
   const [error, setError] = useState<Error | null>(null);
 
   const RequestType = service.lookupType(
@@ -76,54 +91,12 @@ export default function Method({ service, method }: ServiceProps) {
     useState<Record<string, unknown>>(defaultRequestData);
   const [response, setResponse] = useState<unknown[]>([]);
 
-  const handleExecute = async () => {
-    try {
-      setProcessing(() => {});
-      setResponse([]);
-      setError(null);
+  const processing = cancelFunction !== null;
 
-      // TODO: Support request streaming
-      if (method.requestStream) {
-        throw new Error(
-          "Request streaming is not supported yet (client or bi-directional)",
-        );
-      }
-
-      const message = RequestType.create(requestData);
-
-      if (method.responseStream) {
-        await new Promise<void>((resolve, reject) => {
-          const stream = makeGrpcServerStreamingCall(
-            hostname,
-            service,
-            method,
-            RequestType,
-            ResponseType,
-            message,
-          );
-          const onCancel = () => {
-            stream.cancel();
-            reject(new Error("Cancelled"));
-          };
-
-          setProcessing(onCancel);
-
-          stream.on("data", (data) => {
-            const response = ResponseType.toObject(data, {});
-            setResponse((responses) => [...responses, response]);
-          });
-
-          stream.on("error", (error) => {
-            console.log("error", error);
-            reject(error);
-          });
-
-          stream.on("end", () => {
-            resolve();
-          });
-        });
-      } else {
-        const response = await makeGrpcCall(
+  const handleUnaryRequest = async (message: protobuf.Message<{}>) => {
+    const cancellablePromise = new PCancelable<protobuf.Message<{}>>(
+      (resolve, reject, onCancel) => {
+        const promise = makeGrpcCall(
           hostname,
           service,
           method,
@@ -132,15 +105,84 @@ export default function Method({ service, method }: ServiceProps) {
           message,
         );
 
-        setResponse([ResponseType.toObject(response, {})]);
+        promise.then(resolve).catch(reject);
+      },
+    );
+
+    const onCancel = () => {
+      cancellablePromise.cancel();
+    };
+    setCancelFunction(() => onCancel);
+
+    const response = await cancellablePromise;
+
+    setResponse([ResponseType.toObject(response, {})]);
+  };
+
+  const handleServerStreaming = (message: protobuf.Message<{}>) => {
+    return new Promise<void>((resolve, reject) => {
+      const stream = makeGrpcServerStreamingCall(
+        hostname,
+        service,
+        method,
+        RequestType,
+        ResponseType,
+        message,
+      );
+      const onCancel = () => {
+        stream.cancel();
+        reject(new CancelError("Canceled"));
+      };
+
+      setCancelFunction(() => onCancel);
+
+      stream.on("data", (data) => {
+        const response = ResponseType.toObject(data, {});
+        setResponse((responses) => [...responses, response]);
+      });
+
+      stream.on("error", (error) => {
+        reject(error);
+      });
+
+      stream.on("end", () => {
+        resolve();
+      });
+    });
+  };
+
+  const handleExecute = async () => {
+    try {
+      setCancelFunction(() => {});
+      setResponse([]);
+      setError(null);
+
+      const message = RequestType.create(requestData);
+
+      // TODO: Support request streaming
+      if (method.requestStream) {
+        throw new Error(
+          "Request streaming is not supported yet (client or bi-directional)",
+        );
+      }
+
+      if (method.responseStream) {
+        await handleServerStreaming(message);
+      }
+
+      if (!method.requestStream && !method.responseStream) {
+        await handleUnaryRequest(message);
       }
     } catch (e) {
       console.error(e);
       if (e instanceof Error) {
         setError(e);
       }
+      if (e instanceof CancelError) {
+        setError(new Error("Request canceled"));
+      }
     } finally {
-      setProcessing(null);
+      setCancelFunction(null);
     }
   };
 
@@ -220,15 +262,19 @@ export default function Method({ service, method }: ServiceProps) {
               </tbody>
             </table>
             <div className="mt-2 d-grid gap-1">
-              <Button size="sm" disabled={!!processing} onClick={handleExecute}>
+              <Button size="sm" disabled={processing} onClick={handleExecute}>
+                <Spinner
+                  size="sm"
+                  className={processing ? "visible" : "visually-hidden"}
+                />{" "}
                 Execute
               </Button>
-              {!!processing && (
+              {processing && (
                 <Button
                   size="sm"
                   variant="danger"
                   onClick={() => {
-                    processing();
+                    cancelFunction();
                   }}
                 >
                   Cancel
@@ -258,7 +304,7 @@ export default function Method({ service, method }: ServiceProps) {
               {!response.length && !error && (
                 <span className="small">No response yet</span>
               )}
-              {!!processing && <ProgressBar animated now={100} />}
+              {processing && <ProgressBar animated now={100} />}
               {!!response.length && (
                 <div className="d-grid gap-2">
                   {response.map((response, index) => (

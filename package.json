@@ -19,6 +19,7 @@
     "grpc-web": "^1.5.0",
     "json-colorizer": "^2.2.2",
     "next": "14.0.4",
+    "p-cancelable": "^4.0.1",
     "patch-package": "^8.0.0",
     "protobufjs": "^7.2.5",
     "react": "^18",
