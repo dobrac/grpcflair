@@ -1,31 +1,21 @@
 import protobuf, { MapField } from "protobufjs";
-import Type from "@/components/Type";
+import Type from "@/components/parts/Type";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
-import EnumType from "@/components/EnumType";
+import EnumType from "@/components/parts/EnumType";
 
 export interface FieldProps {
   field: protobuf.Field;
 }
 
 export default function Field({ field }: FieldProps) {
+  field.resolve();
+
   const [open, setOpen] = useState(false);
 
-  let subType;
-  try {
-    subType = field.root.lookupType(field.type);
-  } catch (e) {
-    // Ignore, type not found
-  }
+  let resolvedType = field.resolvedType;
 
-  let subEnumType;
-  try {
-    subEnumType = field.root.lookupEnum(field.type);
-  } catch (e) {
-    // Ignore, type not found
-  }
-
-  const expandable = !!subType || !!subEnumType;
+  const expandable = !!resolvedType;
 
   return (
     <div>
@@ -56,8 +46,12 @@ export default function Field({ field }: FieldProps) {
       {field.comment && (
         <span className="text-secondary fst-italic ms-1">{field.comment}</span>
       )}
-      {!!subType && open && <Type type={subType} />}
-      {!!subEnumType && open && <EnumType enumType={subEnumType} />}
+      {!!resolvedType && resolvedType instanceof protobuf.Type && open && (
+        <Type type={resolvedType} />
+      )}
+      {!!resolvedType && resolvedType instanceof protobuf.Enum && open && (
+        <EnumType enumType={resolvedType} />
+      )}
     </div>
   );
 }

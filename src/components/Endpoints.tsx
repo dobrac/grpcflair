@@ -5,9 +5,9 @@ import {
   getServicesFromContext,
   getTypesFromContext,
 } from "@/types/protobufjs";
-import Service from "@/components/Service";
-import Type from "@/components/Type";
-import EnumType from "@/components/EnumType";
+import Service from "@/components/parts/Service";
+import Type from "@/components/parts/Type";
+import EnumType from "@/components/parts/EnumType";
 
 export default function Endpoints() {
   const { context } = useSourceContext();

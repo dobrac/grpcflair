@@ -1,4 +1,10 @@
 {
+  "options": {
+    "java_multiple_files": true,
+    "java_package": "io.grpc.examples.routeguide",
+    "java_outer_classname": "RouteGuideProto",
+    "objc_class_prefix": "RTG"
+  },
   "nested": {
     "helloworld": {
       "nested": {
@@ -1222,6 +1228,135 @@
               "comment": null
             }
           }
+        }
+      }
+    },
+    "routeguide": {
+      "nested": {
+        "RouteGuide": {
+          "methods": {
+            "GetFeature": {
+              "requestType": "Point",
+              "responseType": "Feature",
+              "comment": null
+            },
+            "ListFeatures": {
+              "requestType": "Rectangle",
+              "responseType": "Feature",
+              "responseStream": true,
+              "comment": null
+            },
+            "RecordRoute": {
+              "requestType": "Point",
+              "requestStream": true,
+              "responseType": "RouteSummary",
+              "comment": null
+            },
+            "RouteChat": {
+              "requestType": "RouteNote",
+              "requestStream": true,
+              "responseType": "RouteNote",
+              "responseStream": true,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "Point": {
+          "fields": {
+            "latitude": {
+              "type": "int32",
+              "id": 1,
+              "comment": null
+            },
+            "longitude": {
+              "type": "int32",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "Rectangle": {
+          "fields": {
+            "lo": {
+              "type": "Point",
+              "id": 1,
+              "comment": null
+            },
+            "hi": {
+              "type": "Point",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "Feature": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1,
+              "comment": null
+            },
+            "location": {
+              "type": "Point",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "FeatureDatabase": {
+          "fields": {
+            "feature": {
+              "rule": "repeated",
+              "type": "Feature",
+              "id": 1,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "RouteNote": {
+          "fields": {
+            "location": {
+              "type": "Point",
+              "id": 1,
+              "comment": null
+            },
+            "message": {
+              "type": "string",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "RouteSummary": {
+          "fields": {
+            "pointCount": {
+              "type": "int32",
+              "id": 1,
+              "comment": null
+            },
+            "featureCount": {
+              "type": "int32",
+              "id": 2,
+              "comment": null
+            },
+            "distance": {
+              "type": "int32",
+              "id": 3,
+              "comment": null
+            },
+            "elapsedTime": {
+              "type": "int32",
+              "id": 4,
+              "comment": null
+            }
+          },
+          "comment": null
         }
       }
     }

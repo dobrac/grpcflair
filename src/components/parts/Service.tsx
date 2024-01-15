@@ -1,4 +1,4 @@
-import Method from "@/components/Method";
+import Method from "@/components/parts/Method";
 import { Collapse } from "react-bootstrap";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

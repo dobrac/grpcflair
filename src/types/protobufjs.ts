@@ -67,3 +67,24 @@ function traverseStructure<DesiredType extends ProtobufJsType>(
     });
   }
 }
+
+export function serializeFieldDefaultValuesToJSON(
+  fields: Record<string, protobuf.Field>,
+) {
+  const result: any = {};
+  for (const [fieldName, field] of Object.entries(fields)) {
+    field.resolve();
+    if (field.resolvedType != null) {
+      if (field.resolvedType instanceof protobuf.Enum) {
+        result[fieldName] = field.resolvedType.values[0];
+      } else {
+        result[fieldName] = serializeFieldDefaultValuesToJSON(
+          field.resolvedType.fields,
+        );
+      }
+    } else {
+      result[fieldName] = field.defaultValue ?? field.typeDefault ?? field.type;
+    }
+  }
+  return result;
+}

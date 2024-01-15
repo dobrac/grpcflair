@@ -1,14 +1,21 @@
-import { Button, Collapse, Form, ProgressBar } from "react-bootstrap";
+import { Button, Collapse, Form, Nav, ProgressBar } from "react-bootstrap";
 import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/types/grpc-web";
 import protobuf from "protobufjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import YesNoIcon from "@/components/YesNoIcon";
-import Type from "@/components/Type";
+import Type from "@/components/parts/Type";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco";
+import { serializeFieldDefaultValuesToJSON } from "@/types/protobufjs";
+import InputField from "@/components/parts/InputField";
+
+enum RequestInputType {
+  UI = "ui",
+  JSON = "json",
+}
 
 export interface ServiceProps {
   service: protobuf.Service;
@@ -19,7 +26,9 @@ export default function Method({ service, method }: ServiceProps) {
   const [open, setOpen] = useState(false);
 
   const [processing, setProcessing] = useState<(() => void) | null>(null);
-  const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
+  const [requestInputType, setRequestInputType] = useState<RequestInputType>(
+    RequestInputType.UI,
+  );
   const [response, setResponse] = useState<unknown[]>([]);
 
   const RequestType = service.lookupType(
@@ -30,6 +39,12 @@ export default function Method({ service, method }: ServiceProps) {
     // TODO: Include full path?
     method.responseType,
   );
+
+  const fieldValuesDefault = serializeFieldDefaultValuesToJSON(
+    RequestType.fields,
+  );
+  const [fieldValues, setFieldValues] =
+    useState<Record<string, unknown>>(fieldValuesDefault);
 
   return (
     <div key={method.name} className="card">
@@ -64,37 +79,69 @@ export default function Method({ service, method }: ServiceProps) {
           </div>
           <hr className="m-0" />
           <div className="py-2 px-4">
+            <span className="text-secondary">Model</span>
+            <Type type={RequestType} />
+          </div>
+          <div className="py-2 px-4">
             <div>
-              {Object.values(RequestType.fields).map((field) => (
-                <div key={field.name}>
-                  <div>
-                    <div>
-                      <span className="fw-bolder">{field.name}</span>
-                      <span className="ms-1 text-secondary fst-italic">
-                        {field.comment}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-secondary">
-                        {field.type.toString()}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <Form.Control
-                      as="input"
-                      placeholder={field.name}
-                      onChange={(e) =>
-                        setFieldValues((fieldValues) => ({
-                          ...fieldValues,
-                          [field.name]: e.target.value,
-                        }))
-                      }
-                      value={fieldValues[field.name] ?? ""}
-                    />
-                  </div>
-                </div>
-              ))}
+              <Nav
+                variant="pills"
+                activeKey={requestInputType}
+                onSelect={(selectedKey) => {
+                  setRequestInputType(
+                    selectedKey as unknown as RequestInputType,
+                  );
+                }}
+              >
+                <Nav.Item>
+                  <Nav.Link eventKey={RequestInputType.UI}>UI</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link eventKey={RequestInputType.JSON}>JSON</Nav.Link>
+                </Nav.Item>
+              </Nav>
+              <div
+                className={
+                  requestInputType === RequestInputType.UI
+                    ? "d-block"
+                    : "d-none"
+                }
+              >
+                {Object.values(RequestType.fields).map((field) => (
+                  <InputField
+                    key={field.name}
+                    field={field}
+                    value={fieldValues[field.name]}
+                    onChange={(value) => {
+                      setFieldValues((it) => {
+                        return {
+                          ...it,
+                          [field.name]: value,
+                        };
+                      });
+                    }}
+                  />
+                ))}
+              </div>
+              <div
+                className={
+                  requestInputType === RequestInputType.JSON
+                    ? "d-block"
+                    : "d-none"
+                }
+              >
+                <Form.Control
+                  key={JSON.stringify(fieldValues)}
+                  as="textarea"
+                  rows={10}
+                  defaultValue={JSON.stringify(fieldValues, null, 2)}
+                  onBlur={(e) =>
+                    setFieldValues(
+                      e.target.value ? JSON.parse(e.target.value) : {},
+                    )
+                  }
+                />
+              </div>
             </div>
             <div className="mt-2 d-grid gap-1">
               <Button
@@ -112,6 +159,7 @@ export default function Method({ service, method }: ServiceProps) {
                       );
                     }
 
+                    console.log(JSON.stringify(fieldValues, null, 2));
                     const message = RequestType.create(fieldValues);
 
                     if (method.responseStream) {

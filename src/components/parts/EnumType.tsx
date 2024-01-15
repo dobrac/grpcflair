@@ -1,5 +1,5 @@
 import protobuf from "protobufjs";
-import Field from "@/components/Field";
+import Field from "@/components/parts/Field";
 
 export interface EnumProps {
   enumType: protobuf.Enum;
