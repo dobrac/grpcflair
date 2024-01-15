@@ -18,15 +18,10 @@ import Type from "@/components/parts/Type";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco";
 import { serializeFieldDefaultValuesToJSON } from "@/types/protobufjs";
-import InputField from "@/components/parts/inputfields/InputField";
+import InputFieldValue from "@/components/parts/inputfields/InputFieldValue";
 import { RpcError } from "grpc-web";
 import { useSourceContext } from "@/contexts/SourceContext";
-
-enum RequestInputType {
-  UI = "ui",
-  JSON = "json",
-  MODEL = "model",
-}
+import InputFieldName from "@/components/parts/inputfields/InputFieldName";
 
 function getColorFromMethod(method: protobuf.Method) {
   if (method.requestStream && method.responseStream) {
@@ -72,10 +67,6 @@ export default function Method({ service, method }: ServiceProps) {
   const ResponseType = service.lookupType(
     // TODO: Include full path?
     method.responseType,
-  );
-
-  const [requestInputType, setRequestInputType] = useState<RequestInputType>(
-    RequestInputType.UI,
   );
 
   const defaultRequestData = serializeFieldDefaultValuesToJSON(
@@ -196,78 +187,38 @@ export default function Method({ service, method }: ServiceProps) {
           </div>
           <hr className="m-0" />
           <div className="py-2 px-4">
-            <div>
-              <Nav
-                variant="pills"
-                activeKey={requestInputType}
-                onSelect={(selectedKey) => {
-                  setRequestInputType(
-                    selectedKey as unknown as RequestInputType,
-                  );
-                }}
-              >
-                <Nav.Item>
-                  <Nav.Link eventKey={RequestInputType.UI}>UI</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey={RequestInputType.JSON}>JSON</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey={RequestInputType.MODEL}>Model</Nav.Link>
-                </Nav.Item>
-              </Nav>
-              <div
-                className={
-                  requestInputType === RequestInputType.UI
-                    ? "d-block"
-                    : "d-none"
-                }
-              >
+            <table className="w-100">
+              <thead className="border-bottom border-secondary-subtle small">
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
                 {Object.values(RequestType.fields).map((field) => (
-                  <InputField
-                    key={field.name}
-                    field={field}
-                    value={requestData[field.name]}
-                    onChange={(value) => {
-                      setRequestData((it) => {
-                        return {
-                          ...it,
-                          [field.name]: value,
-                        };
-                      });
-                    }}
-                  />
+                  <tr key={field.name}>
+                    <td className="align-top py-3">
+                      <InputFieldName field={field} />
+                    </td>
+                    <td className="align-top py-3">
+                      <div className="text-secondary">{field.comment}</div>
+                      <InputFieldValue
+                        field={field}
+                        value={requestData[field.name]}
+                        onChange={(value) => {
+                          setRequestData((it) => {
+                            return {
+                              ...it,
+                              [field.name]: value,
+                            };
+                          });
+                        }}
+                      />
+                    </td>
+                  </tr>
                 ))}
-              </div>
-              <div
-                className={
-                  requestInputType === RequestInputType.MODEL
-                    ? "d-block"
-                    : "d-none"
-                }
-              >
-                <Type type={RequestType} expanded={true} />
-              </div>
-              <div
-                className={
-                  requestInputType === RequestInputType.JSON
-                    ? "d-block"
-                    : "d-none"
-                }
-              >
-                <Form.Control
-                  key={JSON.stringify(requestData)}
-                  as="textarea"
-                  rows={10}
-                  defaultValue={JSON.stringify(requestData, null, 2)}
-                  onBlur={(e) =>
-                    setRequestData(
-                      e.target.value ? JSON.parse(e.target.value) : {},
-                    )
-                  }
-                />
-              </div>
-            </div>
+              </tbody>
+            </table>
             <div className="mt-2 d-grid gap-1">
               <Button size="sm" disabled={!!processing} onClick={handleExecute}>
                 Execute
