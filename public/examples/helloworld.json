@@ -13,71 +13,55 @@
             "SayHello": {
               "requestType": "HelloRequest",
               "responseType": "HelloReply",
-              "comment": "Hello, how are you?"
+              "comment": "Sends a greeting for specific name."
             },
             "SayRepeatHello": {
               "requestType": "RepeatHelloRequest",
               "responseType": "HelloReply",
               "responseStream": true,
-              "comment": null
+              "comment": "Sends a greeting for specific name repeatedly."
             }
           },
           "comment": "Greeter is a service that greets you."
-        },
-        "GreeterSecond": {
-          "methods": {
-            "SayHello": {
-              "requestType": "HelloRequest",
-              "responseType": "HelloReply",
-              "comment": "Hello, how are you?"
-            },
-            "SayRepeatHello": {
-              "requestType": "RepeatHelloRequest",
-              "responseType": "HelloReply",
-              "responseStream": true,
-              "comment": null
-            }
-          },
-          "comment": null
         },
         "HelloRequest": {
           "fields": {
             "name": {
               "type": "string",
               "id": 1,
-              "comment": "Oj, how are you?"
+              "comment": "The name to greet."
             }
           },
-          "comment": "Hello, how are you?"
+          "comment": "A HelloRequest is a request message you can send to a server."
         },
         "RepeatHelloRequest": {
           "fields": {
             "name": {
               "type": "string",
               "id": 1,
-              "comment": null
+              "comment": "The name to greet."
             },
             "count": {
               "type": "int32",
               "id": 2,
-              "comment": null
+              "comment": "The number of times to repeat the greeting."
             }
           },
-          "comment": null
+          "comment": "A RepeatHelloRequest is a request message you can send to a server."
         },
         "HelloReply": {
           "fields": {
             "message": {
               "type": "string",
               "id": 1,
-              "comment": null
+              "comment": "The greeting."
             }
           },
           "reserved": [
             "foo",
             "bar"
           ],
-          "comment": null
+          "comment": "A HelloReply is a response message from a server."
         },
         "HelloReplyWithInner": {
           "fields": {
@@ -151,7 +135,7 @@
             "CORPUS_PRODUCTS": 6,
             "CORPUS_VIDEO": 7
           },
-          "comment": null,
+          "comment": "A test enum containing value options",
           "comments": {
             "CORPUS_UNSPECIFIED": null,
             "CORPUS_UNIVERSAL": null,
@@ -1238,29 +1222,29 @@
             "GetFeature": {
               "requestType": "Point",
               "responseType": "Feature",
-              "comment": null
+              "comment": "A simple RPC.\n\nObtains the feature at a given position.\n\nA feature with an empty name is returned if there's no feature at the given\nposition."
             },
             "ListFeatures": {
               "requestType": "Rectangle",
               "responseType": "Feature",
               "responseStream": true,
-              "comment": null
+              "comment": "A server-to-client streaming RPC.\n\nObtains the Features available within the given Rectangle.  Results are\nstreamed rather than returned at once (e.g. in a response message with a\nrepeated field), as the rectangle may cover a large area and contain a\nhuge number of features."
             },
             "RecordRoute": {
               "requestType": "Point",
               "requestStream": true,
               "responseType": "RouteSummary",
-              "comment": null
+              "comment": "A client-to-server streaming RPC.\n\nAccepts a stream of Points on a route being traversed, returning a\nRouteSummary when traversal is completed."
             },
             "RouteChat": {
               "requestType": "RouteNote",
               "requestStream": true,
               "responseType": "RouteNote",
               "responseStream": true,
-              "comment": null
+              "comment": "A Bidirectional streaming RPC.\n\nAccepts a stream of RouteNotes sent while a route is being traversed,\nwhile receiving other RouteNotes (e.g. from other users)."
             }
           },
-          "comment": null
+          "comment": "Interface exported by the server."
         },
         "Point": {
           "fields": {
@@ -1275,37 +1259,37 @@
               "comment": null
             }
           },
-          "comment": null
+          "comment": "Points are represented as latitude-longitude pairs in the E7 representation\n(degrees multiplied by 10**7 and rounded to the nearest integer).\nLatitudes should be in the range +/- 90 degrees and longitude should be in\nthe range +/- 180 degrees (inclusive)."
         },
         "Rectangle": {
           "fields": {
             "lo": {
               "type": "Point",
               "id": 1,
-              "comment": null
+              "comment": "One corner of the rectangle."
             },
             "hi": {
               "type": "Point",
               "id": 2,
-              "comment": null
+              "comment": "The other corner of the rectangle."
             }
           },
-          "comment": null
+          "comment": "A latitude-longitude rectangle, represented as two diagonally opposite\npoints \"lo\" and \"hi\"."
         },
         "Feature": {
           "fields": {
             "name": {
               "type": "string",
               "id": 1,
-              "comment": null
+              "comment": "The name of the feature."
             },
             "location": {
               "type": "Point",
               "id": 2,
-              "comment": null
+              "comment": "The point where the feature is detected."
             }
           },
-          "comment": null
+          "comment": "A feature names something at a given point.\n\nIf a feature could not be named, the name is empty."
         },
         "FeatureDatabase": {
           "fields": {
@@ -1316,47 +1300,47 @@
               "comment": null
             }
           },
-          "comment": null
+          "comment": "Not used in the RPC.  Instead, this is here for the form serialized to disk."
         },
         "RouteNote": {
           "fields": {
             "location": {
               "type": "Point",
               "id": 1,
-              "comment": null
+              "comment": "The location from which the message is sent."
             },
             "message": {
               "type": "string",
               "id": 2,
-              "comment": null
+              "comment": "The message to be sent."
             }
           },
-          "comment": null
+          "comment": "A RouteNote is a message sent while at a given point."
         },
         "RouteSummary": {
           "fields": {
             "pointCount": {
               "type": "int32",
               "id": 1,
-              "comment": null
+              "comment": "The number of points received."
             },
             "featureCount": {
               "type": "int32",
               "id": 2,
-              "comment": null
+              "comment": "The number of known features passed while traversing the route."
             },
             "distance": {
               "type": "int32",
               "id": 3,
-              "comment": null
+              "comment": "The distance covered in metres."
             },
             "elapsedTime": {
               "type": "int32",
               "id": 4,
-              "comment": null
+              "comment": "The duration of the traversal in seconds."
             }
           },
-          "comment": null
+          "comment": "A RouteSummary is received in response to a RecordRoute rpc.\n\nIt contains the number of individual points received, the number of\ndetected features, and the total distance covered as the cumulative sum of\nthe distance between each point."
         }
       }
     }

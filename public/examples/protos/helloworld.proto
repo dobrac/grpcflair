@@ -25,41 +25,42 @@ package helloworld;
  */
 service Greeter {
   /**
-  Hello, how are you?
+    Sends a greeting for specific name.
    */
   rpc SayHello(HelloRequest) returns (HelloReply);
-  /// unary call
-  // server streaming call
-  rpc SayRepeatHello(RepeatHelloRequest) returns (stream HelloReply);
-}
-
-service GreeterSecond {
   /**
-  Hello, how are you?
+    Sends a greeting for specific name repeatedly.
    */
-  rpc SayHello(HelloRequest) returns (HelloReply);
-  /// unary call
-  // server streaming call
   rpc SayRepeatHello(RepeatHelloRequest) returns (stream HelloReply);
 }
 
 /**
-Hello, how are you?
+  A HelloRequest is a request message you can send to a server.
  */
 message HelloRequest {
+
   /**
-  Oj, how are you?
+   The name to greet.
    */
   string name = 1;
 }
 
+/**
+  A RepeatHelloRequest is a request message you can send to a server.
+ */
 message RepeatHelloRequest {
+  // The name to greet.
   string name = 1;
+  // The number of times to repeat the greeting.
   int32 count = 2;
 }
 
+/**
+  A HelloReply is a response message from a server.
+ */
 message HelloReply {
   reserved "foo", "bar";
+  // The greeting.
   string message = 1;
 }
 
@@ -79,6 +80,9 @@ extend google.protobuf.EnumValueOptions {
   optional string string_name = 123456789;
 }
 
+/**
+  A test enum containing value options
+ */
 enum Corpus {
   CORPUS_UNSPECIFIED = 0;
   CORPUS_UNIVERSAL = 1 [deprecated = true];
