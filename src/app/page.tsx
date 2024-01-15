@@ -1,20 +1,36 @@
+"use client";
 import Endpoints from "@/components/Endpoints";
-import { Form } from "react-bootstrap";
+import { Button, Form, InputGroup } from "react-bootstrap";
+import { useSourceContext } from "@/contexts/SourceContext";
 
 export default function Home() {
+  const { hostname, setHostname } = useSourceContext();
   const title = "gRPCFlair Petstore";
   const description =
     "This is a sample server Petstore server. You can find out more about gRPCFlair at https://grpcflair.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.";
-  const url = "https://petstore.grpcflair.io/v2/grpcflair.json";
 
   return (
     <main>
       <div className="py-5" style={{ backgroundColor: "whitesmoke" }}>
         <div className="container">
           <h1>{title}</h1>
-          <a href={url} target="_blank" rel="noreferrer">
-            {url}
-          </a>
+          <div>gRPC Server Url</div>
+          <Form
+            onSubmit={(event) => {
+              event.preventDefault();
+            }}
+          >
+            <InputGroup className="d-flex">
+              <Form.Control
+                as="input"
+                onChange={(e) => setHostname(e.target.value)}
+                value={hostname}
+              />
+              <Button variant="primary" type="submit">
+                Set
+              </Button>
+            </InputGroup>
+          </Form>
           <p className="mt-4 text-secondary">{description}</p>
         </div>
       </div>

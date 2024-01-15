@@ -12,6 +12,7 @@ import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco";
 import { serializeFieldDefaultValuesToJSON } from "@/types/protobufjs";
 import InputField from "@/components/parts/InputField";
 import { RpcError } from "grpc-web";
+import { useSourceContext } from "@/contexts/SourceContext";
 
 enum RequestInputType {
   UI = "ui",
@@ -24,6 +25,7 @@ export interface ServiceProps {
 }
 
 export default function Method({ service, method }: ServiceProps) {
+  const { hostname } = useSourceContext();
   const [open, setOpen] = useState(false);
   const [processing, setProcessing] = useState<(() => void) | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -160,6 +162,7 @@ export default function Method({ service, method }: ServiceProps) {
                   try {
                     setProcessing(() => {});
                     setResponse([]);
+                    setError(null);
 
                     // TODO: Support request streaming
                     if (method.requestStream) {
@@ -173,6 +176,7 @@ export default function Method({ service, method }: ServiceProps) {
                     if (method.responseStream) {
                       await new Promise<void>((resolve, reject) => {
                         const stream = makeGrpcServerStreamingCall(
+                          hostname,
                           service,
                           method,
                           RequestType,
@@ -204,6 +208,7 @@ export default function Method({ service, method }: ServiceProps) {
                       });
                     } else {
                       const response = await makeGrpcCall(
+                        hostname,
                         service,
                         method,
                         RequestType,

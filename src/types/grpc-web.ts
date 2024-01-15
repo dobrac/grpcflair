@@ -11,6 +11,7 @@ class DummyRPCType {
 }
 
 export function makeGrpcCall<MessageData extends object = object>(
+  hostname: string,
   service: protobuf.Service,
   method: protobuf.Method,
   typeEncode: protobuf.Type,
@@ -21,7 +22,6 @@ export function makeGrpcCall<MessageData extends object = object>(
     response: protobuf.Message<MessageData>,
   ) => void,
 ): Promise<protobuf.Message<MessageData>> {
-  const hostname = "http://localhost:8080";
   const client = new GrpcWebClientBase({ format: "text" });
 
   const methodPath = `${hostname}/${
@@ -64,13 +64,13 @@ export function makeGrpcCall<MessageData extends object = object>(
 export function makeGrpcServerStreamingCall<
   MessageData extends object = object,
 >(
+  hostname: string,
   service: protobuf.Service,
   method: protobuf.Method,
   typeEncode: protobuf.Type,
   typeDecode: protobuf.Type,
   message: protobuf.Message,
 ): ClientReadableStream<protobuf.Message<MessageData>> {
-  const hostname = "http://localhost:8080";
   const client = new GrpcWebClientBase({ format: "text" });
 
   const methodPath = `${hostname}/${

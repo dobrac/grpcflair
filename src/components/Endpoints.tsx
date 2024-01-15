@@ -10,7 +10,7 @@ import Type from "@/components/parts/Type";
 import EnumType from "@/components/parts/EnumType";
 
 export default function Endpoints() {
-  const { context } = useSourceContext();
+  const { context, setHostname } = useSourceContext();
 
   const services = context ? getServicesFromContext(context) : [];
   const types = context ? getTypesFromContext(context) : [];
