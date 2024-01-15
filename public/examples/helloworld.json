@@ -22,7 +22,7 @@
               "comment": null
             }
           },
-          "comment": null
+          "comment": "Greeter is a service that greets you."
         },
         "GreeterSecond": {
           "methods": {

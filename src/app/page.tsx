@@ -14,27 +14,10 @@ export default function Home() {
       <div className="py-5" style={{ backgroundColor: "whitesmoke" }}>
         <div className="container">
           <h1>{title}</h1>
-          <div>gRPC Server Url</div>
-          <Form
-            onSubmit={(event) => {
-              event.preventDefault();
-            }}
-          >
-            <InputGroup className="d-flex">
-              <Form.Control
-                as="input"
-                onChange={(e) => setHostname(e.target.value)}
-                value={hostname}
-              />
-              <Button variant="primary" type="submit">
-                Set
-              </Button>
-            </InputGroup>
-          </Form>
           <p className="mt-4 text-secondary">{description}</p>
         </div>
       </div>
-      <div className="container py-3">
+      <div className="container py-3 d-flex flex-wrap column-gap-5 row-gap-2">
         <div className="d-inline-block">
           Method
           <Form.Select aria-label="Method selection">
@@ -43,6 +26,15 @@ export default function Home() {
               grpc-server (NOT IMPLEMENTED)
             </option>
           </Form.Select>
+        </div>
+        <div className="flex-grow-1">
+          <div>Base gRPC Url</div>
+          <Form.Control
+            as="input"
+            className="w-100"
+            onChange={(e) => setHostname(e.target.value)}
+            value={hostname}
+          />
         </div>
       </div>
       <div className="py-3" style={{ backgroundColor: "whitesmoke" }}>

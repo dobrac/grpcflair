@@ -20,7 +20,9 @@ import "google/protobuf/descriptor.proto";
 
 package helloworld;
 
-
+/**
+ Greeter is a service that greets you.
+ */
 service Greeter {
   /**
   Hello, how are you?

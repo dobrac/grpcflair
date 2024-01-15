@@ -6,9 +6,10 @@ import EnumType from "@/components/parts/EnumType";
 
 export interface FieldProps {
   field: protobuf.Field;
+  dark?: boolean;
 }
 
-export default function Field({ field }: FieldProps) {
+export default function Field({ field, dark }: FieldProps) {
   field.resolve();
 
   const [open, setOpen] = useState(false);
@@ -25,7 +26,7 @@ export default function Field({ field }: FieldProps) {
       </span>
       {": "}
       {field.map && "<" + (field as unknown as MapField).keyType + ", "}
-      <span className="text-secondary">
+      <span className={dark ? "text-white" : "text-secondary"}>
         {expandable ? (
           <Button
             size="sm"
@@ -44,14 +45,23 @@ export default function Field({ field }: FieldProps) {
       {/*{field.optional ? " (optional)" : ""}*/}
       {field.partOf ? " (part of " + field.partOf.name + ")" : ""}
       {field.comment && (
-        <span className="text-secondary fst-italic ms-1">{field.comment}</span>
+        <span
+          className={[
+            "fst-italic ms-1",
+            dark ? "text-white" : "text-secondary",
+          ].join(" ")}
+        >
+          {field.comment}
+        </span>
       )}
-      {!!resolvedType && resolvedType instanceof protobuf.Type && open && (
-        <Type type={resolvedType} />
-      )}
-      {!!resolvedType && resolvedType instanceof protobuf.Enum && open && (
-        <EnumType enumType={resolvedType} />
-      )}
+      <div>
+        {!!resolvedType && resolvedType instanceof protobuf.Type && open && (
+          <Type type={resolvedType} dark={dark} expanded={true} />
+        )}
+        {!!resolvedType && resolvedType instanceof protobuf.Enum && open && (
+          <EnumType enumType={resolvedType} dark={dark} expanded={true} />
+        )}
+      </div>
     </div>
   );
 }

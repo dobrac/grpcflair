@@ -32,7 +32,7 @@ export default function InputField({
       {!!resolvedType && field.resolvedType instanceof protobuf.Type && (
         <div className="d-grid gap-2">
           {Object.values(field.resolvedType.fields).map((field) => (
-            <div key={field.name} className="ms-3 card p-2">
+            <div key={field.name} className="ms-3 p-2">
               <InputField
                 field={field}
                 value={value[field.name]}
