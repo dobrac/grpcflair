@@ -8,13 +8,27 @@ import {
 import Service from "@/components/parts/Service";
 import Type from "@/components/parts/Type";
 import EnumType from "@/components/parts/EnumType";
+import { Spinner } from "react-bootstrap";
+import { FILTERED_NAMESPACES } from "@/types/constants";
 
 export default function Endpoints() {
   const { context, setHostname } = useSourceContext();
 
-  const services = context ? getServicesFromContext(context) : [];
-  const types = context ? getTypesFromContext(context) : [];
-  const enums = context ? getEnumsFromContext(context) : [];
+  if (!context) {
+    return (
+      <div className="d-grid justify-content-center">
+        <Spinner animation="border" />
+      </div>
+    );
+  }
+
+  const services = getServicesFromContext(context);
+  const types = getTypesFromContext(context).filter((type) => {
+    return !FILTERED_NAMESPACES.includes(type.fullName.split(".")[1]);
+  });
+  const enums = getEnumsFromContext(context).filter((type) => {
+    return !FILTERED_NAMESPACES.includes(type.fullName.split(".")[1]);
+  });
 
   return (
     <div>

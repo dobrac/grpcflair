@@ -19,6 +19,7 @@ export default function Navbar() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setContext(undefined);
 
     await fetchUrl(search);
   };

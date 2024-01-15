@@ -7,7 +7,7 @@ interface SourceContextData {
   hostname: string;
   setHostname: (hostname: string) => void;
   context?: Root;
-  setContext: (context: Root) => void;
+  setContext: (context: Root | undefined) => void;
 }
 
 const SourceContext = createContext<SourceContextData>({

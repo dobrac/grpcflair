@@ -22,7 +22,7 @@ export default function EnumType({ enumType, dark, expanded }: EnumProps) {
         ].join(" ")}
         onClick={() => setOpen((open) => !open)}
       >
-        [Enum] <span className="fw-bolder">{enumType.name}</span>
+        [Enum] <span className="fw-bolder">{enumType.fullName}</span>
         <span className="mx-2">
           {open ? (
             <FontAwesomeIcon icon={faChevronDown} />

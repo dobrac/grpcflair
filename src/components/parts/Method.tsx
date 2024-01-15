@@ -222,7 +222,7 @@ export default function Method({ service, method }: ServiceProps) {
           <div className="py-3 px-4 bg-light">
             <span className="fw-bolder">Parameters</span>
             {!!method.requestStream && (
-              <span>
+              <span className="ms-1">
                 streaming: <YesNoIcon value={true} className="ms-1" />
               </span>
             )}
@@ -286,7 +286,7 @@ export default function Method({ service, method }: ServiceProps) {
           <div className="py-3 px-4 bg-light">
             <span className="fw-bolder">Responses</span>
             {!!method.responseStream && (
-              <span>
+              <span className="ms-1">
                 streaming: <YesNoIcon value={true} className="ms-1" />
               </span>
             )}
