@@ -1,7 +1,7 @@
 import { Button, Collapse, Form, Nav, ProgressBar } from "react-bootstrap";
 import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/types/grpc-web";
 import protobuf from "protobufjs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
@@ -11,6 +11,7 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco";
 import { serializeFieldDefaultValuesToJSON } from "@/types/protobufjs";
 import InputField from "@/components/parts/InputField";
+import { RpcError } from "grpc-web";
 
 enum RequestInputType {
   UI = "ui",
@@ -24,12 +25,8 @@ export interface ServiceProps {
 
 export default function Method({ service, method }: ServiceProps) {
   const [open, setOpen] = useState(false);
-
   const [processing, setProcessing] = useState<(() => void) | null>(null);
-  const [requestInputType, setRequestInputType] = useState<RequestInputType>(
-    RequestInputType.UI,
-  );
-  const [response, setResponse] = useState<unknown[]>([]);
+  const [error, setError] = useState<Error | null>(null);
 
   const RequestType = service.lookupType(
     // TODO: Include full path?
@@ -40,11 +37,16 @@ export default function Method({ service, method }: ServiceProps) {
     method.responseType,
   );
 
-  const fieldValuesDefault = serializeFieldDefaultValuesToJSON(
+  const [requestInputType, setRequestInputType] = useState<RequestInputType>(
+    RequestInputType.UI,
+  );
+
+  const defaultRequestData = serializeFieldDefaultValuesToJSON(
     RequestType.fields,
   );
-  const [fieldValues, setFieldValues] =
-    useState<Record<string, unknown>>(fieldValuesDefault);
+  const [requestData, setRequestData] =
+    useState<Record<string, unknown>>(defaultRequestData);
+  const [response, setResponse] = useState<unknown[]>([]);
 
   return (
     <div key={method.name} className="card">
@@ -53,8 +55,15 @@ export default function Method({ service, method }: ServiceProps) {
         onClick={() => setOpen((open) => !open)}
       >
         <div className="d-flex align-items-center gap-2">
-          <div className="fw-bold fs-6">{method.name}</div>
-          <div className="flex-grow-1 small text-secondary">
+          <div className="fw-bold fs-6">
+            {method.name}
+            {!!method.requestStream && (
+              <span className="fw-normal small text-secondary fst-italic ms-1">
+                (Not supported yet)
+              </span>
+            )}
+          </div>
+          <div className="flex-grow-1 small text-secondary ms-1">
             {method.comment}
           </div>
           <div>
@@ -111,9 +120,9 @@ export default function Method({ service, method }: ServiceProps) {
                   <InputField
                     key={field.name}
                     field={field}
-                    value={fieldValues[field.name]}
+                    value={requestData[field.name]}
                     onChange={(value) => {
-                      setFieldValues((it) => {
+                      setRequestData((it) => {
                         return {
                           ...it,
                           [field.name]: value,
@@ -131,12 +140,12 @@ export default function Method({ service, method }: ServiceProps) {
                 }
               >
                 <Form.Control
-                  key={JSON.stringify(fieldValues)}
+                  key={JSON.stringify(requestData)}
                   as="textarea"
                   rows={10}
-                  defaultValue={JSON.stringify(fieldValues, null, 2)}
+                  defaultValue={JSON.stringify(requestData, null, 2)}
                   onBlur={(e) =>
-                    setFieldValues(
+                    setRequestData(
                       e.target.value ? JSON.parse(e.target.value) : {},
                     )
                   }
@@ -159,8 +168,7 @@ export default function Method({ service, method }: ServiceProps) {
                       );
                     }
 
-                    console.log(JSON.stringify(fieldValues, null, 2));
-                    const message = RequestType.create(fieldValues);
+                    const message = RequestType.create(requestData);
 
                     if (method.responseStream) {
                       await new Promise<void>((resolve, reject) => {
@@ -207,6 +215,9 @@ export default function Method({ service, method }: ServiceProps) {
                     }
                   } catch (e) {
                     console.error(e);
+                    if (e instanceof Error) {
+                      setError(e);
+                    }
                   } finally {
                     setProcessing(null);
                   }
@@ -243,21 +254,45 @@ export default function Method({ service, method }: ServiceProps) {
           </div>
           <hr className="m-0" />
           <div className="py-2 px-4 d-grid gap-2">
-            {!response.length && <span>No response yet</span>}
+            {!response.length && !error && <span>No response yet</span>}
             {!!processing && <ProgressBar animated now={100} />}
-            <div className="d-grid gap-2">
-              {response.map((response, index) => (
-                <div key={index}>
-                  <SyntaxHighlighter
-                    language="json"
-                    style={docco}
-                    className="bg-dark text-light p-1 rounded-1 m-0"
-                  >
-                    {JSON.stringify(response, null, 2)}
-                  </SyntaxHighlighter>
-                </div>
-              ))}
-            </div>
+            {!!response.length && (
+              <div className="d-grid gap-2">
+                {response.map((response, index) => (
+                  <div key={index}>
+                    <SyntaxHighlighter
+                      language="json"
+                      style={docco}
+                      className="bg-dark text-light p-1 rounded-1 m-0"
+                    >
+                      {JSON.stringify(response, null, 2)}
+                    </SyntaxHighlighter>
+                  </div>
+                ))}
+              </div>
+            )}
+            {!!error && (
+              <div className="text-white bg-danger p-2 rounded-1">
+                {error instanceof RpcError && (
+                  <>
+                    <div>Error {error.code}</div>
+                  </>
+                )}
+                <div>{error.message}</div>
+                {error instanceof RpcError && (
+                  <>
+                    <div>Metadata</div>
+                    <SyntaxHighlighter
+                      language="json"
+                      style={docco}
+                      className="bg-dark text-light p-1 rounded-1 m-0"
+                    >
+                      {JSON.stringify(error.metadata, null, 2)}
+                    </SyntaxHighlighter>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </Collapse>
