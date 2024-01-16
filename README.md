@@ -1,7 +1,9 @@
 # grpcflair
 
-## json Generation
-cd ./public/examples; pbjs -t json ./proto/helloworld.proto > helloworld-pbjs.json; cd ../..
+## JSON Generation
+```bash
+pbjs --alt-comment -t json ${SOURCE_PROTO_FILES} > ${EXPORTED_NAME}.json
+```
 
 
 ## Introduction
