@@ -29,6 +29,7 @@ export default function Type({ type, dark, expanded }: TypeProps) {
         onClick={() => setOpen((open) => !open)}
       >
         <span className="fw-bolder">{type.fullName}</span>
+        <span className="small text-secondary ms-2">{type.comment}</span>
         <span className="mx-2">
           {open ? (
             <FontAwesomeIcon icon={faChevronDown} />

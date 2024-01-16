@@ -232,7 +232,7 @@ export default function Method({ service, method }: ServiceProps) {
             <table className="w-100">
               <thead className="border-bottom border-secondary-subtle small">
                 <tr>
-                  <th>Name</th>
+                  <th className="w-25">Name</th>
                   <th>Description</th>
                 </tr>
               </thead>
@@ -348,7 +348,7 @@ export default function Method({ service, method }: ServiceProps) {
               <table className="w-100">
                 <thead className="border-bottom border-secondary-subtle small">
                   <tr>
-                    <th>Code</th>
+                    <th className="w-25">Code</th>
                     <th>Description</th>
                   </tr>
                 </thead>
