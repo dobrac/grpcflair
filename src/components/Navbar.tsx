@@ -6,9 +6,13 @@ import { useSourceContext } from "@/contexts/SourceContext";
 import { DEFAULT_URL } from "@/types/constants";
 import protobuf from "protobufjs";
 import { ProtobufjsRootDescriptor } from "@/types/protobufjs-types";
+import { useSearchParams } from "next/navigation";
 
 export default function Navbar() {
-  const [search, setSearch] = useState(DEFAULT_URL);
+  const searchParams = useSearchParams();
+  const url = searchParams.get("url");
+
+  const [search, setSearch] = useState(url ?? DEFAULT_URL);
 
   const { setContext } = useSourceContext();
 
