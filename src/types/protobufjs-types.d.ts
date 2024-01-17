@@ -6,6 +6,10 @@ interface ProtobufjsRootDescriptor {
     protoVersion: string,
   ): protobuf.Message<IFileDescriptorSet> & IFileDescriptorSet;
   fromDescriptor(
-    descriptor: IFileDescriptorSet | protobuf.Reader | Uint8Array,
+    descriptor:
+      | protobuf.Message<IFileDescriptorSet>
+      | IFileDescriptorSet
+      | protobuf.Reader
+      | Uint8Array,
   ): protobuf.Root;
 }

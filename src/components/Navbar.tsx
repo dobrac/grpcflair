@@ -5,8 +5,9 @@ import { FormEvent, useEffect, useState } from "react";
 import { useSourceContext } from "@/contexts/SourceContext";
 import { DEFAULT_URL } from "@/types/constants";
 import protobuf from "protobufjs";
-import { ProtobufjsRootDescriptor } from "@/types/protobufjs-types";
 import { useSearchParams } from "next/navigation";
+import { ProtobufjsRootDescriptor } from "@/types/protobufjs-types";
+import descriptor from "protobufjs/ext/descriptor";
 
 export default function Navbar() {
   const searchParams = useSearchParams();
@@ -34,9 +35,11 @@ export default function Navbar() {
       case "bin": {
         const sourceBin = await source.arrayBuffer();
         const uint8View = new Uint8Array(sourceBin);
+
+        const decodedSource = descriptor.FileDescriptorSet.decode(uint8View);
         const content = (
           protobuf.Root as unknown as ProtobufjsRootDescriptor
-        ).fromDescriptor(uint8View);
+        ).fromDescriptor(decodedSource);
         setContext(content);
         break;
       }
