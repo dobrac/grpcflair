@@ -1,0 +1,283 @@
+{
+  "nested": {
+    "routeguide": {
+      "options": {
+        "java_package": "io.grpc.examples.routeguide",
+        "java_outer_classname": "RouteGuideProto",
+        "java_multiple_files": true,
+        "objc_class_prefix": "RTG"
+      },
+      "nested": {
+        "Point": {
+          "fields": {
+            "latitude": {
+              "type": "int32",
+              "id": 1
+            },
+            "longitude": {
+              "type": "int32",
+              "id": 2
+            }
+          }
+        },
+        "Rectangle": {
+          "fields": {
+            "lo": {
+              "type": ".routeguide.Point",
+              "id": 1
+            },
+            "hi": {
+              "type": ".routeguide.Point",
+              "id": 2
+            }
+          }
+        },
+        "Feature": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1
+            },
+            "location": {
+              "type": ".routeguide.Point",
+              "id": 2
+            }
+          }
+        },
+        "FeatureDatabase": {
+          "fields": {
+            "feature": {
+              "rule": "repeated",
+              "type": ".routeguide.Feature",
+              "id": 1
+            }
+          }
+        },
+        "RouteNote": {
+          "fields": {
+            "location": {
+              "type": ".routeguide.Point",
+              "id": 1
+            },
+            "message": {
+              "type": "string",
+              "id": 2
+            }
+          }
+        },
+        "RouteSummary": {
+          "fields": {
+            "point_count": {
+              "type": "int32",
+              "id": 1
+            },
+            "feature_count": {
+              "type": "int32",
+              "id": 2
+            },
+            "distance": {
+              "type": "int32",
+              "id": 3
+            },
+            "elapsed_time": {
+              "type": "int32",
+              "id": 4
+            }
+          }
+        },
+        "RouteGuide": {
+          "methods": {
+            "GetFeature": {
+              "requestType": ".routeguide.Point",
+              "responseType": ".routeguide.Feature"
+            },
+            "ListFeatures": {
+              "requestType": ".routeguide.Rectangle",
+              "responseType": ".routeguide.Feature",
+              "responseStream": true
+            },
+            "RecordRoute": {
+              "requestType": ".routeguide.Point",
+              "requestStream": true,
+              "responseType": ".routeguide.RouteSummary"
+            },
+            "RouteChat": {
+              "requestType": ".routeguide.RouteNote",
+              "requestStream": true,
+              "responseType": ".routeguide.RouteNote",
+              "responseStream": true
+            }
+          }
+        }
+      }
+    },
+    "grpc": {
+      "nested": {
+        "reflection": {
+          "nested": {
+            "v1alpha": {
+              "options": {
+                "java_package": "io.grpc.reflection.v1alpha",
+                "java_outer_classname": "ServerReflectionProto",
+                "java_multiple_files": true,
+                "deprecated": true
+              },
+              "nested": {
+                "ServerReflectionRequest": {
+                  "oneofs": {
+                    "message_request": {
+                      "oneof": [
+                        "file_by_filename",
+                        "file_containing_symbol",
+                        "file_containing_extension",
+                        "all_extension_numbers_of_type",
+                        "list_services"
+                      ]
+                    }
+                  },
+                  "fields": {
+                    "host": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "file_by_filename": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "file_containing_symbol": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "file_containing_extension": {
+                      "type": ".grpc.reflection.v1alpha.ExtensionRequest",
+                      "id": 5
+                    },
+                    "all_extension_numbers_of_type": {
+                      "type": "string",
+                      "id": 6
+                    },
+                    "list_services": {
+                      "type": "string",
+                      "id": 7
+                    }
+                  }
+                },
+                "ExtensionRequest": {
+                  "fields": {
+                    "containing_type": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "extension_number": {
+                      "type": "int32",
+                      "id": 2
+                    }
+                  }
+                },
+                "ServerReflectionResponse": {
+                  "oneofs": {
+                    "message_response": {
+                      "oneof": [
+                        "file_descriptor_response",
+                        "all_extension_numbers_response",
+                        "list_services_response",
+                        "error_response"
+                      ]
+                    }
+                  },
+                  "fields": {
+                    "valid_host": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "original_request": {
+                      "type": ".grpc.reflection.v1alpha.ServerReflectionRequest",
+                      "id": 2
+                    },
+                    "file_descriptor_response": {
+                      "type": ".grpc.reflection.v1alpha.FileDescriptorResponse",
+                      "id": 4
+                    },
+                    "all_extension_numbers_response": {
+                      "type": ".grpc.reflection.v1alpha.ExtensionNumberResponse",
+                      "id": 5
+                    },
+                    "list_services_response": {
+                      "type": ".grpc.reflection.v1alpha.ListServiceResponse",
+                      "id": 6
+                    },
+                    "error_response": {
+                      "type": ".grpc.reflection.v1alpha.ErrorResponse",
+                      "id": 7
+                    }
+                  }
+                },
+                "FileDescriptorResponse": {
+                  "fields": {
+                    "file_descriptor_proto": {
+                      "rule": "repeated",
+                      "type": "bytes",
+                      "id": 1
+                    }
+                  }
+                },
+                "ExtensionNumberResponse": {
+                  "fields": {
+                    "base_type_name": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "extension_number": {
+                      "rule": "repeated",
+                      "type": "int32",
+                      "id": 2
+                    }
+                  }
+                },
+                "ListServiceResponse": {
+                  "fields": {
+                    "service": {
+                      "rule": "repeated",
+                      "type": ".grpc.reflection.v1alpha.ServiceResponse",
+                      "id": 1
+                    }
+                  }
+                },
+                "ServiceResponse": {
+                  "fields": {
+                    "name": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "ErrorResponse": {
+                  "fields": {
+                    "error_code": {
+                      "type": "int32",
+                      "id": 1
+                    },
+                    "error_message": {
+                      "type": "string",
+                      "id": 2
+                    }
+                  }
+                },
+                "ServerReflection": {
+                  "methods": {
+                    "ServerReflectionInfo": {
+                      "requestType": ".grpc.reflection.v1alpha.ServerReflectionRequest",
+                      "requestStream": true,
+                      "responseType": ".grpc.reflection.v1alpha.ServerReflectionResponse",
+                      "responseStream": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

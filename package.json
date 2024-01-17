@@ -8,6 +8,7 @@
     "start": "npx serve@latest out",
     "lint": "next lint",
     "generateExample": "cd ./public/examples; pbjs --alt-comment -t json ./protos/helloworld.proto > helloworld.json",
+    "generateExampleReflection": "node ./scripts/protobufjs-reflection.js ./public/examples/descriptors.bin > ./public/examples/helloworld-reflection.json",
     "postinstall": "patch-package"
   },
   "dependencies": {
@@ -17,7 +18,6 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "bootstrap": "^5.3.2",
     "grpc-web": "^1.5.0",
-    "json-colorizer": "^2.2.2",
     "next": "14.0.4",
     "p-cancelable": "^4.0.1",
     "patch-package": "^8.0.0",
@@ -26,7 +26,6 @@
     "react-bootstrap": "^2.9.2",
     "react-dom": "^18",
     "react-syntax-highlighter": "^15.5.0",
-    "remove": "^0.1.5",
     "sass": "^1.69.7"
   },
   "devDependencies": {
@@ -39,7 +38,6 @@
     "eslint-config-next": "14.0.4",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "3.1.1",
-    "proto3-json-serializer": "^2.0.0",
     "protobufjs-cli": "^1.1.2",
     "typescript": "^5"
   }
