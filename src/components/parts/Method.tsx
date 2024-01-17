@@ -1,5 +1,5 @@
 import { Badge, Button, Collapse, ProgressBar, Spinner } from "react-bootstrap";
-import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/types/grpc-web";
+import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/services/grpc-web";
 import protobuf from "protobufjs";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +9,7 @@ import YesNoIcon from "@/components/YesNoIcon";
 import Type from "@/components/parts/Type";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco";
-import { serializeFieldDefaultValuesToJSON } from "@/types/protobufjs";
+import { serializeFieldDefaultValuesToJSON } from "@/services/protobufjs";
 import InputFieldValue from "@/components/parts/inputfields/InputFieldValue";
 import { RpcError } from "grpc-web";
 import { useSourceContext } from "@/contexts/SourceContext";

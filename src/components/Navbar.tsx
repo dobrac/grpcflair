@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useSourceContext } from "@/contexts/SourceContext";
 import { DEFAULT_URL } from "@/types/constants";
 import protobuf from "protobufjs";
+import { ProtobufjsRootDescriptor } from "@/types/protobufjs-types";
 
 export default function Navbar() {
   const [search, setSearch] = useState(DEFAULT_URL);
@@ -12,9 +13,32 @@ export default function Navbar() {
   const { setContext } = useSourceContext();
 
   const fetchUrl = async (url: string) => {
-    const source = await fetch(url).then((res) => res.json());
-    const content = protobuf.Root.fromJSON(source);
-    setContext(content);
+    const source = await fetch(url);
+    const extension = url.split(".").pop();
+
+    if (!extension) {
+      return;
+    }
+
+    switch (extension) {
+      case "json": {
+        const sourceJson = await source.json();
+        const content = protobuf.Root.fromJSON(sourceJson);
+        setContext(content);
+        break;
+      }
+      case "bin": {
+        const sourceBin = await source.arrayBuffer();
+        const uint8View = new Uint8Array(sourceBin);
+        const content = (
+          protobuf.Root as unknown as ProtobufjsRootDescriptor
+        ).fromDescriptor(uint8View);
+        setContext(content);
+        break;
+      }
+      default:
+        return;
+    }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

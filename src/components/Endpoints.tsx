@@ -4,7 +4,7 @@ import {
   getEnumsFromContext,
   getServicesFromContext,
   getTypesFromContext,
-} from "@/types/protobufjs";
+} from "@/services/protobufjs";
 import Service from "@/components/parts/Service";
 import Type from "@/components/parts/Type";
 import EnumType from "@/components/parts/EnumType";
