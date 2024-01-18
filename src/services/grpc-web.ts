@@ -10,6 +10,15 @@ class DummyRPCType {
   constructor(...args: unknown[]) {}
 }
 
+export enum GrpcWebFormat {
+  TEXT = "text",
+  BINARY = "binary",
+}
+
+export interface GrpcWebOptions {
+  format?: GrpcWebFormat;
+}
+
 export function makeGrpcCall<MessageData extends object = object>(
   hostname: string,
   service: protobuf.Service,
@@ -17,12 +26,9 @@ export function makeGrpcCall<MessageData extends object = object>(
   typeEncode: protobuf.Type,
   typeDecode: protobuf.Type,
   message: protobuf.Message,
-  callback?: (
-    err: Error | null,
-    response: protobuf.Message<MessageData>,
-  ) => void,
+  options?: GrpcWebOptions,
 ): Promise<protobuf.Message<MessageData>> {
-  const client = new GrpcWebClientBase({ format: "text" });
+  const client = new GrpcWebClientBase({ format: options?.format });
 
   const methodPath = `${hostname}/${
     // Replace starting dot "."
@@ -55,7 +61,6 @@ export function makeGrpcCall<MessageData extends object = object>(
         } else {
           resolve(response);
         }
-        callback?.(err, response);
       },
     );
   });
@@ -70,8 +75,15 @@ export function makeGrpcServerStreamingCall<
   typeEncode: protobuf.Type,
   typeDecode: protobuf.Type,
   message: protobuf.Message,
+  options?: GrpcWebOptions,
 ): ClientReadableStream<protobuf.Message<MessageData>> {
-  const client = new GrpcWebClientBase({ format: "text" });
+  if (options?.format !== GrpcWebFormat.TEXT) {
+    throw new Error(
+      `Only format ${GrpcWebFormat.TEXT} is supported for grpc-web server streaming`,
+    );
+  }
+
+  const client = new GrpcWebClientBase({ format: options?.format });
 
   const methodPath = `${hostname}/${
     // Replace starting dot "."

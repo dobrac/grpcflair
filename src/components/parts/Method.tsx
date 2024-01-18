@@ -1,5 +1,16 @@
-import { Badge, Button, Collapse, ProgressBar, Spinner } from "react-bootstrap";
-import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/services/grpc-web";
+import {
+  Badge,
+  Button,
+  Collapse,
+  Form,
+  ProgressBar,
+  Spinner,
+} from "react-bootstrap";
+import {
+  GrpcWebFormat,
+  makeGrpcCall,
+  makeGrpcServerStreamingCall,
+} from "@/services/grpc-web";
 import protobuf from "protobufjs";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -93,6 +104,8 @@ export default function Method({ service, method }: ServiceProps) {
 
   const processing = cancelFunction !== null;
 
+  const [format, setFormat] = useState<GrpcWebFormat>(GrpcWebFormat.TEXT);
+
   const handleUnaryRequest = async (message: protobuf.Message<{}>) => {
     const cancellablePromise = new PCancelable<protobuf.Message<{}>>(
       (resolve, reject, onCancel) => {
@@ -103,6 +116,9 @@ export default function Method({ service, method }: ServiceProps) {
           RequestType,
           ResponseType,
           message,
+          {
+            format: format,
+          },
         );
 
         promise.then(resolve).catch(reject);
@@ -128,6 +144,9 @@ export default function Method({ service, method }: ServiceProps) {
         RequestType,
         ResponseType,
         message,
+        {
+          format: format,
+        },
       );
       const onCancel = () => {
         stream.cancel();
@@ -283,13 +302,32 @@ export default function Method({ service, method }: ServiceProps) {
             </div>
           </div>
           <hr className="m-0" />
-          <div className="py-3 px-4 bg-light">
-            <span className="fw-bolder">Responses</span>
-            {!!method.responseStream && (
-              <span className="ms-1">
-                streaming: <YesNoIcon value={true} className="ms-1" />
-              </span>
-            )}
+          <div className="py-3 px-4 bg-light d-flex justify-content-between align-items-center">
+            <div>
+              <span className="fw-bolder">Responses</span>
+              {!!method.responseStream && (
+                <span className="ms-1">
+                  streaming: <YesNoIcon value={true} className="ms-1" />
+                </span>
+              )}
+            </div>
+            <div className="d-flex align-items-center gap-2">
+              <span className="text-nowrap small fw-bolder">Content type</span>
+              <Form.Select
+                size="sm"
+                value={format}
+                onChange={(e) => {
+                  setFormat(e.target.value as GrpcWebFormat);
+                }}
+              >
+                <option value={GrpcWebFormat.TEXT}>
+                  application/grpc-web-text
+                </option>
+                <option value={GrpcWebFormat.BINARY}>
+                  application/grpc-web
+                </option>
+              </Form.Select>
+            </div>
           </div>
           <hr className="m-0" />
           <div className="py-2 px-4 d-grid gap-4">
