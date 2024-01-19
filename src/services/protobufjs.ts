@@ -89,7 +89,7 @@ export function serializeFieldDefaultValuesToJSON(
   return result;
 }
 
-enum RequestType {
+export enum RequestType {
   UNARY,
   CLIENT_STREAMING,
   SERVER_STREAMING,

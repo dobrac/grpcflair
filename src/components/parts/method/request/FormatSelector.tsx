@@ -3,14 +3,17 @@ import { Form } from "react-bootstrap";
 import { useMethodContext } from "@/contexts/MethodContext";
 
 export default function FormatSelector() {
-  const { request, functions } = useMethodContext();
+  const {
+    request,
+    functions: { setRequest },
+  } = useMethodContext();
 
   return (
     <Form.Select
       size="sm"
       value={request.format}
       onChange={(e) => {
-        functions.setRequest((request) => ({
+        setRequest((request) => ({
           ...request,
           format: e.target.value as GrpcWebFormat,
         }));

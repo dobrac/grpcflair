@@ -67,6 +67,7 @@ export default function MethodContextProvider({
   method: protobuf.Method;
 }) {
   method.resolve();
+
   const requestType = method.resolvedRequestType;
   const defaultRequestData = serializeFieldDefaultValuesToJSON(
     requestType?.fields ?? {},

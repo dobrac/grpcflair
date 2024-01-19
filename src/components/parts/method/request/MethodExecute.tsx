@@ -21,7 +21,7 @@ export default function MethodExecute({
   const responseType = method.resolvedResponseType;
 
   if (!requestType || !responseType) {
-    return null;
+    return <div>Unable to resolve request/response type</div>;
   }
 
   const handleUnaryRequest = async (message: protobuf.Message<{}>) => {

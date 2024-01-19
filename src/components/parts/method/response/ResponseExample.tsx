@@ -4,7 +4,7 @@ import protobuf from "protobufjs";
 export default function ResponseExample({
   responseType,
 }: {
-  responseType: protobuf.Type;
+  responseType: protobuf.Type | null;
 }) {
   return (
     <table className="w-100">
@@ -18,7 +18,10 @@ export default function ResponseExample({
         <tr>
           <td className="align-top">0</td>
           <td className="py-2">
-            <Type type={responseType} dark expanded={true} />
+            {!responseType && (
+              <div className="text-secondary">No response type</div>
+            )}
+            {responseType && <Type type={responseType} dark expanded={true} />}
           </td>
         </tr>
       </tbody>

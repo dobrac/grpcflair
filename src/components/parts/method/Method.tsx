@@ -28,7 +28,12 @@ export default function Method({ service, method }: ServiceProps) {
   method.resolve();
 
   const { hostname } = useSourceContext();
-  const { processing, response, request, functions } = useMethodContext();
+  const {
+    processing,
+    response,
+    request,
+    functions: { setRequest },
+  } = useMethodContext();
 
   const [open, setOpen] = useState(false);
 
@@ -36,17 +41,6 @@ export default function Method({ service, method }: ServiceProps) {
   const responseType = method.resolvedResponseType;
 
   const color = getColorFromMethodType(method);
-
-  if (!requestType || !responseType) {
-    return (
-      <div>
-        <div className="fw-bold fs-6">{method.name}</div>
-        <div className="small text-secondary fst-italic">
-          Unable to resolve request/response type
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div key={method.name} className={"card bg-" + color + "-subtle"}>
@@ -97,7 +91,7 @@ export default function Method({ service, method }: ServiceProps) {
                 </tr>
               </thead>
               <tbody>
-                {Object.values(requestType.fields).map((field) => (
+                {Object.values(requestType?.fields ?? {}).map((field) => (
                   <tr key={field.name}>
                     <td className="align-top py-3">
                       <InputFieldName field={field} />
@@ -108,7 +102,7 @@ export default function Method({ service, method }: ServiceProps) {
                         field={field}
                         value={request.data?.[field.name]}
                         onChange={(value) => {
-                          functions.setRequest((it) => ({
+                          setRequest((it) => ({
                             ...it,
                             data: {
                               ...it.data,
