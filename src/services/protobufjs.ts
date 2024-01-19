@@ -88,3 +88,47 @@ export function serializeFieldDefaultValuesToJSON(
   }
   return result;
 }
+
+enum RequestType {
+  UNARY,
+  CLIENT_STREAMING,
+  SERVER_STREAMING,
+  BIDIRECTIONAL_STREAMING,
+}
+
+export function getRequestType(method: protobuf.Method): RequestType {
+  if (method.requestStream && method.responseStream) {
+    return RequestType.BIDIRECTIONAL_STREAMING;
+  } else if (method.requestStream) {
+    return RequestType.CLIENT_STREAMING;
+  } else if (method.responseStream) {
+    return RequestType.SERVER_STREAMING;
+  } else {
+    return RequestType.UNARY;
+  }
+}
+
+export function getColorFromMethodType(method: protobuf.Method): string {
+  switch (getRequestType(method)) {
+    case RequestType.BIDIRECTIONAL_STREAMING:
+    case RequestType.CLIENT_STREAMING:
+      return "danger";
+    case RequestType.SERVER_STREAMING:
+      return "dark";
+    case RequestType.UNARY:
+      return "success";
+  }
+}
+
+export function getMethodType(method: protobuf.Method) {
+  switch (getRequestType(method)) {
+    case RequestType.BIDIRECTIONAL_STREAMING:
+      return "Bi-directional streaming";
+    case RequestType.CLIENT_STREAMING:
+      return "Client streaming";
+    case RequestType.SERVER_STREAMING:
+      return "Server streaming";
+    case RequestType.UNARY:
+      return "Unary";
+  }
+}

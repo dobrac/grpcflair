@@ -1,10 +1,11 @@
-import Method from "@/components/parts/Method";
+import Method from "@/components/parts/method/Method";
 import { Collapse } from "react-bootstrap";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import protobuf from "protobufjs";
+import MethodContextProvider from "@/contexts/MethodContext";
 
 export interface ServiceProps {
   service: protobuf.Service;
@@ -40,7 +41,9 @@ export default function Service({ service }: ServiceProps) {
         <div>
           <div className="my-2 d-grid gap-3">
             {Object.values(service.methods).map((method) => (
-              <Method key={method.name} service={service} method={method} />
+              <MethodContextProvider key={method.name} method={method}>
+                <Method service={service} method={method} />
+              </MethodContextProvider>
             ))}
           </div>
         </div>
