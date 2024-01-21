@@ -1,7 +1,7 @@
 import protobuf from "protobufjs";
 
 export interface InputFieldNameProps {
-  field: protobuf.Field;
+  field: protobuf.FieldBase;
 }
 
 export default function InputFieldName({ field }: InputFieldNameProps) {
