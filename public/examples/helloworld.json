@@ -20,6 +20,12 @@
               "responseType": "HelloReply",
               "responseStream": true,
               "comment": "Sends a greeting for specific name repeatedly."
+            },
+            "TestInputTypes": {
+              "requestType": "TestRequest",
+              "responseType": "HelloReply",
+              "responseStream": true,
+              "comment": "Test Input Types"
             }
           },
           "comment": "Greeter is a service that greets you."
@@ -48,6 +54,95 @@
             }
           },
           "comment": "A RepeatHelloRequest is a request message you can send to a server."
+        },
+        "TestRequest": {
+          "oneofs": {
+            "oneoffield": {
+              "oneof": [
+                "oneofString",
+                "oneofNumber_1",
+                "oneofNumber_2"
+              ],
+              "comment": "One Of comment"
+            }
+          },
+          "fields": {
+            "string": {
+              "type": "string",
+              "id": 1,
+              "comment": "String"
+            },
+            "number": {
+              "type": "int32",
+              "id": 2,
+              "comment": "Number"
+            },
+            "bool": {
+              "type": "bool",
+              "id": 14,
+              "comment": "Boolean"
+            },
+            "bytes": {
+              "type": "bytes",
+              "id": 15,
+              "comment": "Bytes"
+            },
+            "enum": {
+              "type": "Corpus",
+              "id": 3,
+              "comment": "Enum"
+            },
+            "enumAlias": {
+              "type": "EnumAllowingAlias",
+              "id": 4,
+              "comment": "Enum with alias"
+            },
+            "oneofString": {
+              "type": "string",
+              "id": 5,
+              "comment": "One Of String"
+            },
+            "oneofNumber_1": {
+              "type": "int32",
+              "id": 6,
+              "comment": "One Of Number"
+            },
+            "oneofNumber_2": {
+              "type": "int32",
+              "id": 7,
+              "comment": "One Of Number"
+            },
+            "map": {
+              "keyType": "string",
+              "type": "google.protobuf.Any",
+              "id": 8,
+              "comment": "Map"
+            },
+            "repeatedString": {
+              "rule": "repeated",
+              "type": "string",
+              "id": 10,
+              "comment": "Repeated String"
+            },
+            "repeatedNumber": {
+              "rule": "repeated",
+              "type": "int32",
+              "id": 11,
+              "comment": "Repeated Number"
+            },
+            "repeatedEnum": {
+              "rule": "repeated",
+              "type": "Corpus",
+              "id": 12,
+              "comment": "Repeated Enum"
+            },
+            "any": {
+              "type": "google.protobuf.Any",
+              "id": 13,
+              "comment": "Any"
+            }
+          },
+          "comment": "A Test Request Type"
         },
         "HelloReply": {
           "fields": {

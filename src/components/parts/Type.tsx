@@ -1,5 +1,5 @@
 import protobuf from "protobufjs";
-import Field from "@/components/parts/Field";
+import Field from "@/components/parts/field/Field";
 import { Fragment, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
@@ -15,11 +15,8 @@ export interface TypeProps {
 export default function Type({ type, dark, expanded }: TypeProps) {
   const [open, setOpen] = useState(expanded ?? false);
 
-  const fields = Object.values(type.fields);
-  const oneOfFields = uniqBy(
-    compact(fields.map((it) => it.partOf)),
-    (it) => it.fullName,
-  );
+  const fields = type.fieldsArray;
+  const oneOfFields = type.oneofsArray;
 
   const fieldsWithoutOneOf = fields.filter((it) => !it.partOf);
 

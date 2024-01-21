@@ -1,4 +1,4 @@
-import protobuf from "protobufjs";
+import protobuf, { MapField } from "protobufjs";
 
 export function getServicesFromContext(
   context: protobuf.Root,
@@ -68,22 +68,60 @@ function traverseStructure<DesiredType extends ProtobufJsType>(
   }
 }
 
-export function serializeFieldDefaultValuesToJSON(
-  fields: Record<string, protobuf.Field>,
+export function getFieldDefaultValue(field: protobuf.Field) {
+  if (field.resolvedType == null) {
+    if (field.repeated) {
+      // For empty strings, return type name
+      if (field.typeDefault === "") {
+        return field.type;
+      }
+
+      return field.typeDefault ?? field.type;
+    } else {
+      return field.defaultValue ?? field.typeDefault ?? field.type;
+    }
+  }
+
+  if (field.resolvedType instanceof protobuf.Enum) {
+    return field.resolvedType.values[0];
+  }
+
+  return getTypeDefaultValues(field.resolvedType);
+}
+
+export function getTypeDefaultValues(
+  type: protobuf.Type | null,
+  ignorePrimitives = false,
 ) {
   const result: any = {};
-  for (const [fieldName, field] of Object.entries(fields)) {
+  if (type == null) {
+    return result;
+  }
+
+  const fieldsWithoutPartOf = type.fieldsArray.filter((field) => !field.partOf);
+
+  for (const field of fieldsWithoutPartOf) {
     field.resolve();
-    if (field.resolvedType != null) {
-      if (field.resolvedType instanceof protobuf.Enum) {
-        result[fieldName] = field.resolvedType.values[0];
-      } else {
-        result[fieldName] = serializeFieldDefaultValuesToJSON(
-          field.resolvedType.fields,
-        );
-      }
+    const fieldName = field.name;
+
+    // Ignore primitives if specified as all fields are optional by default
+    const primitiveOrEnum =
+      field.resolvedType == null || field.resolvedType instanceof protobuf.Enum;
+    if (ignorePrimitives && field.optional && primitiveOrEnum) {
+      continue;
+    }
+
+    const value = getFieldDefaultValue(field);
+    if (field.repeated) {
+      result[fieldName] = [value];
+    } else if (field.map) {
+      const fieldMap = field as unknown as MapField;
+      const fieldMapKeyValue = fieldMap.keyType;
+      result[fieldName] = {
+        [fieldMapKeyValue]: value,
+      };
     } else {
-      result[fieldName] = field.defaultValue ?? field.typeDefault ?? field.type;
+      result[fieldName] = value;
     }
   }
   return result;

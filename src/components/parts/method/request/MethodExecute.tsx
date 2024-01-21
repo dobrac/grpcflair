@@ -100,6 +100,7 @@ export default function MethodExecute({
       functions.setResponse(undefined);
 
       const message = requestType.create(request.data ?? {});
+      console.log("message", message);
 
       // TODO: Support request streaming
       if (method.requestStream) {

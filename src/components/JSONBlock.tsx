@@ -1,16 +1,8 @@
 import SyntaxHighlighter from "react-syntax-highlighter";
 import docco from "react-syntax-highlighter/dist/esm/styles/hljs/docco";
+import { isJSON } from "@/services/json";
 
 export default function JSONBlock({ children }: { children: string }) {
-  const isJSON = (str: string) => {
-    try {
-      JSON.parse(str);
-    } catch (e) {
-      return false;
-    }
-    return true;
-  };
-
   return (
     <SyntaxHighlighter
       language={isJSON(children) ? "json" : "dns"}

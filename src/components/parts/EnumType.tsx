@@ -1,5 +1,5 @@
 import protobuf from "protobufjs";
-import Field from "@/components/parts/Field";
+import Field from "@/components/parts/field/Field";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";

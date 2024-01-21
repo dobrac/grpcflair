@@ -17,6 +17,7 @@ syntax = "proto3";
 import "other_protos.proto";
 import "hello_streaming.proto";
 import "google/protobuf/descriptor.proto";
+import "google/protobuf/any.proto";
 
 package helloworld;
 
@@ -32,6 +33,10 @@ service Greeter {
     Sends a greeting for specific name repeatedly.
    */
   rpc SayRepeatHello(RepeatHelloRequest) returns (stream HelloReply);
+  /**
+    Test Input Types
+   */
+  rpc TestInputTypes(TestRequest) returns (stream HelloReply);
 }
 
 /**
@@ -53,6 +58,47 @@ message RepeatHelloRequest {
   string name = 1;
   // The number of times to repeat the greeting.
   int32 count = 2;
+}
+
+/**
+  A Test Request Type
+ */
+message TestRequest {
+  // String
+  string string = 1;
+  // Number
+  int32 number = 2;
+  // Boolean
+  bool bool = 14;
+  // Bytes
+  bytes bytes = 15;
+  // Enum
+  Corpus enum = 3;
+  // Enum with alias
+  EnumAllowingAlias enum_alias = 4;
+
+  // One Of comment
+  oneof oneoffield {
+    // One Of String
+    string oneof_string = 5;
+    // One Of Number
+    int32 oneof_number_1 = 6;
+    // One Of Number
+    int32 oneof_number_2 = 7;
+  }
+
+  // Map
+  map<string, google.protobuf.Any> map = 8;
+
+  // Repeated String
+  repeated string repeated_string = 10;
+  // Repeated Number
+  repeated int32 repeated_number = 11;
+  // Repeated Enum
+  repeated Corpus repeated_enum = 12;
+
+  // Any
+  google.protobuf.Any any = 13;
 }
 
 /**

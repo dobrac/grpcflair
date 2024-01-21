@@ -10,7 +10,7 @@ import {
 } from "react";
 import { GrpcWebFormat } from "@/services/grpc-web";
 import protobuf from "protobufjs";
-import { serializeFieldDefaultValuesToJSON } from "@/services/protobufjs";
+import { getTypeDefaultValues } from "@/services/protobufjs";
 
 type RequestData = Record<string, unknown>;
 type CancelFunction = () => void;
@@ -69,9 +69,7 @@ export default function MethodContextProvider({
   method.resolve();
 
   const requestType = method.resolvedRequestType;
-  const defaultRequestData = serializeFieldDefaultValuesToJSON(
-    requestType?.fields ?? {},
-  );
+  const defaultRequestData = getTypeDefaultValues(requestType, true);
 
   const [cancelFunction, setCancelFunction] = useState<
     CancelFunction | undefined
