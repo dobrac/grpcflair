@@ -18,6 +18,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "bootstrap": "^5.3.2",
     "grpc-web": "^1.5.0",
+    "lodash": "^4.17.21",
     "next": "14.1.0",
     "p-cancelable": "^4.0.1",
     "patch-package": "^8.0.0",
@@ -29,6 +30,7 @@
     "sass": "^1.69.7"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "@types/long": "^5.0.0",
     "@types/node": "^20.11.5",
     "@types/react": "^18",

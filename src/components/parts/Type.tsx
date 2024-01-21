@@ -1,9 +1,10 @@
 import protobuf from "protobufjs";
 import Field from "@/components/parts/Field";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
+import { compact, filter, isNull, omit, omitBy, uniqBy } from "lodash";
 
 export interface TypeProps {
   type: protobuf.Type;
@@ -13,6 +14,14 @@ export interface TypeProps {
 
 export default function Type({ type, dark, expanded }: TypeProps) {
   const [open, setOpen] = useState(expanded ?? false);
+
+  const fields = Object.values(type.fields);
+  const oneOfFields = uniqBy(
+    compact(fields.map((it) => it.partOf)),
+    (it) => it.fullName,
+  );
+
+  const fieldsWithoutOneOf = fields.filter((it) => !it.partOf);
 
   return (
     <div
@@ -43,7 +52,19 @@ export default function Type({ type, dark, expanded }: TypeProps) {
       {open && (
         <>
           <div className="ps-3">
-            {Object.values(type.fields).map((field) => (
+            {oneOfFields.map((field) => (
+              <Fragment key={field.fullName}>
+                oneof <span className="fw-bolder">{field.name}</span>
+                {" {"}
+                <div className="ps-3">
+                  {field.fieldsArray.map((field) => (
+                    <Field key={field.name} field={field} dark={dark} />
+                  ))}
+                </div>
+                {"}"}
+              </Fragment>
+            ))}
+            {fieldsWithoutOneOf.map((field) => (
               <Field key={field.name} field={field} dark={dark} />
             ))}
           </div>

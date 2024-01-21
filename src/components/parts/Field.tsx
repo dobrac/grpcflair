@@ -25,7 +25,7 @@ export default function Field({ field, dark }: FieldProps) {
         {field.required ? "*" : ""}
       </span>
       {": "}
-      {field.map && "<" + (field as unknown as MapField).keyType + ", "}
+      {field.map && "map<" + (field as unknown as MapField).keyType + ", "}
       <span className={dark ? "text-white" : "text-secondary"}>
         {expandable ? (
           <Button
@@ -43,7 +43,6 @@ export default function Field({ field, dark }: FieldProps) {
       {field.map && ">"}
       {field.repeated ? "[]" : ""}
       {/*{field.optional ? " (optional)" : ""}*/}
-      {field.partOf ? " (part of " + field.partOf.name + ")" : ""}
       {field.comment && (
         <span
           className={[
