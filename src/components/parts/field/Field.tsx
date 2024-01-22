@@ -17,6 +17,7 @@ export default function Field({ field, dark }: FieldProps) {
         {field.name}
         {field.required ? "*" : ""}
       </span>
+      <span className="text-secondary ms-1">({field.id})</span>
       {": "}
       <FieldType field={field} dark={dark} />
     </div>
