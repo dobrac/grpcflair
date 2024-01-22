@@ -51,7 +51,7 @@ export default function Method({ service, method }: ServiceProps) {
               </span>
             )}
           </div>
-          <div className="flex-grow-1 small text-secondary ms-1">
+          <div className="flex-grow-1 small text-secondary whitespace-pre ms-1">
             {method.comment}
           </div>
           <div>

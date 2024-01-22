@@ -24,7 +24,7 @@ export default function Service({ service }: ServiceProps) {
           <div className="fw-bold fs-5">
             {service.fullName.replace(".", "")}
           </div>
-          <div className="flex-grow-1 small text-secondary ms-3">
+          <div className="flex-grow-1 small text-secondary whitespace-pre ms-3">
             {service.comment}
           </div>
           <div>

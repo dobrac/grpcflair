@@ -31,7 +31,9 @@ export default function RequestForm({ method }: RequestFormProps) {
           <Fragment key={oneOf.name}>
             <tr>
               <td className="align-top py-3" colSpan={2}>
-                <div className="text-secondary">{oneOf.comment}</div>
+                <div className="text-secondary whitespace-pre">
+                  {oneOf.comment}
+                </div>
                 <div className="fw-bolder">{oneOf.name}</div>
               </td>
             </tr>
@@ -42,7 +44,9 @@ export default function RequestForm({ method }: RequestFormProps) {
                   <InputFieldName field={field} />
                 </td>
                 <td className="align-top py-3">
-                  <div className="text-secondary">{field.comment}</div>
+                  <div className="text-secondary whitespace-pre">
+                    {field.comment}
+                  </div>
                   <InputFieldValue field={field} />
                 </td>
               </tr>
@@ -55,7 +59,9 @@ export default function RequestForm({ method }: RequestFormProps) {
               <InputFieldName field={field} />
             </td>
             <td className="align-top py-3">
-              <div className="text-secondary">{field.comment}</div>
+              <div className="text-secondary whitespace-pre">
+                {field.comment}
+              </div>
               <InputFieldValue field={field} />
             </td>
           </tr>

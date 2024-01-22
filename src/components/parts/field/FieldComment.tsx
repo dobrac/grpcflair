@@ -11,7 +11,14 @@ export default function FieldComment({ field, dark }: FieldCommentProps) {
   }
 
   return (
-    <span className={["fst-italic", "small", "text-secondary"].join(" ")}>
+    <span
+      className={[
+        "fst-italic",
+        "small",
+        "text-secondary",
+        "whitespace-pre",
+      ].join(" ")}
+    >
       {field.comment}
     </span>
   );
