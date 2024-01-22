@@ -5,6 +5,7 @@ export function getFieldYupType(field: protobuf.Field) {
   if (field.map) {
     return yup
       .object()
+      .typeError(`Field "${field.name}" must be an object`)
       .transform((val, orig) => (orig == "" ? null : val))
       .nullable()
       .json();
@@ -13,6 +14,7 @@ export function getFieldYupType(field: protobuf.Field) {
   if (field.repeated) {
     return yup
       .array()
+      .typeError(`Field "${field.name}" must be an array object`)
       .transform((val, orig) => (orig == "" ? null : val))
       .nullable()
       .json();
@@ -22,6 +24,7 @@ export function getFieldYupType(field: protobuf.Field) {
     if (typeof field.typeDefault === "boolean") {
       return yup
         .boolean()
+        .typeError(`Field "${field.name}" must be a boolean`)
         .transform((val, orig) => (orig == "" ? null : val))
         .nullable();
     }
@@ -29,6 +32,7 @@ export function getFieldYupType(field: protobuf.Field) {
     if (typeof field.typeDefault === "number") {
       return yup
         .number()
+        .typeError(`Field "${field.name}" must be a number`)
         .transform((val, orig) => (orig == "" ? null : val))
         .nullable();
     }
@@ -47,6 +51,7 @@ export function getFieldYupType(field: protobuf.Field) {
   return yup
     .object()
     .transform((val, orig) => (orig == "" ? null : val))
+    .typeError(`Field "${field.name}" must be an object`)
     .nullable()
     .json();
 }

@@ -19,7 +19,7 @@ export default function FormControlledField({
     <Form.Group>
       <Controller name={fieldName} control={control} render={render} />
       <Form.Control.Feedback type="invalid">
-        {JSON.stringify(errors[fieldName]?.message)}
+        {errors[fieldName]?.message as string}
       </Form.Control.Feedback>
     </Form.Group>
   );
