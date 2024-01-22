@@ -6,8 +6,8 @@ import FieldType from "@/components/parts/field/FieldType";
 import { useFormContext } from "react-hook-form";
 import TabbedInputField, {
   InputTypeTab,
-} from "@/components/parts/method/request/inputfields/layout/TabbedInputField";
-import FormControlledField from "@/components/parts/method/request/inputfields/form/FormControlledField";
+} from "@/components/parts/method/request/inputfield/layout/TabbedInputField";
+import FormControlledField from "@/components/parts/method/request/inputfield/form/FormControlledField";
 import { placeholderTransformation } from "@/services/form";
 import { ChangeEvent } from "react";
 
