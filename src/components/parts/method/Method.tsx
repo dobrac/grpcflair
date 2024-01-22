@@ -17,7 +17,6 @@ import RequestFormExecution from "@/components/parts/method/request/RequestFormE
 import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
 import RequestForm from "@/components/parts/method/request/RequestForm";
-import { cleanEmptyValues } from "@/services/form";
 
 export interface ServiceProps {
   service: protobuf.Service;
