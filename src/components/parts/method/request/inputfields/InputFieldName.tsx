@@ -1,7 +1,8 @@
 import protobuf from "protobufjs";
+import FieldType from "@/components/parts/field/FieldType";
 
 export interface InputFieldNameProps {
-  field: protobuf.FieldBase;
+  field: protobuf.Field;
 }
 
 export default function InputFieldName({ field }: InputFieldNameProps) {
@@ -10,7 +11,7 @@ export default function InputFieldName({ field }: InputFieldNameProps) {
   return (
     <div>
       <div className="fw-bolder">{field.name}</div>
-      <div className="text-secondary small">{field.type.toString()}</div>
+      <FieldType field={field} expandable={false} />
     </div>
   );
 }

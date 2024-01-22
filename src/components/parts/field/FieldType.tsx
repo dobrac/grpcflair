@@ -8,13 +8,17 @@ import FieldComment from "@/components/parts/field/FieldComment";
 export interface FieldTypeProps {
   field: protobuf.Field;
   dark?: boolean;
+  expandable?: boolean;
   expanded?: boolean;
+  className?: string;
 }
 
 export default function FieldType({
   field,
   dark,
+  expandable = true,
   expanded = false,
+  className,
 }: FieldTypeProps) {
   field.resolve();
 
@@ -22,13 +26,13 @@ export default function FieldType({
 
   let resolvedType = field.resolvedType;
 
-  const expandable = !!resolvedType;
+  const expandableResolved = expandable && !!resolvedType;
 
   return (
-    <>
-      {field.map && "map<" + (field as unknown as MapField).keyType + ", "}
+    <span className={className}>
       <span className={dark ? "text-white" : "text-secondary"}>
-        {expandable ? (
+        {field.map && "map<" + (field as unknown as MapField).keyType + ", "}
+        {expandableResolved ? (
           <Button
             size="sm"
             variant="link"
@@ -40,9 +44,9 @@ export default function FieldType({
         ) : (
           field.type
         )}
+        {field.map && ">"}
+        {field.repeated ? "[]" : ""}
       </span>
-      {field.map && ">"}
-      {field.repeated ? "[]" : ""}
       {/*{field.optional ? " (optional)" : ""}*/}
       <div>
         {!!resolvedType && resolvedType instanceof protobuf.Type && open && (
@@ -52,6 +56,6 @@ export default function FieldType({
           <EnumType enumType={resolvedType} dark={dark} expanded={true} />
         )}
       </div>
-    </>
+    </span>
   );
 }

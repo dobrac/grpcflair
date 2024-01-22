@@ -1,345 +1,238 @@
-import { Form, Nav } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import protobuf from "protobufjs";
-import { useState } from "react";
 import Type from "@/components/parts/Type";
 import EnumType from "@/components/parts/EnumType";
 import FieldType from "@/components/parts/field/FieldType";
-import { isJSON } from "@/services/json";
-import { getFieldDefaultValue } from "@/services/protobufjs";
+import { useFormContext } from "react-hook-form";
+import InputFieldTabbed, {
+  InputTypeTab,
+} from "@/components/parts/method/request/inputfields/InputFieldTabbed";
+import FormControlledField from "@/components/parts/method/request/inputfields/FormControlledField";
+import { placeholderTransformation } from "@/services/form";
+import { ChangeEvent } from "react";
 
-function ScalarInputField({ field, value, onChange }: InputFieldValueProps) {
+function ScalarInputField({ field }: InputFieldValueProps) {
+  const {
+    formState: { errors },
+  } = useFormContext();
+
   if (field.type === "bytes") {
     return (
-      <Form.Control
-        type="file"
-        defaultValue={value}
-        onBlur={(e) => {
-          onChange?.(e.target.value);
-        }}
+      <FormControlledField
+        fieldName={field.name}
+        render={({ field }) => (
+          <Form.Control
+            {...field}
+            isInvalid={errors[field.name] !== undefined}
+            type="file"
+            value={field.value?.fileName}
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              // TODO: Does it work?
+              //       const arrayBuffer = await file.arrayBuffer();
+              //       onChange?.(arrayBuffer);
+              field.onChange(event.target.files?.[0]);
+            }}
+          />
+        )}
       />
     );
   }
 
   if (typeof field.typeDefault === "boolean") {
     return (
-      <Form.Select
-        value={value}
-        onChange={(e) => {
-          if (e.target.value !== "") {
-            onChange?.(e.target.value === "true");
-          } else {
-            onChange?.(undefined);
-          }
-        }}
-      >
-        <option value=""></option>
-        <option value="true">true</option>
-        <option value="false">false</option>
-      </Form.Select>
+      <FormControlledField
+        fieldName={field.name}
+        render={({ field }) => (
+          <Form.Select {...field} isInvalid={errors[field.name] !== undefined}>
+            <option value=""></option>
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </Form.Select>
+        )}
+      />
     );
   }
 
   if (typeof field.typeDefault === "number") {
     return (
-      <Form.Control
-        as="input"
-        type="number"
-        defaultValue={value}
-        onBlur={(e) => {
-          if (e.target.value !== "") {
-            onChange?.(Number(e.target.value));
-          } else {
-            onChange?.(undefined);
-          }
-        }}
+      <FormControlledField
+        fieldName={field.name}
+        render={({ field }) => (
+          <Form.Control
+            {...field}
+            isInvalid={errors[field.name] !== undefined}
+            as="input"
+            type="number"
+          />
+        )}
       />
     );
   }
 
   return (
-    <Form.Control
-      as="input"
-      defaultValue={value}
-      onBlur={(e) => {
-        if (e.target.value !== "") {
-          onChange?.(e.target.value);
-        } else {
-          onChange?.(undefined);
-        }
+    <FormControlledField
+      fieldName={field.name}
+      render={({ field }) => (
+        <Form.Control
+          {...field}
+          isInvalid={errors[field.name] !== undefined}
+          as="input"
+        />
+      )}
+    />
+  );
+}
+
+export interface TypeInputFieldValueProps extends InputFieldValueProps {
+  type: protobuf.Type;
+}
+
+function TypeInputField({ field, type }: TypeInputFieldValueProps) {
+  const {
+    formState: { errors },
+  } = useFormContext();
+
+  return (
+    <InputFieldTabbed
+      renderer={{
+        [InputTypeTab.JSON]: (
+          <FormControlledField
+            fieldName={field.name}
+            render={({ field }) => (
+              <Form.Control
+                {...field}
+                as="textarea"
+                rows={10}
+                isInvalid={errors[field.name] !== undefined}
+              />
+            )}
+          />
+        ),
+        [InputTypeTab.MODEL]: <Type type={type} expanded={true} />,
       }}
     />
   );
 }
 
-enum InputTypeTab {
-  JSON = "json",
-  MODEL = "model",
+export interface EnumInputFieldProps extends InputFieldValueProps {
+  enumType: protobuf.Enum;
+}
+function EnumInputField({ field, enumType }: EnumInputFieldProps) {
+  const {
+    formState: { errors },
+  } = useFormContext();
+
+  return (
+    <InputFieldTabbed
+      renderer={{
+        [InputTypeTab.JSON]: (
+          <FormControlledField
+            fieldName={field.name}
+            render={({ field }) => (
+              <Form.Select
+                {...field}
+                isInvalid={errors[field.name] !== undefined}
+              >
+                <option value=""></option>
+                {Object.entries(enumType.values).map(([key, value]) => (
+                  <option key={`${key}-${value}`} value={key}>
+                    {key} ({value})
+                  </option>
+                ))}
+              </Form.Select>
+            )}
+          />
+        ),
+        [InputTypeTab.MODEL]: <EnumType enumType={enumType} expanded={true} />,
+      }}
+    />
+  );
 }
 
 export interface InputFieldValueProps {
   field: protobuf.Field;
-  value?: any;
-  onChange?: (value: unknown) => void;
 }
 
-export default function InputFieldValue({
-  field,
-  value,
-  onChange,
-}: InputFieldValueProps) {
+export default function InputFieldValue({ field }: InputFieldValueProps) {
   field.resolve();
 
   const resolvedType = field.resolvedType;
 
-  const [requestInputType, setRequestInputType] = useState<InputTypeTab>(
-    InputTypeTab.JSON,
-  );
+  const dataPlaceholder = placeholderTransformation(field);
 
-  const dataPlaceholder = getFieldDefaultValue(field);
+  const {
+    formState: { errors },
+  } = useFormContext();
 
   if (field.repeated) {
     return (
-      <>
-        <Nav
-          variant="underline"
-          className="mb-2 small"
-          activeKey={requestInputType}
-          onSelect={(selectedKey) => {
-            setRequestInputType(selectedKey as unknown as InputTypeTab);
-          }}
-        >
-          <Nav.Item>
-            <Nav.Link eventKey={InputTypeTab.JSON}>JSON</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey={InputTypeTab.MODEL}>Model</Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <div
-          className={
-            requestInputType === InputTypeTab.JSON ? "d-block" : "d-none"
-          }
-        >
-          <Form.Control
-            key={JSON.stringify(value)}
-            as="textarea"
-            rows={5}
-            defaultValue={JSON.stringify(value, null, 2)}
-            placeholder={JSON.stringify([dataPlaceholder], null, 2)}
-            onBlur={(e) => {
-              const targetValue = e.target.value;
-              if (!isJSON(targetValue)) {
-                onChange?.(value);
-                return;
-              }
-
-              const parsedValue = JSON.parse(targetValue);
-              if (!Array.isArray(parsedValue)) {
-                onChange?.(undefined);
-                return;
-              }
-
-              onChange?.(parsedValue);
-            }}
-          />
-        </div>
-        <div
-          className={
-            requestInputType === InputTypeTab.MODEL ? "d-block" : "d-none"
-          }
-        >
-          <div className="card px-2 py-1 d-inline-block">
-            <FieldType field={field} expanded={true} />
-          </div>
-        </div>
-      </>
+      <InputFieldTabbed
+        renderer={{
+          [InputTypeTab.JSON]: (
+            <FormControlledField
+              fieldName={field.name}
+              render={({ field }) => (
+                <Form.Control
+                  {...field}
+                  isInvalid={errors[field.name] !== undefined}
+                  as="textarea"
+                  rows={5}
+                  placeholder={JSON.stringify(dataPlaceholder, null, 2)}
+                />
+              )}
+            />
+          ),
+          [InputTypeTab.MODEL]: (
+            <div className="card px-2 py-1 d-inline-block">
+              <FieldType field={field} expanded={true} />
+            </div>
+          ),
+        }}
+      />
     );
   }
 
   if (field.map) {
     return (
-      <>
-        <Nav
-          variant="underline"
-          className="mb-2 small"
-          activeKey={requestInputType}
-          onSelect={(selectedKey) => {
-            setRequestInputType(selectedKey as unknown as InputTypeTab);
-          }}
-        >
-          <Nav.Item>
-            <Nav.Link eventKey={InputTypeTab.JSON}>JSON</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey={InputTypeTab.MODEL}>Model</Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <div
-          className={
-            requestInputType === InputTypeTab.JSON ? "d-block" : "d-none"
-          }
-        >
-          <Form.Control
-            key={JSON.stringify(value)}
-            as="textarea"
-            rows={10}
-            defaultValue={JSON.stringify(value, null, 2)}
-            onBlur={(e) => {
-              const fieldValue = e.target.value
-                ? JSON.parse(e.target.value)
-                : {};
-              onChange?.(fieldValue);
-            }}
-          />
-        </div>
-        <div
-          className={
-            requestInputType === InputTypeTab.MODEL ? "d-block" : "d-none"
-          }
-        >
-          <div className="card px-2 py-1 d-inline-block">
-            <FieldType field={field} expanded={true} />
-          </div>
-        </div>
-      </>
+      <InputFieldTabbed
+        renderer={{
+          [InputTypeTab.JSON]: (
+            <FormControlledField
+              fieldName={field.name}
+              render={({ field }) => (
+                <Form.Control
+                  {...field}
+                  isInvalid={errors[field.name] !== undefined}
+                  as="textarea"
+                  rows={10}
+                />
+              )}
+            />
+          ),
+          [InputTypeTab.MODEL]: (
+            <div className="card px-2 py-1 d-inline-block">
+              <FieldType field={field} expanded={true} />
+            </div>
+          ),
+        }}
+      />
     );
   }
-
-  // TODO: Well Known Types?
-  // if (field.type === "google.protobuf.Timestamp") {
-  //   return (
-  //     <Form.Control
-  //       type="datetime-local"
-  //       defaultValue={value}
-  //       onBlur={(e) => {
-  //         onChange?.(e.target.value);
-  //       }}
-  //     />
-  //   );
-  // }
-  // if (field.type === "google.protobuf.Any") {
-  //   return (
-  //     <Form.Control
-  //       as="textarea"
-  //       placeholder={field.defaultValue ?? field.typeDefault}
-  //       rows={10}
-  //       onBlur={(e) => {
-  //         const value = e.target.value;
-  //         if (isJSON(value)) {
-  //           onChange?.(JSON.parse(value));
-  //         } else {
-  //           onChange?.(value);
-  //         }
-  //       }}
-  //     />
-  //   );
-  // }
 
   if (!resolvedType) {
     return (
       <div>
-        <ScalarInputField field={field} value={value} onChange={onChange} />
+        <ScalarInputField field={field} />
       </div>
     );
   }
 
   if (resolvedType instanceof protobuf.Type) {
-    return (
-      <>
-        <Nav
-          variant="underline"
-          className="mb-2 small"
-          activeKey={requestInputType}
-          onSelect={(selectedKey) => {
-            setRequestInputType(selectedKey as unknown as InputTypeTab);
-          }}
-        >
-          <Nav.Item>
-            <Nav.Link eventKey={InputTypeTab.JSON}>JSON</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey={InputTypeTab.MODEL}>Model</Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <div
-          className={
-            requestInputType === InputTypeTab.JSON ? "d-block" : "d-none"
-          }
-        >
-          <Form.Control
-            key={JSON.stringify(value)}
-            as="textarea"
-            rows={10}
-            defaultValue={JSON.stringify(value, null, 2)}
-            onBlur={(e) => {
-              const fieldValue = e.target.value
-                ? JSON.parse(e.target.value)
-                : {};
-              onChange?.(fieldValue);
-            }}
-          />
-        </div>
-        <div
-          className={
-            requestInputType === InputTypeTab.MODEL ? "d-block" : "d-none"
-          }
-        >
-          <Type type={resolvedType} expanded={true} />
-        </div>
-      </>
-    );
+    return <TypeInputField field={field} type={resolvedType} />;
   }
 
   if (resolvedType instanceof protobuf.Enum) {
-    return (
-      <>
-        <Nav
-          variant="underline"
-          className="mb-2 small"
-          activeKey={requestInputType}
-          onSelect={(selectedKey) => {
-            setRequestInputType(selectedKey as unknown as InputTypeTab);
-          }}
-        >
-          <Nav.Item>
-            <Nav.Link eventKey={InputTypeTab.JSON}>Selector</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey={InputTypeTab.MODEL}>Model</Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <div
-          className={
-            requestInputType === InputTypeTab.JSON ? "d-block" : "d-none"
-          }
-        >
-          <Form.Select
-            value={value}
-            onChange={(e) => {
-              if (e.target.value !== "") {
-                onChange?.(e.target.value);
-              } else {
-                onChange?.(undefined);
-              }
-            }}
-          >
-            <option value=""></option>
-            {Object.entries(resolvedType.values).map(([key, value]) => (
-              <option key={`${key}-${value}`} value={key}>
-                {key} ({value})
-              </option>
-            ))}
-          </Form.Select>
-        </div>
-        <div
-          className={
-            requestInputType === InputTypeTab.MODEL ? "d-block" : "d-none"
-          }
-        >
-          <EnumType enumType={resolvedType} expanded={true} />
-        </div>
-      </>
-    );
+    return <EnumInputField field={field} enumType={resolvedType} />;
   }
 
   return null;

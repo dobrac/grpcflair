@@ -4,6 +4,8 @@ import PCancelable, { CancelError } from "p-cancelable";
 import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/services/grpc-web";
 import { useMethodContext } from "@/contexts/MethodContext";
 import { useSourceContext } from "@/contexts/SourceContext";
+import { useFormContext } from "react-hook-form";
+import { transformObjectValues } from "@/services/protobufjs";
 
 export default function MethodExecute({
   service,
@@ -16,6 +18,7 @@ export default function MethodExecute({
 
   const { hostname } = useSourceContext();
   const { processing, request, response, functions } = useMethodContext();
+  const { handleSubmit } = useFormContext();
 
   const requestType = method.resolvedRequestType;
   const responseType = method.resolvedResponseType;
@@ -94,13 +97,21 @@ export default function MethodExecute({
     });
   };
 
-  const handleExecute = async () => {
+  const handleExecute = async (data: Record<string, unknown>) => {
     try {
       functions.setCancelFunction(() => {});
       functions.setResponse(undefined);
 
-      const message = requestType.create(request.data ?? {});
-      console.log("message", message);
+      const dataTransformed = transformObjectValues(data, (value) => {
+        if (value === null) {
+          return undefined;
+        }
+        if (value === "") {
+          return undefined;
+        }
+        return value;
+      });
+      const message = requestType.create(dataTransformed);
 
       // TODO: Support request streaming
       if (method.requestStream) {
@@ -138,7 +149,11 @@ export default function MethodExecute({
 
   return (
     <div className="mt-2 d-grid gap-1">
-      <Button size="sm" disabled={processing} onClick={handleExecute}>
+      <Button
+        size="sm"
+        disabled={processing}
+        onClick={handleSubmit(handleExecute)}
+      >
         <Spinner
           size="sm"
           className={processing ? "visible" : "visually-hidden"}

@@ -19,6 +19,10 @@ import MethodExecute from "@/components/parts/method/request/MethodExecute";
 import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
 import { faL } from "@fortawesome/free-solid-svg-icons/faL";
+import InputForm from "@/components/parts/method/request/InputForm";
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 export interface ServiceProps {
   service: protobuf.Service;
@@ -29,23 +33,13 @@ export default function Method({ service, method }: ServiceProps) {
   method.resolve();
 
   const { hostname } = useSourceContext();
-  const {
-    processing,
-    response,
-    request,
-    functions: { setRequest },
-  } = useMethodContext();
+  const { processing, response } = useMethodContext();
 
   const [open, setOpen] = useState(false);
 
-  const requestType = method.resolvedRequestType;
   const responseType = method.resolvedResponseType;
 
   const color = getColorFromMethodType(method);
-
-  const fields = requestType?.fieldsArray ?? [];
-  const fieldsWithoutOneOf = fields.filter((it) => !it.partOf);
-  const oneofsArray = requestType?.oneofsArray ?? [];
 
   return (
     <div key={method.name} className={"card bg-" + color + "-subtle"}>
@@ -88,73 +82,7 @@ export default function Method({ service, method }: ServiceProps) {
             </div>
           </SectionHeader>
           <SectionBody>
-            <table className="w-100">
-              <thead className="border-bottom border-secondary-subtle small">
-                <tr>
-                  <th className="w-25">Name</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {oneofsArray.map((oneOf) => (
-                  <Fragment key={oneOf.name}>
-                    <tr>
-                      <td className="align-top py-3" colSpan={2}>
-                        <div className="text-secondary">{oneOf.comment}</div>
-                        <div className="fw-bolder">{oneOf.name}</div>
-                      </td>
-                    </tr>
-                    {oneOf.fieldsArray.map((field) => (
-                      <tr key={field.name}>
-                        <td className="align-top py-3 d-flex gap-3 align-items-center">
-                          <FontAwesomeIcon icon={faL} />
-                          <InputFieldName field={field} />
-                        </td>
-                        <td className="align-top py-3">
-                          <div className="text-secondary">{field.comment}</div>
-                          <InputFieldValue
-                            field={field}
-                            value={request.data?.[field.name]}
-                            onChange={(value) => {
-                              setRequest((it) => ({
-                                ...it,
-                                data: {
-                                  ...it.data,
-                                  [field.name]: value,
-                                },
-                              }));
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </Fragment>
-                ))}
-                {fieldsWithoutOneOf.map((field) => (
-                  <tr key={field.name}>
-                    <td className="align-top py-3">
-                      <InputFieldName field={field} />
-                    </td>
-                    <td className="align-top py-3">
-                      <div className="text-secondary">{field.comment}</div>
-                      <InputFieldValue
-                        field={field}
-                        value={request.data?.[field.name]}
-                        onChange={(value) => {
-                          setRequest((it) => ({
-                            ...it,
-                            data: {
-                              ...it.data,
-                              [field.name]: value,
-                            },
-                          }));
-                        }}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <InputForm method={method} />
             <MethodExecute service={service} method={method} />
           </SectionBody>
           <SectionHeader>

@@ -1,4 +1,4 @@
-import protobuf, { MapField } from "protobufjs";
+import protobuf from "protobufjs";
 
 export function getServicesFromContext(
   context: protobuf.Root,
@@ -68,65 +68,6 @@ function traverseStructure<DesiredType extends ProtobufJsType>(
   }
 }
 
-export function getFieldDefaultValue(field: protobuf.Field) {
-  if (field.resolvedType == null) {
-    if (field.repeated) {
-      // For empty strings, return type name
-      if (field.typeDefault === "") {
-        return field.type;
-      }
-
-      return field.typeDefault ?? field.type;
-    } else {
-      return field.defaultValue ?? field.typeDefault ?? field.type;
-    }
-  }
-
-  if (field.resolvedType instanceof protobuf.Enum) {
-    return field.resolvedType.values[0];
-  }
-
-  return getTypeDefaultValues(field.resolvedType);
-}
-
-export function getTypeDefaultValues(
-  type: protobuf.Type | null,
-  ignorePrimitives = false,
-) {
-  const result: any = {};
-  if (type == null) {
-    return result;
-  }
-
-  const fieldsWithoutPartOf = type.fieldsArray.filter((field) => !field.partOf);
-
-  for (const field of fieldsWithoutPartOf) {
-    field.resolve();
-    const fieldName = field.name;
-
-    // Ignore primitives if specified as all fields are optional by default
-    const primitiveOrEnum =
-      field.resolvedType == null || field.resolvedType instanceof protobuf.Enum;
-    if (ignorePrimitives && field.optional && primitiveOrEnum) {
-      continue;
-    }
-
-    const value = getFieldDefaultValue(field);
-    if (field.repeated) {
-      result[fieldName] = [value];
-    } else if (field.map) {
-      const fieldMap = field as unknown as MapField;
-      const fieldMapKeyValue = fieldMap.keyType;
-      result[fieldName] = {
-        [fieldMapKeyValue]: value,
-      };
-    } else {
-      result[fieldName] = value;
-    }
-  }
-  return result;
-}
-
 export enum RequestType {
   UNARY,
   CLIENT_STREAMING,
@@ -169,4 +110,33 @@ export function getMethodType(method: protobuf.Method) {
     case RequestType.UNARY:
       return "Unary";
   }
+}
+
+export function transformTypeValues(
+  type: protobuf.Type | null,
+  transformValue: (value: protobuf.Field) => unknown,
+) {
+  const result: any = {};
+  if (type == null) {
+    return result;
+  }
+
+  for (const field of type.fieldsArray) {
+    field.resolve();
+    const fieldName = field.name;
+
+    result[fieldName] = transformValue(field);
+  }
+  return result;
+}
+
+export function transformObjectValues(
+  object: Record<string, unknown>,
+  transformValue: (value: unknown) => unknown,
+) {
+  const result: any = {};
+  for (const [key, value] of Object.entries(object)) {
+    result[key] = transformValue(value);
+  }
+  return result;
 }

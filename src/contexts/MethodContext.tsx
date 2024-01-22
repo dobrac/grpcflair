@@ -10,15 +10,18 @@ import {
 } from "react";
 import { GrpcWebFormat } from "@/types/grpc-web";
 import protobuf from "protobufjs";
-import { getTypeDefaultValues } from "@/services/protobufjs";
+import { transformTypeValues } from "@/services/protobufjs";
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { getFieldYupType } from "@/services/yup";
+import { formTransformation } from "@/services/form";
 
-type RequestData = Record<string, unknown>;
 type CancelFunction = () => void;
 
 interface MethodRequest {
   format: GrpcWebFormat;
   metadata?: Record<string, string>;
-  data?: RequestData;
 }
 
 interface MethodResponse {
@@ -69,20 +72,32 @@ export default function MethodContextProvider({
   method.resolve();
 
   const requestType = method.resolvedRequestType;
-  const defaultRequestData = getTypeDefaultValues(requestType, true);
 
   const [cancelFunction, setCancelFunction] = useState<
     CancelFunction | undefined
   >(defaultValues.functions.cancel);
+
   const [request, setRequest] = useState<MethodRequest>({
     ...defaultValues.request,
-    data: defaultRequestData,
   });
   const [response, setResponse] = useState<MethodResponse | undefined>(
     defaultValues.response,
   );
 
   const processing = !!cancelFunction;
+
+  const defaultRequestData = transformTypeValues(
+    requestType,
+    formTransformation,
+  );
+
+  const schema = yup.object(transformTypeValues(requestType, getFieldYupType));
+
+  const methods = useForm({
+    defaultValues: defaultRequestData,
+    resolver: yupResolver(schema),
+    mode: "onBlur",
+  });
 
   const contextValue = useMemo(
     () => ({
@@ -100,8 +115,10 @@ export default function MethodContextProvider({
   );
 
   return (
-    <SourceContext.Provider value={contextValue}>
-      {children}
-    </SourceContext.Provider>
+    <FormProvider {...methods}>
+      <SourceContext.Provider value={contextValue}>
+        {children}
+      </SourceContext.Provider>
+    </FormProvider>
   );
 }
