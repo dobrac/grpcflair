@@ -11,6 +11,7 @@ import FormControlledField from "@/components/parts/method/request/inputfield/fo
 import { placeholderTransformation } from "@/services/form";
 import { ChangeEvent } from "react";
 import { groupBy } from "lodash";
+import JSONBlock from "@/components/JSONBlock";
 
 function ScalarInputField({ field }: InputFieldValueProps) {
   const {
@@ -97,6 +98,8 @@ function TypeInputField({ field, type }: TypeInputFieldValueProps) {
     formState: { errors },
   } = useFormContext();
 
+  const dataPlaceholder = placeholderTransformation(field);
+
   return (
     <TabbedInputField
       renderer={{
@@ -112,6 +115,11 @@ function TypeInputField({ field, type }: TypeInputFieldValueProps) {
               />
             )}
           />
+        ),
+        [InputTypeTab.EXAMPLE]: (
+          <JSONBlock dark={false}>
+            {JSON.stringify(dataPlaceholder, null, 2)}
+          </JSONBlock>
         ),
         [InputTypeTab.MODEL]: <Type type={type} expanded={true} />,
       }}
@@ -131,6 +139,8 @@ function EnumInputField({ field, enumType }: EnumInputFieldProps) {
     Object.entries(enumType.values),
     ([, value]) => value,
   );
+
+  const dataPlaceholder = placeholderTransformation(field);
 
   return (
     <TabbedInputField
@@ -152,6 +162,11 @@ function EnumInputField({ field, enumType }: EnumInputFieldProps) {
               </Form.Select>
             )}
           />
+        ),
+        [InputTypeTab.EXAMPLE]: (
+          <JSONBlock dark={false}>
+            {JSON.stringify(dataPlaceholder, null, 2)}
+          </JSONBlock>
         ),
         [InputTypeTab.MODEL]: <EnumType enumType={enumType} expanded={true} />,
       }}
@@ -187,10 +202,14 @@ export default function InputFieldValue({ field }: InputFieldValueProps) {
                   isInvalid={errors[field.name] !== undefined}
                   as="textarea"
                   rows={5}
-                  placeholder={JSON.stringify(dataPlaceholder, null, 2)}
                 />
               )}
             />
+          ),
+          [InputTypeTab.EXAMPLE]: (
+            <JSONBlock dark={false}>
+              {JSON.stringify(dataPlaceholder, null, 2)}
+            </JSONBlock>
           ),
           [InputTypeTab.MODEL]: (
             <div className="card px-2 py-1 d-inline-block">
@@ -218,6 +237,11 @@ export default function InputFieldValue({ field }: InputFieldValueProps) {
                 />
               )}
             />
+          ),
+          [InputTypeTab.EXAMPLE]: (
+            <JSONBlock dark={false}>
+              {JSON.stringify(dataPlaceholder, null, 2)}
+            </JSONBlock>
           ),
           [InputTypeTab.MODEL]: (
             <div className="card px-2 py-1 d-inline-block">

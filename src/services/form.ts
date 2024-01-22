@@ -54,21 +54,8 @@ function getFieldFormValue(field: protobuf.Field): string {
 }
 
 export function formTransformation(field: protobuf.Field) {
-  if (field.repeated) {
+  if (field.repeated || field.map) {
     return "";
-  }
-
-  if (field.map) {
-    const fieldMap = field as unknown as MapField;
-    const fieldMapKeyValue = fieldMap.keyType;
-    const value = getFieldFormValue(field);
-    return JSON.stringify(
-      {
-        [fieldMapKeyValue]: value ? JSON.parse(value) : null,
-      },
-      null,
-      2,
-    );
   }
 
   return getFieldFormValue(field);

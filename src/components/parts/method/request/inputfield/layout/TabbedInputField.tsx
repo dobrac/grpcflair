@@ -4,6 +4,7 @@ import { ReactNode, useState } from "react";
 export enum InputTypeTab {
   JSON = "JSON",
   ENUM = "Selector",
+  EXAMPLE = "Example",
   MODEL = "Model",
 }
 
