@@ -1,14 +1,12 @@
 import { Badge, Collapse, ProgressBar } from "react-bootstrap";
 import protobuf from "protobufjs";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import YesNoIcon from "@/components/YesNoIcon";
 import { getColorFromMethodType, getMethodType } from "@/services/protobufjs";
-import InputFieldValue from "@/components/parts/method/request/inputfields/InputFieldValue";
 import { useSourceContext } from "@/contexts/SourceContext";
-import InputFieldName from "@/components/parts/method/request/inputfields/InputFieldName";
 import ResponseError from "@/components/parts/method/response/ResponseError";
 import ResponsesList from "@/components/parts/method/response/ResponsesList";
 import ResponseExample from "@/components/parts/method/response/ResponseExample";
@@ -18,11 +16,7 @@ import FormatSelector from "@/components/parts/method/request/FormatSelector";
 import RequestFormExecution from "@/components/parts/method/request/RequestFormExecution";
 import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
-import { faL } from "@fortawesome/free-solid-svg-icons/faL";
 import RequestForm from "@/components/parts/method/request/RequestForm";
-import { FormProvider, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 export interface ServiceProps {
   service: protobuf.Service;

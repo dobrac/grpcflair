@@ -1,8 +1,8 @@
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faL } from "@fortawesome/free-solid-svg-icons/faL";
-import InputFieldName from "@/components/parts/method/request/inputfields/InputFieldName";
-import InputFieldValue from "@/components/parts/method/request/inputfields/InputFieldValue";
+import InputFieldName from "@/components/parts/method/request/inputfield/InputFieldName";
+import InputFieldValue from "@/components/parts/method/request/inputfield/InputFieldValue";
 import protobuf from "protobufjs";
 
 export interface RequestFormProps {
