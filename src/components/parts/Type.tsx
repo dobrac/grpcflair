@@ -4,7 +4,6 @@ import { Fragment, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
-import { compact, filter, isNull, omit, omitBy, uniqBy } from "lodash";
 
 export interface TypeProps {
   type: protobuf.Type;
@@ -19,6 +18,22 @@ export default function Type({ type, dark, expanded }: TypeProps) {
   const oneOfFields = type.oneofsArray;
 
   const fieldsWithoutOneOf = fields.filter((it) => !it.partOf);
+
+  const reservedFields =
+    type.reserved?.map((it) => {
+      if (typeof it === "string") {
+        return it;
+      }
+      if (Array.isArray(it)) {
+        const [from, to] = it;
+        if (from === to) {
+          return `${from}`;
+        } else {
+          return `${from}-${to}`;
+        }
+      }
+      return `${it}`;
+    }) ?? [];
 
   return (
     <div
@@ -49,6 +64,12 @@ export default function Type({ type, dark, expanded }: TypeProps) {
       {open && (
         <>
           <div className="ps-3">
+            {!!reservedFields.length && (
+              <div className="small text-secondary mb-1">
+                <span>reserved </span>
+                <span>{reservedFields.join(", ")}</span>
+              </div>
+            )}
             {oneOfFields.map((field) => (
               <Fragment key={field.fullName}>
                 oneof <span className="fw-bolder">{field.name}</span>

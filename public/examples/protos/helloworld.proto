@@ -106,8 +106,9 @@ message TestRequest {
  */
 message HelloReply {
   reserved "foo", "bar";
+  reserved 1, 2 to 5;
   // The greeting.
-  string message = 1;
+  string message = 6;
 }
 
 message HelloReplyWithInner {

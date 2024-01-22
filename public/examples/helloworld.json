@@ -148,13 +148,21 @@
           "fields": {
             "message": {
               "type": "string",
-              "id": 1,
+              "id": 6,
               "comment": "The greeting."
             }
           },
           "reserved": [
             "foo",
-            "bar"
+            "bar",
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              5
+            ]
           ],
           "comment": "A HelloReply is a response message from a server."
         },
