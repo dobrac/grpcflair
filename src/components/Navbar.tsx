@@ -1,7 +1,7 @@
 "use client";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { Button, Dropdown, Form, InputGroup } from "react-bootstrap";
 import Image from "next/image";
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSourceContext } from "@/contexts/SourceContext";
 import { DEFAULT_URL } from "@/types/constants";
 import protobuf from "protobufjs";
@@ -9,21 +9,24 @@ import { useSearchParams } from "next/navigation";
 import { ProtobufjsRootDescriptor } from "@/types/protobufjs-types";
 import descriptor from "protobufjs/ext/descriptor";
 
+enum FileSource {
+  URL = "URL",
+  FILE = "File",
+}
+
 export default function Navbar() {
   const searchParams = useSearchParams();
   const url = searchParams.get("url");
 
   const [search, setSearch] = useState(url ?? DEFAULT_URL);
+  const [file, setFile] = useState<File | null>(null);
 
   const { setContext } = useSourceContext();
 
-  const fetchUrl = async (url: string) => {
-    const source = await fetch(url);
-    const extension = url.split(".").pop();
+  const [fileSource, setFileSource] = useState<FileSource>(FileSource.URL);
 
-    if (!extension) {
-      return;
-    }
+  const processRequest = async (url: string, extension: string) => {
+    const source = await fetch(url);
 
     switch (extension) {
       case "json": {
@@ -48,16 +51,45 @@ export default function Navbar() {
     }
   };
 
+  const processUrl = async (url: string) => {
+    const extension = url.split(".").pop();
+    if (!extension) {
+      return;
+    }
+
+    await processRequest(url, extension);
+  };
+
+  const processFile = async (file: File) => {
+    const url = URL.createObjectURL(file);
+    const extension = file.name.split(".").pop();
+    if (!extension) {
+      return;
+    }
+
+    await processRequest(url, extension);
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setContext(undefined);
 
-    await fetchUrl(search);
+    switch (fileSource) {
+      case FileSource.URL:
+        await processUrl(search);
+        break;
+      case FileSource.FILE:
+        if (!file) {
+          return;
+        }
+        await processFile(file);
+        break;
+    }
   };
 
   useEffect(() => {
     if (search) {
-      fetchUrl(search);
+      processUrl(search);
     }
   }, []);
 
@@ -76,11 +108,34 @@ export default function Navbar() {
       <div className="flex-grow-1">
         <Form onSubmit={handleSubmit}>
           <InputGroup className="d-flex">
-            <Form.Control
-              as="input"
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
-            />
+            <Dropdown>
+              <Dropdown.Toggle>{fileSource}</Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setFileSource(FileSource.URL)}>
+                  URL
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setFileSource(FileSource.FILE)}>
+                  File
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            {fileSource === FileSource.URL && (
+              <Form.Control
+                as="input"
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
+              />
+            )}
+            {fileSource === FileSource.FILE && (
+              <Form.Control
+                type="file"
+                accept=".json"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setFile(e.target.files?.[0] ?? null);
+                }}
+              />
+            )}
             <Button variant="primary" type="submit">
               Explore
             </Button>
