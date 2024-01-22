@@ -37,7 +37,11 @@ export function placeholderTransformation(field: protobuf.Field) {
   return getFieldPlaceholderValue(field);
 }
 
-function getFieldFormValue(field: protobuf.Field): string {
+export function formTransformation(field: protobuf.Field) {
+  if (field.repeated || field.map) {
+    return "";
+  }
+
   if (field.resolvedType == null) {
     return "";
   }
@@ -47,16 +51,8 @@ function getFieldFormValue(field: protobuf.Field): string {
   }
 
   return JSON.stringify(
-    transformTypeValues(field.resolvedType, formTransformation),
+    transformTypeValues(field.resolvedType, placeholderTransformation),
     null,
     2,
   );
-}
-
-export function formTransformation(field: protobuf.Field) {
-  if (field.repeated || field.map) {
-    return "";
-  }
-
-  return getFieldFormValue(field);
 }
