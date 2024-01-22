@@ -10,6 +10,7 @@ import TabbedInputField, {
 import FormControlledField from "@/components/parts/method/request/inputfield/form/FormControlledField";
 import { placeholderTransformation } from "@/services/form";
 import { ChangeEvent } from "react";
+import { groupBy } from "lodash";
 
 function ScalarInputField({ field }: InputFieldValueProps) {
   const {
@@ -26,11 +27,15 @@ function ScalarInputField({ field }: InputFieldValueProps) {
             isInvalid={errors[field.name] !== undefined}
             type="file"
             value={field.value?.fileName}
-            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-              // TODO: Does it work?
-              //       const arrayBuffer = await file.arrayBuffer();
-              //       onChange?.(arrayBuffer);
-              field.onChange(event.target.files?.[0]);
+            onChange={async (event: ChangeEvent<HTMLInputElement>) => {
+              const file = event.target.files?.[0];
+              if (!file) {
+                field.onChange("");
+                return;
+              }
+              const arrayBuffer = await file.arrayBuffer();
+              const uint8Array = new Uint8Array(arrayBuffer);
+              field.onChange(uint8Array);
             }}
           />
         )}
@@ -122,6 +127,11 @@ function EnumInputField({ field, enumType }: EnumInputFieldProps) {
     formState: { errors },
   } = useFormContext();
 
+  const valuesById = groupBy(
+    Object.entries(enumType.values),
+    ([, value]) => value,
+  );
+
   return (
     <TabbedInputField
       renderer={{
@@ -134,9 +144,9 @@ function EnumInputField({ field, enumType }: EnumInputFieldProps) {
                 isInvalid={errors[field.name] !== undefined}
               >
                 <option value=""></option>
-                {Object.entries(enumType.values).map(([key, value]) => (
-                  <option key={`${key}-${value}`} value={key}>
-                    {key} ({value})
+                {Object.entries(valuesById).map(([value, entries]) => (
+                  <option key={value} value={value}>
+                    {entries.map(([key]) => key).join(", ")} ({value})
                   </option>
                 ))}
               </Form.Select>

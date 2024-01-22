@@ -14,7 +14,7 @@ function getFieldPlaceholderValue(field: protobuf.Field): unknown {
   }
 
   if (field.resolvedType instanceof protobuf.Enum) {
-    return field.resolvedType.values[0];
+    return Object.values(field.resolvedType.values)[0];
   }
 
   return transformTypeValues(field.resolvedType, placeholderTransformation);

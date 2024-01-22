@@ -38,14 +38,17 @@ export function getFieldYupType(field: protobuf.Field) {
     }
 
     if (field.type === "bytes") {
-      return yup.mixed<File>().nullable();
+      return yup.mixed<Uint8Array>().nullable();
     }
 
     return yup.string().nullable();
   }
 
   if (field.resolvedType instanceof protobuf.Enum) {
-    return yup.string().nullable();
+    return yup
+      .number()
+      .transform((val, orig) => (orig == "" ? null : val))
+      .nullable();
   }
 
   return yup

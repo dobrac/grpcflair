@@ -111,6 +111,14 @@ export default function RequestFormExecution({
         }
         return value;
       });
+
+      const err = requestType.verify(dataTransformed);
+      if (err) {
+        functions.setResponse({
+          error: new Error('Request is invalid: "' + err + '"'),
+        });
+        return;
+      }
       const message = requestType.create(dataTransformed);
 
       // TODO: Support request streaming
