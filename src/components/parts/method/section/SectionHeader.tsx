@@ -1,7 +1,4 @@
 import { ReactNode } from "react";
-import YesNoIcon from "@/components/YesNoIcon";
-import { Form } from "react-bootstrap";
-import { GrpcWebFormat } from "@/services/grpc-web";
 
 export default function SectionHeader({ children }: { children: ReactNode }) {
   return (

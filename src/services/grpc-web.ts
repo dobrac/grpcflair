@@ -5,14 +5,10 @@ import {
   MethodDescriptor,
   MethodType,
 } from "grpc-web";
+import { GrpcWebFormat } from "@/types/grpc-web";
 
 class DummyRPCType {
   constructor(...args: unknown[]) {}
-}
-
-export enum GrpcWebFormat {
-  TEXT = "text",
-  BINARY = "binary",
 }
 
 export interface GrpcWebOptions {

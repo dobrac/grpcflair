@@ -1,6 +1,6 @@
-import { GrpcWebFormat } from "@/services/grpc-web";
 import { Form } from "react-bootstrap";
 import { useMethodContext } from "@/contexts/MethodContext";
+import { GrpcWebFormat } from "@/types/grpc-web";
 
 export default function FormatSelector() {
   const {

@@ -1,7 +1,11 @@
 "use client";
-import Endpoints from "@/components/Endpoints";
 import { Form } from "react-bootstrap";
 import { useSourceContext } from "@/contexts/SourceContext";
+import dynamic from "next/dynamic";
+
+const Endpoints = dynamic(() => import("@/components/Endpoints"), {
+  ssr: false,
+});
 
 export default function Home() {
   const { hostname, setHostname } = useSourceContext();

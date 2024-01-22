@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { GrpcWebFormat } from "@/services/grpc-web";
+import { GrpcWebFormat } from "@/types/grpc-web";
 import protobuf from "protobufjs";
 import { getTypeDefaultValues } from "@/services/protobufjs";
 
