@@ -4,10 +4,10 @@ import Type from "@/components/parts/Type";
 import EnumType from "@/components/parts/EnumType";
 import FieldType from "@/components/parts/field/FieldType";
 import { useFormContext } from "react-hook-form";
-import InputFieldTabbed, {
+import TabbedInputField, {
   InputTypeTab,
-} from "@/components/parts/method/request/inputfields/InputFieldTabbed";
-import FormControlledField from "@/components/parts/method/request/inputfields/FormControlledField";
+} from "@/components/parts/method/request/inputfields/layout/TabbedInputField";
+import FormControlledField from "@/components/parts/method/request/inputfields/form/FormControlledField";
 import { placeholderTransformation } from "@/services/form";
 import { ChangeEvent } from "react";
 
@@ -93,7 +93,7 @@ function TypeInputField({ field, type }: TypeInputFieldValueProps) {
   } = useFormContext();
 
   return (
-    <InputFieldTabbed
+    <TabbedInputField
       renderer={{
         [InputTypeTab.JSON]: (
           <FormControlledField
@@ -123,7 +123,7 @@ function EnumInputField({ field, enumType }: EnumInputFieldProps) {
   } = useFormContext();
 
   return (
-    <InputFieldTabbed
+    <TabbedInputField
       renderer={{
         [InputTypeTab.ENUM]: (
           <FormControlledField
@@ -166,7 +166,7 @@ export default function InputFieldValue({ field }: InputFieldValueProps) {
 
   if (field.repeated) {
     return (
-      <InputFieldTabbed
+      <TabbedInputField
         renderer={{
           [InputTypeTab.JSON]: (
             <FormControlledField
@@ -194,7 +194,7 @@ export default function InputFieldValue({ field }: InputFieldValueProps) {
 
   if (field.map) {
     return (
-      <InputFieldTabbed
+      <TabbedInputField
         renderer={{
           [InputTypeTab.JSON]: (
             <FormControlledField

@@ -7,11 +7,11 @@ export enum InputTypeTab {
   MODEL = "Model",
 }
 
-export interface InputFieldTabbedProps {
+export interface TabbedInputFieldProps {
   renderer: Partial<Record<InputTypeTab, ReactNode>>;
 }
 
-export default function InputFieldTabbed({ renderer }: InputFieldTabbedProps) {
+export default function TabbedInputField({ renderer }: TabbedInputFieldProps) {
   const availableTypes = Object.values(InputTypeTab).filter(
     (it) => renderer[it],
   );

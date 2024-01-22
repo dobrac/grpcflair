@@ -5,11 +5,11 @@ import InputFieldName from "@/components/parts/method/request/inputfields/InputF
 import InputFieldValue from "@/components/parts/method/request/inputfields/InputFieldValue";
 import protobuf from "protobufjs";
 
-export interface InputFormProps {
+export interface RequestFormProps {
   method: protobuf.Method;
 }
 
-export default function InputForm({ method }: InputFormProps) {
+export default function RequestForm({ method }: RequestFormProps) {
   method.resolve();
 
   const requestType = method.resolvedRequestType;

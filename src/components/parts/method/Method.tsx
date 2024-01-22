@@ -15,11 +15,11 @@ import ResponseExample from "@/components/parts/method/response/ResponseExample"
 import { useMethodContext } from "@/contexts/MethodContext";
 import JSONBlock from "@/components/JSONBlock";
 import FormatSelector from "@/components/parts/method/request/FormatSelector";
-import MethodExecute from "@/components/parts/method/request/MethodExecute";
+import RequestFormExecution from "@/components/parts/method/request/RequestFormExecution";
 import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
 import { faL } from "@fortawesome/free-solid-svg-icons/faL";
-import InputForm from "@/components/parts/method/request/InputForm";
+import RequestForm from "@/components/parts/method/request/RequestForm";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -82,8 +82,8 @@ export default function Method({ service, method }: ServiceProps) {
             </div>
           </SectionHeader>
           <SectionBody>
-            <InputForm method={method} />
-            <MethodExecute service={service} method={method} />
+            <RequestForm method={method} />
+            <RequestFormExecution service={service} method={method} />
           </SectionBody>
           <SectionHeader>
             <div>

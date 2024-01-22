@@ -7,7 +7,7 @@ import { useSourceContext } from "@/contexts/SourceContext";
 import { useFormContext } from "react-hook-form";
 import { transformObjectValues } from "@/services/protobufjs";
 
-export default function MethodExecute({
+export default function RequestFormExecution({
   service,
   method,
 }: {
