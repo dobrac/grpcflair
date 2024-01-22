@@ -2,17 +2,22 @@ import { Nav } from "react-bootstrap";
 import { ReactNode, useState } from "react";
 
 export enum InputTypeTab {
-  JSON = "json",
-  MODEL = "model",
+  JSON = "JSON",
+  ENUM = "Selector",
+  MODEL = "Model",
 }
 
 export interface InputFieldTabbedProps {
-  renderer: Record<InputTypeTab, ReactNode>;
+  renderer: Partial<Record<InputTypeTab, ReactNode>>;
 }
 
 export default function InputFieldTabbed({ renderer }: InputFieldTabbedProps) {
+  const availableTypes = Object.values(InputTypeTab).filter(
+    (it) => renderer[it],
+  );
+
   const [requestInputType, setRequestInputType] = useState<InputTypeTab>(
-    InputTypeTab.JSON,
+    availableTypes[0],
   );
 
   return (
@@ -25,12 +30,11 @@ export default function InputFieldTabbed({ renderer }: InputFieldTabbedProps) {
           setRequestInputType(selectedKey as unknown as InputTypeTab);
         }}
       >
-        <Nav.Item>
-          <Nav.Link eventKey={InputTypeTab.JSON}>JSON</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey={InputTypeTab.MODEL}>Model</Nav.Link>
-        </Nav.Item>
+        {availableTypes.map((inputType) => (
+          <Nav.Item key={inputType}>
+            <Nav.Link eventKey={inputType}>{inputType}</Nav.Link>
+          </Nav.Item>
+        ))}
       </Nav>
       <div>{renderer[requestInputType]}</div>
     </>

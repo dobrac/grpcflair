@@ -1,7 +1,7 @@
 import protobuf, { MapField } from "protobufjs";
 import { transformTypeValues } from "@/services/protobufjs";
 
-function getFieldPlaceholderValue(field: protobuf.Field) {
+function getFieldPlaceholderValue(field: protobuf.Field): unknown {
   if (field.resolvedType == null) {
     const value = field.typeDefault ?? field.type;
 
@@ -37,7 +37,7 @@ export function placeholderTransformation(field: protobuf.Field) {
   return getFieldPlaceholderValue(field);
 }
 
-function getFieldFormValue(field: protobuf.Field) {
+function getFieldFormValue(field: protobuf.Field): string {
   if (field.resolvedType == null) {
     return "";
   }

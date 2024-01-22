@@ -125,7 +125,7 @@ function EnumInputField({ field, enumType }: EnumInputFieldProps) {
   return (
     <InputFieldTabbed
       renderer={{
-        [InputTypeTab.JSON]: (
+        [InputTypeTab.ENUM]: (
           <FormControlledField
             fieldName={field.name}
             render={({ field }) => (
