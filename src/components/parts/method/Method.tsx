@@ -17,6 +17,7 @@ import RequestFormExecution from "@/components/parts/method/request/RequestFormE
 import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
 import RequestForm from "@/components/parts/method/request/RequestForm";
+import { cleanEmptyValues } from "@/services/form";
 
 export interface ServiceProps {
   service: protobuf.Service;
@@ -27,7 +28,7 @@ export default function Method({ service, method }: ServiceProps) {
   method.resolve();
 
   const { hostname } = useSourceContext();
-  const { processing, response } = useMethodContext();
+  const { processing, response, request } = useMethodContext();
 
   const [open, setOpen] = useState(false);
 
@@ -95,17 +96,29 @@ export default function Method({ service, method }: ServiceProps) {
           </SectionHeader>
           <SectionBody>
             <div className="d-grid gap-4">
-              <div className="d-grid gap-2">
-                <div className="fw-bolder small">Request server</div>
-                <JSONBlock>{hostname}</JSONBlock>
-              </div>
-              <div className="d-grid gap-2">
-                <div className="fw-bolder small">Server responses</div>
-                {!response && <span className="small">No response yet</span>}
-                {processing && <ProgressBar animated now={100} />}
-                <ResponsesList responses={response?.data ?? []} />
-                <ResponseError error={response?.error} />
-              </div>
+              {!!response && (
+                <>
+                  <div className="d-grid gap-2">
+                    <div className="fw-bolder small">Request JSON</div>
+                    <JSONBlock>
+                      {JSON.stringify(request.message, null, 2)}
+                    </JSONBlock>
+                  </div>
+                  <div className="d-grid gap-2">
+                    <div className="fw-bolder small">Request server</div>
+                    <JSONBlock>{hostname}</JSONBlock>
+                  </div>
+                  <div className="d-grid gap-2">
+                    <div className="fw-bolder small">Server responses</div>
+                    {!response && (
+                      <span className="small">No response yet</span>
+                    )}
+                    {processing && <ProgressBar animated now={100} />}
+                    <ResponsesList responses={response?.data ?? []} />
+                    <ResponseError error={response?.error} />
+                  </div>
+                </>
+              )}
               <div className="d-grid gap-2">
                 <div className="fw-bolder small">Responses</div>
                 <ResponseExample responseType={responseType} />

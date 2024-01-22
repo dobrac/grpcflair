@@ -129,14 +129,3 @@ export function transformTypeValues(
   }
   return result;
 }
-
-export function transformObjectValues(
-  object: Record<string, unknown>,
-  transformValue: (value: unknown) => unknown,
-) {
-  const result: any = {};
-  for (const [key, value] of Object.entries(object)) {
-    result[key] = transformValue(value);
-  }
-  return result;
-}

@@ -5,7 +5,7 @@ import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/services/grpc-web";
 import { useMethodContext } from "@/contexts/MethodContext";
 import { useSourceContext } from "@/contexts/SourceContext";
 import { useFormContext } from "react-hook-form";
-import { transformObjectValues } from "@/services/protobufjs";
+import { cleanEmptyValues } from "@/services/json";
 
 export default function RequestFormExecution({
   service,
@@ -18,7 +18,7 @@ export default function RequestFormExecution({
 
   const { hostname } = useSourceContext();
   const { processing, request, response, functions } = useMethodContext();
-  const { handleSubmit } = useFormContext();
+  const { handleSubmit, setError } = useFormContext();
 
   const requestType = method.resolvedRequestType;
   const responseType = method.resolvedResponseType;
@@ -102,23 +102,25 @@ export default function RequestFormExecution({
       functions.setCancelFunction(() => {});
       functions.setResponse(undefined);
 
-      const dataTransformed = transformObjectValues(data, (value) => {
-        if (value === null) {
-          return undefined;
-        }
-        if (value === "") {
-          return undefined;
-        }
-        return value;
-      });
+      const dataTransformed = cleanEmptyValues(data);
 
+      functions.setRequest((it) => ({
+        ...it,
+        message: dataTransformed,
+      }));
+
+      // Validate model data
       const err = requestType.verify(dataTransformed);
       if (err) {
-        functions.setResponse({
-          error: new Error('Request is invalid: "' + err + '"'),
+        const [fieldName, error] = err.split(": ", 2);
+        setError(fieldName, {
+          type: "manual",
+          message: 'Protobuf type or value is invalid: "' + error + '"',
         });
         return;
       }
+
+      // Construct protobufjs message
       const message = requestType.create(dataTransformed);
 
       // TODO: Support request streaming

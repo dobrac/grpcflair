@@ -22,6 +22,7 @@ type CancelFunction = () => void;
 interface MethodRequest {
   format: GrpcWebFormat;
   metadata?: Record<string, string>;
+  message?: object;
 }
 
 interface MethodResponse {
