@@ -7,6 +7,8 @@ import { useSourceContext } from "@/contexts/SourceContext";
 import { useFormContext } from "react-hook-form";
 import { cleanEmptyValues } from "@/services/json";
 
+const errorDelimiter = ": ";
+
 export default function RequestFormExecution({
   service,
   method,
@@ -112,10 +114,13 @@ export default function RequestFormExecution({
       // Validate model data
       const err = requestType.verify(dataTransformed);
       if (err) {
-        const [fieldName, error] = err.split(": ", 2);
+        const [fieldName, ...error] = err.split(errorDelimiter);
         setError(fieldName, {
           type: "manual",
-          message: 'Protobuf type or value is invalid: "' + error + '"',
+          message:
+            'Protobuf type or value is invalid: "' +
+            error.join(errorDelimiter) +
+            '"',
         });
         return;
       }

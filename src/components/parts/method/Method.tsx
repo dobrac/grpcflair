@@ -18,6 +18,34 @@ import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
 import RequestForm from "@/components/parts/method/request/RequestForm";
 
+const COMMENT_DELIMITER = "\n";
+
+/**
+ * Split comment to two parts: first line and the rest, filtering out starting empty lines
+ * @param comment Comment to split
+ */
+function splitCommentToTwoParts(comment: string) {
+  const [commentFirstLine, ...commentRestLines] = comment?.split(
+    COMMENT_DELIMITER,
+  ) ?? [""];
+
+  // Find first non-empty line
+  const commentsFirstNonEmptyIndex = commentRestLines.findIndex(
+    (line) => line.trim() !== "",
+  );
+
+  let commentRest: string;
+  if (commentsFirstNonEmptyIndex === -1) {
+    commentRest = "";
+  } else {
+    commentRest = commentRestLines
+      .slice(commentsFirstNonEmptyIndex)
+      .join(COMMENT_DELIMITER);
+  }
+
+  return [commentFirstLine, commentRest] as const;
+}
+
 export interface ServiceProps {
   service: protobuf.Service;
   method: protobuf.Method;
@@ -35,6 +63,10 @@ export default function Method({ service, method }: ServiceProps) {
 
   const color = getColorFromMethodType(method);
 
+  const [commentFirstLine, commentRest] = splitCommentToTwoParts(
+    method.comment ?? "",
+  );
+
   return (
     <div key={method.name} className={"card bg-" + color + "-subtle"}>
       <button
@@ -51,8 +83,9 @@ export default function Method({ service, method }: ServiceProps) {
               </span>
             )}
           </div>
-          <div className="flex-grow-1 small text-secondary whitespace-pre ms-1">
-            {method.comment}
+          <div className="flex-grow-1 small text-secondary ms-1">
+            {/* Show only first line in the collapsed state */}
+            {commentFirstLine}
           </div>
           <div>
             {open ? (
@@ -65,6 +98,13 @@ export default function Method({ service, method }: ServiceProps) {
       </button>
       <Collapse in={open}>
         <div>
+          {!!commentRest && (
+            <SectionBody>
+              <div className="small text-secondary whitespace-pre">
+                {commentRest}
+              </div>
+            </SectionBody>
+          )}
           <SectionHeader>
             <div>
               <span className="fw-bolder">Parameters</span>
