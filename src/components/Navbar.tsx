@@ -100,9 +100,13 @@ export default function Navbar() {
     >
       <div className="position-relative" style={{ width: "10rem" }}>
         <Image
-          src="https://static1.smartbear.co/swagger/media/assets/images/swagger_logo.svg"
+          src="/logo.png"
           alt="logo"
-          fill={true}
+          sizes="100vw"
+          fill
+          style={{
+            objectFit: "contain",
+          }}
         />
       </div>
       <div className="flex-grow-1">
