@@ -2,6 +2,7 @@ import protobuf from "protobufjs";
 import {
   ClientReadableStream,
   GrpcWebClientBase,
+  Metadata,
   MethodDescriptor,
   MethodType,
 } from "grpc-web";
@@ -12,6 +13,7 @@ class DummyRPCType {
 }
 
 export interface GrpcWebOptions {
+  metadata?: Metadata;
   format?: GrpcWebFormat;
 }
 
@@ -36,7 +38,7 @@ export function makeGrpcCall<MessageData extends object = object>(
       methodPath,
       // Ignored, using protobufjs directly
       {},
-      {},
+      options?.metadata ?? {},
       new MethodDescriptor(
         method.name,
         MethodType.UNARY,
@@ -90,7 +92,7 @@ export function makeGrpcServerStreamingCall<
     methodPath,
     // Ignored, using protobufjs directly
     {},
-    {},
+    options?.metadata ?? {},
     new MethodDescriptor(
       method.name,
       MethodType.SERVER_STREAMING,

@@ -14,3 +14,13 @@ $primary: green;
 .whitespace-pre {
   white-space: pre;
 }
+
+.grid-metadata {
+  display: grid;
+  grid-template-columns: 1fr 1fr 38px;
+
+  > div {
+    display: flex;
+    align-items: center;
+  }
+}

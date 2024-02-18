@@ -6,6 +6,7 @@ import { useMethodContext } from "@/contexts/MethodContext";
 import { useSourceContext } from "@/contexts/SourceContext";
 import { useFormContext } from "react-hook-form";
 import { cleanEmptyValues } from "@/services/json";
+import { useMetadataContext } from "@/contexts/MetadataContext";
 
 const errorDelimiter = ": ";
 
@@ -21,6 +22,7 @@ export default function RequestFormExecution({
   const { hostname } = useSourceContext();
   const { processing, request, response, functions } = useMethodContext();
   const { handleSubmit, setError } = useFormContext();
+  const { metadata } = useMetadataContext();
 
   const requestType = method.resolvedRequestType;
   const responseType = method.resolvedResponseType;
@@ -40,6 +42,7 @@ export default function RequestFormExecution({
           responseType,
           message,
           {
+            metadata,
             format: request.format,
           },
         );
@@ -71,6 +74,7 @@ export default function RequestFormExecution({
         responseType,
         message,
         {
+          metadata,
           format: request.format,
         },
       );

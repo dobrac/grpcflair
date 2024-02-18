@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import SourceContextProvider from "@/contexts/SourceContext";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
+import MetadataContextProvider from "@/contexts/MetadataContext";
 
 config.autoAddCss = false;
 
@@ -24,7 +25,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SourceContextProvider>
-          <Layout>{children}</Layout>
+          <MetadataContextProvider>
+            <Layout>{children}</Layout>
+          </MetadataContextProvider>
         </SourceContextProvider>
       </body>
     </html>
