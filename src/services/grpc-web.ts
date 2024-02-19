@@ -17,6 +17,13 @@ export interface GrpcWebOptions {
   format?: GrpcWebFormat;
 }
 
+export interface UnaryResponse<MessageData extends object = object> {
+  error?: Error;
+  headers?: Metadata;
+  trailers?: Metadata;
+  data?: protobuf.Message<MessageData>[];
+}
+
 export function makeGrpcCall<MessageData extends object = object>(
   hostname: string,
   service: protobuf.Service,
@@ -25,7 +32,7 @@ export function makeGrpcCall<MessageData extends object = object>(
   typeDecode: protobuf.Type,
   message: protobuf.Message,
   options?: GrpcWebOptions,
-): Promise<protobuf.Message<MessageData>> {
+): Promise<UnaryResponse<MessageData>> {
   const client = new GrpcWebClientBase({ format: options?.format });
 
   const methodPath = `${hostname}/${
@@ -34,7 +41,9 @@ export function makeGrpcCall<MessageData extends object = object>(
   }/${method.name}`;
 
   return new Promise((resolve, reject) => {
-    client.rpcCall(
+    let completeResponse: UnaryResponse<MessageData> = {};
+
+    const unaryStream = client.rpcCall(
       methodPath,
       // Ignored, using protobufjs directly
       {},
@@ -55,12 +64,28 @@ export function makeGrpcCall<MessageData extends object = object>(
       ),
       (err, response: protobuf.Message<MessageData>) => {
         if (err) {
-          reject(err);
+          completeResponse.error = err;
         } else {
-          resolve(response);
+          completeResponse.data = [response];
         }
       },
     );
+
+    unaryStream.on("metadata", (metadata) => {
+      completeResponse.headers = metadata;
+    });
+
+    unaryStream.on("status", (status) => {
+      completeResponse.trailers = status.metadata;
+    });
+
+    unaryStream.on("end", () => {
+      if (completeResponse.error) {
+        reject(completeResponse.error);
+      } else {
+        resolve(completeResponse);
+      }
+    });
   });
 }
 

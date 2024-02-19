@@ -1,7 +1,11 @@
 import { Button, Spinner } from "react-bootstrap";
 import protobuf from "protobufjs";
 import PCancelable, { CancelError } from "p-cancelable";
-import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/services/grpc-web";
+import {
+  makeGrpcCall,
+  makeGrpcServerStreamingCall,
+  UnaryResponse,
+} from "@/services/grpc-web";
 import { useMethodContext } from "@/contexts/MethodContext";
 import { useSourceContext } from "@/contexts/SourceContext";
 import { useFormContext } from "react-hook-form";
@@ -32,7 +36,7 @@ export default function RequestFormExecution({
   }
 
   const handleUnaryRequest = async (message: protobuf.Message<{}>) => {
-    const cancellablePromise = new PCancelable<protobuf.Message<{}>>(
+    const cancellablePromise = new PCancelable<UnaryResponse>(
       (resolve, reject, onCancel) => {
         const promise = makeGrpcCall(
           hostname,
@@ -60,7 +64,9 @@ export default function RequestFormExecution({
 
     functions.setResponse((it) => ({
       ...it,
-      data: [responseType.toObject(response, {})],
+      headers: response.headers,
+      trailers: response.trailers,
+      data: response.data?.map((it) => responseType.toObject(it, {})),
     }));
   };
 
@@ -93,6 +99,20 @@ export default function RequestFormExecution({
         }));
       });
 
+      stream.on("metadata", (metadata) => {
+        functions.setResponse((it) => ({
+          ...it,
+          headers: metadata,
+        }));
+      });
+
+      stream.on("status", (status) => {
+        functions.setResponse((it) => ({
+          ...it,
+          trailers: status.metadata,
+        }));
+      });
+
       stream.on("error", (error) => {
         reject(error);
       });
@@ -112,6 +132,7 @@ export default function RequestFormExecution({
 
       functions.setRequest((it) => ({
         ...it,
+        metadata: metadata,
         message: dataTransformed,
       }));
 

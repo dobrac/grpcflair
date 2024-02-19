@@ -1,4 +1,4 @@
-import { Badge, Collapse, ProgressBar } from "react-bootstrap";
+import { Badge, Collapse, ProgressBar, Spinner } from "react-bootstrap";
 import protobuf from "protobufjs";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +17,7 @@ import RequestFormExecution from "@/components/parts/method/request/RequestFormE
 import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
 import RequestForm from "@/components/parts/method/request/RequestForm";
+import { useMetadataContext } from "@/contexts/MetadataContext";
 
 const COMMENT_DELIMITER = "\n";
 
@@ -139,6 +140,14 @@ export default function Method({ service, method }: ServiceProps) {
                 <>
                   <div className="d-grid gap-2">
                     <div className="fw-bolder small">Request JSON</div>
+                    <div>
+                      <JSONBlock dark={false} className="rounded-bottom-0">
+                        <span className="small">Metadata</span>
+                      </JSONBlock>
+                      <JSONBlock dark={false} className="rounded-top-0">
+                        {JSON.stringify(request.metadata, null, 2)}
+                      </JSONBlock>
+                    </div>
                     <JSONBlock>
                       {JSON.stringify(request.message, null, 2)}
                     </JSONBlock>
@@ -153,8 +162,37 @@ export default function Method({ service, method }: ServiceProps) {
                       <span className="small">No response yet</span>
                     )}
                     {processing && <ProgressBar animated now={100} />}
+
+                    <div>
+                      <JSONBlock dark={false} className="rounded-bottom-0">
+                        <span className="small">Headers</span>
+                        {processing && (
+                          <Spinner
+                            animation="grow"
+                            size="sm"
+                            className="ms-2"
+                          />
+                        )}
+                      </JSONBlock>
+                      <JSONBlock dark={false} className="rounded-top-0">
+                        {!processing &&
+                          JSON.stringify(response?.headers ?? {}, null, 2)}
+                      </JSONBlock>
+                    </div>
+
                     <ResponsesList responses={response?.data ?? []} />
                     <ResponseError error={response?.error} />
+
+                    {!processing && (
+                      <div>
+                        <JSONBlock dark={false} className="rounded-bottom-0">
+                          <span className="small">Trailers</span>
+                        </JSONBlock>
+                        <JSONBlock dark={false} className="rounded-top-0">
+                          {JSON.stringify(response?.trailers ?? {}, null, 2)}
+                        </JSONBlock>
+                      </div>
+                    )}
                   </div>
                 </>
               )}

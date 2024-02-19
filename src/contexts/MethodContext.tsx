@@ -16,17 +16,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { getFieldYupType } from "@/services/yup";
 import { formTransformation } from "@/services/form";
+import { Metadata } from "@/contexts/MetadataContext";
 
 type CancelFunction = () => void;
 
 interface MethodRequest {
   format: GrpcWebFormat;
+  metadata?: Metadata;
   message?: object;
 }
 
 interface MethodResponse {
   error?: Error;
-  metadata?: Record<string, string>;
+  headers?: Metadata;
+  trailers?: Metadata;
   data?: unknown[];
 }
 
