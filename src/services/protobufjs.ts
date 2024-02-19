@@ -2,8 +2,12 @@ import protobuf from "protobufjs";
 
 export function getOptionsFromReflectionObject(
   reflectionObject: protobuf.ReflectionObject,
+  includeParent = true,
 ): Record<string, unknown> {
-  return { ...reflectionObject.options, ...reflectionObject.parent?.options };
+  return {
+    ...reflectionObject.options,
+    ...(includeParent ? reflectionObject.parent?.options : {}),
+  };
 }
 
 export function getServicesFromContext(
