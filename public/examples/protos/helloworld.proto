@@ -16,6 +16,7 @@ syntax = "proto3";
 
 import "other_protos.proto";
 import "hello_streaming.proto";
+import "options_test.proto";
 import "google/protobuf/descriptor.proto";
 import "google/protobuf/any.proto";
 
@@ -65,7 +66,12 @@ message RepeatHelloRequest {
  */
 message TestRequest {
   // String
-  string string = 1;
+  string string = 1 [ (validate.rules).enum = {
+    defined_only: true,
+    not_in: [ 0 ],
+    in: ["google","github","azuread"]
+  } ];
+
   // Number
   int32 number = 2;
   // Boolean

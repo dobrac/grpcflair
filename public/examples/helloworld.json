@@ -70,6 +70,11 @@
             "string": {
               "type": "string",
               "id": 1,
+              "options": {
+                "(validate.rules).enum.defined_only": true,
+                "(validate.rules).enum.not_in": 0,
+                "(validate.rules).enum.in": "azuread"
+              },
               "comment": "String"
             },
             "number": {
@@ -1444,6 +1449,296 @@
             }
           },
           "comment": "A RouteSummary is received in response to a RecordRoute rpc.\n\nIt contains the number of individual points received, the number of\ndetected features, and the total distance covered as the cumulative sum of\nthe distance between each point."
+        }
+      }
+    },
+    "test": {
+      "nested": {
+        "foRepInt": {
+          "rule": "repeated",
+          "type": "int32",
+          "id": 50000,
+          "extend": "google.protobuf.FieldOptions",
+          "comment": null
+        },
+        "foSingleInt": {
+          "type": "int32",
+          "id": 50001,
+          "extend": "google.protobuf.FieldOptions",
+          "comment": null
+        },
+        "moRepInt": {
+          "rule": "repeated",
+          "type": "int32",
+          "id": 50000,
+          "extend": "google.protobuf.MessageOptions",
+          "comment": null
+        },
+        "moSingleInt": {
+          "type": "int32",
+          "id": 50001,
+          "extend": "google.protobuf.MessageOptions",
+          "comment": null
+        },
+        "TestFieldOptionsInt": {
+          "fields": {
+            "field1": {
+              "type": "string",
+              "id": 2,
+              "options": {
+                "(fo_rep_int)": 2
+              },
+              "comment": null
+            },
+            "field2": {
+              "type": "string",
+              "id": 1,
+              "options": {
+                "(fo_single_int)": 3
+              },
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "TestMessageOptionsInt": {
+          "options": {
+            "(mo_rep_int)": 2,
+            "(mo_single_int)": 3
+          },
+          "fields": {},
+          "comment": null
+        },
+        "Msg": {
+          "fields": {
+            "value": {
+              "type": "int32",
+              "id": 1,
+              "comment": null
+            },
+            "repValue": {
+              "rule": "repeated",
+              "type": "int32",
+              "id": 2,
+              "comment": null
+            },
+            "nested": {
+              "type": "SubMsg",
+              "id": 3,
+              "comment": null
+            },
+            "repNested": {
+              "rule": "repeated",
+              "type": "SubMsg",
+              "id": 4,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "SubMsg": {
+          "fields": {
+            "value": {
+              "type": "string",
+              "id": 1,
+              "comment": null
+            },
+            "nested": {
+              "type": "SubMsg",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "foRepMsg": {
+          "rule": "repeated",
+          "type": "Msg",
+          "id": 50002,
+          "extend": "google.protobuf.FieldOptions",
+          "comment": null
+        },
+        "foSingleMsg": {
+          "type": "Msg",
+          "id": 50003,
+          "extend": "google.protobuf.FieldOptions",
+          "comment": null
+        },
+        "moRepMsg": {
+          "rule": "repeated",
+          "type": "Msg",
+          "id": 50002,
+          "extend": "google.protobuf.MessageOptions",
+          "comment": null
+        },
+        "moSingleMsg": {
+          "type": "Msg",
+          "id": 50003,
+          "extend": "google.protobuf.MessageOptions",
+          "comment": null
+        },
+        "methodRepMsg": {
+          "rule": "repeated",
+          "type": "Msg",
+          "id": 50002,
+          "extend": "google.protobuf.MethodOptions",
+          "comment": null
+        },
+        "methodSingleMsg": {
+          "type": "Msg",
+          "id": 50003,
+          "extend": "google.protobuf.MethodOptions",
+          "comment": null
+        },
+        "TestFieldOptionsMsg": {
+          "fields": {
+            "field1": {
+              "type": "string",
+              "id": 1,
+              "options": {
+                "(fo_rep_msg).value": 4,
+                "(fo_rep_msg).rep_value": 6
+              },
+              "comment": null
+            },
+            "field2": {
+              "type": "string",
+              "id": 2,
+              "options": {
+                "(fo_single_msg).value": 7,
+                "(fo_single_msg).rep_value": 9
+              },
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "TestMessageOptionsMsg": {
+          "options": {
+            "(mo_rep_msg).value": 5,
+            "(mo_rep_msg).rep_value": 8,
+            "(mo_single_msg).value": 7,
+            "(mo_single_msg).rep_value": 9
+          },
+          "fields": {},
+          "comment": null
+        },
+        "TestFieldOptionsNested": {
+          "fields": {
+            "field1": {
+              "type": "string",
+              "id": 1,
+              "options": {
+                "(fo_rep_msg).value": 1,
+                "(fo_rep_msg).nested.nested.value": "x",
+                "(fo_rep_msg).rep_nested.value": "z",
+                "(fo_rep_msg).rep_value": 3,
+                "(fo_rep_msg).nested.value": "w"
+              },
+              "comment": null
+            },
+            "field2": {
+              "type": "string",
+              "id": 2,
+              "options": {
+                "(fo_single_msg).nested.value": "x",
+                "(fo_single_msg).rep_nested.value": "y"
+              },
+              "comment": null
+            },
+            "field3": {
+              "type": "string",
+              "id": 3,
+              "options": {
+                "(fo_single_msg).nested.value": "x",
+                "(fo_single_msg).nested.nested.nested.value": "y"
+              },
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "TestMessageOptionsNested": {
+          "options": {
+            "(mo_rep_msg).value": 1,
+            "(mo_rep_msg).nested.nested.value": "x",
+            "(mo_rep_msg).rep_nested.value": "z",
+            "(mo_rep_msg).rep_value": 3,
+            "(mo_rep_msg).nested.value": "w",
+            "(mo_single_msg).nested.value": "x",
+            "(mo_single_msg).rep_nested.value": "y",
+            "(mo_single_msg).rep_nested.nested.nested.value": "y"
+          },
+          "fields": {},
+          "comment": null
+        },
+        "TestOptionsService": {
+          "methods": {
+            "TestOptionsRpc": {
+              "requestType": "Msg",
+              "responseType": "Msg",
+              "options": {
+                "(method_rep_msg).value": 1,
+                "(method_rep_msg).nested.nested.value": "x",
+                "(method_rep_msg).rep_nested.value": "z",
+                "(method_rep_msg).rep_value": 3,
+                "(method_rep_msg).nested.value": "w",
+                "(method_single_msg).nested.value": "x",
+                "(method_single_msg).rep_nested.value": "y",
+                "(method_single_msg).rep_nested.nested.nested.value": "y"
+              },
+              "comment": null,
+              "parsedOptions": [
+                {
+                  "(method_rep_msg)": {
+                    "value": 1,
+                    "nested": {
+                      "nested": {
+                        "value": "x"
+                      }
+                    },
+                    "rep_nested": [
+                      {
+                        "value": "y"
+                      },
+                      {
+                        "value": "z"
+                      }
+                    ],
+                    "rep_value": 3
+                  }
+                },
+                {
+                  "(method_rep_msg)": {
+                    "nested": {
+                      "value": "w"
+                    }
+                  }
+                },
+                {
+                  "(method_single_msg)": {
+                    "nested": {
+                      "value": "x"
+                    },
+                    "rep_nested": [
+                      {
+                        "value": "x",
+                        "nested": {
+                          "nested": {
+                            "value": "y"
+                          }
+                        }
+                      },
+                      {
+                        "value": "y"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "comment": null
         }
       }
     }

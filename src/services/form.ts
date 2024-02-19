@@ -1,7 +1,12 @@
 import protobuf, { MapField } from "protobufjs";
 import { transformTypeValues } from "@/services/protobufjs";
 
-function getFieldPlaceholderValue(field: protobuf.Field): unknown {
+const MAX_DEPTH = 1;
+
+function getFieldPlaceholderValue(
+  depth: number,
+  field: protobuf.Field,
+): unknown {
   if (field.resolvedType == null) {
     const value = field.typeDefault ?? field.type;
 
@@ -17,24 +22,38 @@ function getFieldPlaceholderValue(field: protobuf.Field): unknown {
     return Object.values(field.resolvedType.values)[0];
   }
 
-  return transformTypeValues(field.resolvedType, placeholderTransformation);
+  if (depth >= MAX_DEPTH) {
+    return {};
+  }
+
+  return transformTypeValues(
+    field.resolvedType,
+    placeholderTransformationWithDepth.bind(null, depth + 1),
+  );
 }
 
-export function placeholderTransformation(field: protobuf.Field) {
+function placeholderTransformationWithDepth(
+  depth: number,
+  field: protobuf.Field,
+) {
   if (field.repeated) {
-    return [getFieldPlaceholderValue(field)];
+    return [getFieldPlaceholderValue(depth, field)];
   }
 
   if (field.map) {
     const fieldMap = field as unknown as MapField;
     const fieldMapKeyValue = fieldMap.keyType;
-    const value = getFieldPlaceholderValue(field);
+    const value = getFieldPlaceholderValue(depth, field);
     return {
       [fieldMapKeyValue]: value,
     };
   }
 
-  return getFieldPlaceholderValue(field);
+  return getFieldPlaceholderValue(depth, field);
+}
+
+export function placeholderTransformation(field: protobuf.Field) {
+  return placeholderTransformationWithDepth(0, field);
 }
 
 export function formTransformation(field: protobuf.Field) {
