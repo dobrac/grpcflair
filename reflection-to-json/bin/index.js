@@ -24,12 +24,13 @@ if (!filePath) {
 
 readFileToByteArray(filePath, (err, byteArray) => {
   if (err) {
-    console.error("Error reading file:", err);
-  } else {
-    const decodedDescriptor = descriptor.FileDescriptorSet.decode(byteArray);
-
-    const root = protobuf.Root.fromDescriptor(decodedDescriptor);
-
-    console.log(JSON.stringify(root.toJSON(), null, 2));
+    console.error("Incorrect .bin file provided");
+    process.exit(1);
   }
+
+  const decodedDescriptor = descriptor.FileDescriptorSet.decode(byteArray);
+
+  const root = protobuf.Root.fromDescriptor(decodedDescriptor);
+
+  console.log(JSON.stringify(root.toJSON(), null, 2));
 });

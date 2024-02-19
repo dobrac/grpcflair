@@ -52,6 +52,11 @@ function filesOrFoldersToFiles(filesOrFolders) {
 
 const files = filesOrFoldersToFiles(filesOrFolders).filter(isProtobufFile);
 
+if (!files.length) {
+  console.error("Incorrect proto files provided");
+  process.exit(1);
+}
+
 pbjs.main(["--alt-comment", "-t", "json", ...files], function (err, output) {
   if (err) {
     throw err;
