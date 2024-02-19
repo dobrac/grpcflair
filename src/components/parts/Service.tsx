@@ -6,6 +6,7 @@ import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import protobuf from "protobufjs";
 import MethodContextProvider from "@/contexts/MethodContext";
+import Options from "@/components/parts/helpers/Options";
 
 export interface ServiceProps {
   service: protobuf.Service;
@@ -21,8 +22,11 @@ export default function Service({ service }: ServiceProps) {
         onClick={() => setOpen((open) => !open)}
       >
         <div className="d-flex justify-content-between align-items-center py-1 px-2">
-          <div className="fw-bold fs-5">
-            {service.fullName.replace(".", "")}
+          <div>
+            <div className="fw-bold fs-5">
+              {service.fullName.replace(".", "")}
+            </div>
+            <Options reflectionObject={service} />
           </div>
           <div className="flex-grow-1 small text-secondary whitespace-pre ms-3">
             {service.comment}

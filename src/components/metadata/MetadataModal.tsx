@@ -1,6 +1,6 @@
 import { Button, Modal } from "react-bootstrap";
-import HeadersTable from "@/components/parts/metadata/HeadersTable";
-import Authorization from "@/components/parts/metadata/Authorization";
+import HeadersTable from "@/components/metadata/HeadersTable";
+import Authorization from "@/components/metadata/Authorization";
 
 export interface MetadataModalProps {
   show: boolean;

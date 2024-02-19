@@ -4,6 +4,7 @@ import { faL } from "@fortawesome/free-solid-svg-icons/faL";
 import InputFieldName from "@/components/parts/method/request/inputfield/InputFieldName";
 import InputFieldValue from "@/components/parts/method/request/inputfield/InputFieldValue";
 import protobuf from "protobufjs";
+import FieldComment from "@/components/parts/field/FieldComment";
 
 export interface RequestFormProps {
   method: protobuf.Method;
@@ -31,10 +32,8 @@ export default function RequestForm({ method }: RequestFormProps) {
           <Fragment key={oneOf.name}>
             <tr>
               <td className="align-top py-3" colSpan={2}>
-                <div className="text-secondary whitespace-pre">
-                  {oneOf.comment}
-                </div>
-                <div className="fw-bolder">{oneOf.name}</div>
+                <FieldComment field={oneOf} />
+                <InputFieldName field={oneOf} />
               </td>
             </tr>
             {oneOf.fieldsArray.map((field) => (
@@ -44,9 +43,7 @@ export default function RequestForm({ method }: RequestFormProps) {
                   <InputFieldName field={field} />
                 </td>
                 <td className="align-top py-3">
-                  <div className="text-secondary whitespace-pre">
-                    {field.comment}
-                  </div>
+                  <FieldComment field={field} />
                   <InputFieldValue field={field} />
                 </td>
               </tr>
@@ -59,9 +56,7 @@ export default function RequestForm({ method }: RequestFormProps) {
               <InputFieldName field={field} />
             </td>
             <td className="align-top py-3">
-              <div className="text-secondary whitespace-pre">
-                {field.comment}
-              </div>
+              <FieldComment field={field} />
               <InputFieldValue field={field} />
             </td>
           </tr>

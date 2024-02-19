@@ -17,7 +17,7 @@ import RequestFormExecution from "@/components/parts/method/request/RequestFormE
 import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
 import RequestForm from "@/components/parts/method/request/RequestForm";
-import { useMetadataContext } from "@/contexts/MetadataContext";
+import Options from "@/components/parts/helpers/Options";
 
 const COMMENT_DELIMITER = "\n";
 
@@ -106,6 +106,7 @@ export default function Method({ service, method }: ServiceProps) {
               </div>
             </SectionBody>
           )}
+          <Options reflectionObject={method} className="mt-2" />
           <SectionHeader>
             <div>
               <span className="fw-bolder">Parameters</span>

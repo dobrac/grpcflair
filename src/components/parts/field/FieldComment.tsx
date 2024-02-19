@@ -1,7 +1,7 @@
 import protobuf from "protobufjs";
 
 export interface FieldCommentProps {
-  field: protobuf.Field;
+  field: protobuf.Field | protobuf.OneOf;
   dark?: boolean;
 }
 

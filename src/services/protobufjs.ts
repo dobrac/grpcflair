@@ -1,5 +1,11 @@
 import protobuf from "protobufjs";
 
+export function getOptionsFromReflectionObject(
+  reflectionObject: protobuf.ReflectionObject,
+): Record<string, unknown> {
+  return { ...reflectionObject.options, ...reflectionObject.parent?.options };
+}
+
 export function getServicesFromContext(
   context: protobuf.Root,
 ): protobuf.Service[] {

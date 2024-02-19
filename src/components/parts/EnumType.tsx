@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import { useState } from "react";
+import Options from "@/components/parts/helpers/Options";
 
 export interface EnumProps {
   enumType: protobuf.Enum;
@@ -39,6 +40,7 @@ export default function EnumType({ enumType, dark, expanded }: EnumProps) {
       {open && (
         <>
           <div className="ps-3">
+            <Options reflectionObject={enumType} className="mb-2" />
             {Object.entries(enumType.values).map(([key, value]) => (
               <div key={key}>
                 {key} = {value}{" "}

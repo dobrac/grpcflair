@@ -4,6 +4,9 @@ import { Fragment, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
+import { getOptionsFromReflectionObject } from "@/services/protobufjs";
+import OneOfField from "@/components/parts/field/OneOfField";
+import Options from "@/components/parts/helpers/Options";
 
 export interface TypeProps {
   type: protobuf.Type;
@@ -66,23 +69,15 @@ export default function Type({ type, dark, expanded }: TypeProps) {
       {open && (
         <>
           <div className="ps-3">
+            <Options reflectionObject={type} className="mb-2" />
             {!!reservedFields.length && (
               <div className="small text-secondary mb-1">
                 <span>reserved </span>
                 <span>{reservedFields.join(", ")}</span>
               </div>
             )}
-            {oneOfFields.map((field) => (
-              <Fragment key={field.fullName}>
-                oneof <span className="fw-bolder">{field.name}</span>
-                {" {"}
-                <div className="ps-3">
-                  {field.fieldsArray.map((field) => (
-                    <Field key={field.name} field={field} dark={dark} />
-                  ))}
-                </div>
-                {"}"}
-              </Fragment>
+            {oneOfFields.map((oneOf) => (
+              <OneOfField field={oneOf} dark={dark} key={oneOf.fullName} />
             ))}
             {fieldsWithoutOneOf.map((field) => (
               <Field key={field.name} field={field} dark={dark} />
