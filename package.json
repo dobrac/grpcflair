@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "lerna clean --yes && rimraf node_modules",
     "proto-to-json": "gf-proto-to-json",
     "reflection-to-json": "gf-reflection-to-json",
     "generateExample": "gf-proto-to-json web/public/examples/protos/helloworld.proto > ./web/public/examples/helloworld.json",
@@ -17,5 +18,9 @@
       "protobufjs-cli@1.1.2": "patches/protobufjs-cli@1.1.2.patch",
       "protobufjs@7.2.6": "patches/protobufjs@7.2.6.patch"
     }
+  },
+  "devDependencies": {
+    "lerna": "^8.1.2",
+    "rimraf": "^5.0.5"
   }
 }
