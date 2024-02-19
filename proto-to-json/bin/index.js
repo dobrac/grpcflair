@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const pbjs = require("protobufjs-cli/pbjs");
 const fs = require("fs");
 

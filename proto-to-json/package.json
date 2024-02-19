@@ -1,0 +1,11 @@
+{
+  "name": "@grpcflair/proto-to-json",
+  "version": "0.1.0",
+  "main": "bin/index.js",
+  "bin": {
+    "gf-proto-to-json": "bin/index.js"
+  },
+  "dependencies": {
+    "protobufjs-cli": "^1.1.2"
+  }
+}

@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { GrpcWebFormat } from "@/types/grpc-web";
+import { GrpcWebFormat } from "../types/grpc-web";
 import protobuf from "protobufjs";
 import { transformTypeValues } from "@/services/protobufjs";
 import { FormProvider, useForm } from "react-hook-form";

@@ -1,7 +1,7 @@
-diff --git a/node_modules/protobufjs-cli/targets/json.js b/node_modules/protobufjs-cli/targets/json.js
-index 7025372..7b9bfa0 100644
---- a/node_modules/protobufjs-cli/targets/json.js
-+++ b/node_modules/protobufjs-cli/targets/json.js
+diff --git a/targets/json.js b/targets/json.js
+index 70253723678448088ca104d26586eea855781f47..7b9bfa0d3833ff38be0618708ea520bfd1ce311d 100644
+--- a/targets/json.js
++++ b/targets/json.js
 @@ -4,5 +4,7 @@ module.exports = json_target;
  json_target.description = "JSON representation";
  

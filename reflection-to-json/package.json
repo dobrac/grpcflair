@@ -1,0 +1,11 @@
+{
+  "name": "@grpcflair/reflection-to-json",
+  "version": "0.1.0",
+  "main": "bin/index.js",
+  "bin": {
+    "gf-reflection-to-json": "bin/index.js"
+  },
+  "dependencies": {
+    "protobufjs": "^7.2.6"
+  }
+}

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../scss/App.scss";
-import Layout from "@/components/Layout";
-import SourceContextProvider from "@/contexts/SourceContext";
+import Layout from "../components/Layout";
+import SourceContextProvider from "../contexts/SourceContext";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
-import MetadataContextProvider from "@/contexts/MetadataContext";
+import MetadataContextProvider from "../contexts/MetadataContext";
 
 config.autoAddCss = false;
 

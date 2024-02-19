@@ -1,11 +1,11 @@
 "use client";
 import { Button, Form } from "react-bootstrap";
-import { useSourceContext } from "@/contexts/SourceContext";
+import { useSourceContext } from "../contexts/SourceContext";
 import dynamic from "next/dynamic";
 import { useState } from "react";
-import MetadataModal from "@/components/metadata/MetadataModal";
+import MetadataModal from "../components/metadata/MetadataModal";
 
-const Endpoints = dynamic(() => import("@/components/Endpoints"), {
+const Endpoints = dynamic(() => import("../components/Endpoints"), {
   ssr: false,
 });
 

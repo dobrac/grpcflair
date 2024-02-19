@@ -1,7 +1,7 @@
-diff --git a/node_modules/protobufjs/src/enum.js b/node_modules/protobufjs/src/enum.js
-index 1c01620..730b8e4 100644
---- a/node_modules/protobufjs/src/enum.js
-+++ b/node_modules/protobufjs/src/enum.js
+diff --git a/src/enum.js b/src/enum.js
+index 1c016209f4acb19ce330b62566fa92ea9a88aced..730b8e4dd146a3415e973f50c96aef5d604e7c52 100644
+--- a/src/enum.js
++++ b/src/enum.js
 @@ -87,7 +87,7 @@ function Enum(name, values, options, comment, comments, valuesOptions) {
   * @throws {TypeError} If arguments are invalid
   */

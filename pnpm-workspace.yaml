@@ -1,0 +1,4 @@
+packages:
+  - 'web'
+  - 'proto-to-json'
+  - 'reflection-to-json'

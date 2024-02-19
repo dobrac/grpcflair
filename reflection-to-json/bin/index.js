@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const protobuf = require("protobufjs");
 const descriptor = require("protobufjs/ext/descriptor");
 const fs = require("fs");
