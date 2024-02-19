@@ -25,7 +25,11 @@ export default function RequestFormExecution({
 
   const { hostname } = useSourceContext();
   const { processing, request, response, functions } = useMethodContext();
-  const { handleSubmit, setError } = useFormContext();
+  const {
+    handleSubmit,
+    formState: { isValid },
+    setError,
+  } = useFormContext();
   const { metadata } = useMetadataContext();
 
   const requestType = method.resolvedRequestType;
@@ -189,9 +193,15 @@ export default function RequestFormExecution({
 
   return (
     <div className="mt-2 d-grid gap-1">
+      {!isValid && (
+        <div className="text-danger">
+          Problems found in the request. Please fix them before executing.
+        </div>
+      )}
       <Button
         size="sm"
-        disabled={processing}
+        variant={isValid ? "primary" : "danger"}
+        disabled={processing || !isValid}
         onClick={handleSubmit(handleExecute)}
       >
         <Spinner
