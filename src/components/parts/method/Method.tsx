@@ -5,7 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import YesNoIcon from "@/components/YesNoIcon";
-import { getColorFromMethodType, getMethodType } from "@/services/protobufjs";
+import {
+  getColorFromMethodType,
+  getMethodType,
+  getOptionsFromReflectionObject,
+} from "@/services/protobufjs";
 import { useSourceContext } from "@/contexts/SourceContext";
 import ResponseError from "@/components/parts/method/response/ResponseError";
 import ResponsesList from "@/components/parts/method/response/ResponsesList";
@@ -61,6 +65,7 @@ export default function Method({ service, method }: ServiceProps) {
   const [open, setOpen] = useState(false);
 
   const responseType = method.resolvedResponseType;
+  const options = Object.entries(getOptionsFromReflectionObject(method));
 
   const color = getColorFromMethodType(method);
 
@@ -99,14 +104,20 @@ export default function Method({ service, method }: ServiceProps) {
       </button>
       <Collapse in={open}>
         <div>
-          {!!commentRest && (
-            <SectionBody>
-              <div className="small text-secondary whitespace-pre">
-                {commentRest}
-              </div>
-            </SectionBody>
-          )}
-          <Options reflectionObject={method} className="mt-2" />
+          <div className="d-grid gap-2">
+            {!!commentRest && (
+              <SectionBody>
+                <div className="small text-secondary whitespace-pre">
+                  {commentRest}
+                </div>
+              </SectionBody>
+            )}
+            {!!options.length && (
+              <SectionBody>
+                <Options reflectionObject={method} />
+              </SectionBody>
+            )}
+          </div>
           <SectionHeader>
             <div>
               <span className="fw-bolder">Parameters</span>
