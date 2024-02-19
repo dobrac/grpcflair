@@ -16,8 +16,12 @@ export default function ResponseError({ error }: { error: Error | undefined }) {
       <div>{error.message}</div>
       {error instanceof RpcError && (
         <>
-          <div>Metadata</div>
-          <JSONBlock>{JSON.stringify(error.metadata, null, 2)}</JSONBlock>
+          <JSONBlock className="rounded-bottom-0">
+            <span className="small">Metadata</span>
+          </JSONBlock>
+          <JSONBlock className="rounded-top-0">
+            {JSON.stringify(error.metadata, null, 2)}
+          </JSONBlock>
         </>
       )}
     </div>

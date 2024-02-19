@@ -18,7 +18,6 @@ export interface GrpcWebOptions {
 }
 
 export interface UnaryResponse<MessageData extends object = object> {
-  error?: Error;
   headers?: Metadata;
   trailers?: Metadata;
   data?: protobuf.Message<MessageData>[];
@@ -64,7 +63,7 @@ export function makeGrpcCall<MessageData extends object = object>(
       ),
       (err, response: protobuf.Message<MessageData>) => {
         if (err) {
-          completeResponse.error = err;
+          reject(err);
         } else {
           completeResponse.data = [response];
         }
@@ -80,11 +79,7 @@ export function makeGrpcCall<MessageData extends object = object>(
     });
 
     unaryStream.on("end", () => {
-      if (completeResponse.error) {
-        reject(completeResponse.error);
-      } else {
-        resolve(completeResponse);
-      }
+      resolve(completeResponse);
     });
   });
 }
