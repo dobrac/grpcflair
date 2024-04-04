@@ -2,10 +2,7 @@ import { act, render, screen } from "@testing-library/react";
 import Endpoints from "@/components/Endpoints";
 import { SourceContext } from "@/contexts/SourceContext";
 import { DEFAULT_HOSTNAME } from "@/types/constants";
-import protobuf from "protobufjs";
-import sourceJson from "../data/helloworld.json";
-
-const context = protobuf.Root.fromJSON(JSON.parse(JSON.stringify(sourceJson)));
+import { context } from "../../tests/protobufjs-source";
 
 describe("Endpoints", () => {
   beforeEach(async () => {

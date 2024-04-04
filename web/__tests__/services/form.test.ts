@@ -4,13 +4,10 @@ import {
   formTransformation,
   placeholderTransformation,
 } from "@/services/form";
-import sourceJson from "../data/helloworld.json";
+import { type } from "../../tests/protobufjs-source";
 
 const { getFieldPlaceholderValue, placeholderTransformationWithDepth } =
   exportedForTesting;
-
-const context = protobuf.Root.fromJSON(JSON.parse(JSON.stringify(sourceJson)));
-const type = context.lookupType("helloworld.TestRequest");
 
 describe("Form Service - getFieldPlaceholderValue", () => {
   it("string === string", async () => {
