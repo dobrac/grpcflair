@@ -75,3 +75,8 @@ export function formTransformation(field: protobuf.Field) {
     2,
   );
 }
+
+export const exportedForTesting = {
+  getFieldPlaceholderValue,
+  placeholderTransformationWithDepth,
+};

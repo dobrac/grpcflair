@@ -12,7 +12,7 @@ interface SourceContextData {
   setError: (error: Error | undefined) => void;
 }
 
-const SourceContext = createContext<SourceContextData>({
+export const SourceContext = createContext<SourceContextData>({
   hostname: DEFAULT_HOSTNAME,
   setHostname: () => {},
   context: undefined,

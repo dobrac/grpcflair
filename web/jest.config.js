@@ -10,7 +10,7 @@ const createJestConfig = nextJest({
   dir: "./",
 });
 
-const config = {
+const customJestConfig = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -144,7 +144,7 @@ const config = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
@@ -204,4 +204,11 @@ const config = {
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(config);
+async function jestConfig() {
+  const nextJestConfig = await createJestConfig(customJestConfig)();
+  // /node_modules/ is the first pattern, replace it with the new pattern
+  nextJestConfig.transformIgnorePatterns[0] = "/node_modules/(?!p-cancelable)/";
+  return nextJestConfig;
+}
+
+module.exports = jestConfig;

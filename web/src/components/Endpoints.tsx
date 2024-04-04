@@ -46,7 +46,7 @@ export default function Endpoints() {
 
   return (
     <div>
-      <div>
+      <div data-testid="services">
         <h4>Services</h4>
         {services.map((service) => (
           <Service key={service.fullName} service={service} />
@@ -55,7 +55,7 @@ export default function Endpoints() {
           <div className="text-secondary fst-italic">No services found</div>
         )}
       </div>
-      <div className="mt-5">
+      <div data-testid="types" className="mt-5">
         <h4>Types</h4>
         <div className="d-grid gap-2">
           {types.map((type) => (
@@ -66,7 +66,7 @@ export default function Endpoints() {
           <div className="text-secondary fst-italic">No types found</div>
         )}
       </div>
-      <div className="mt-5">
+      <div data-testid="enums" className="mt-5">
         <h4>Enums</h4>
         <div className="d-grid gap-2">
           {enums.map((enumType) => (

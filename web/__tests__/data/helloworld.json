@@ -1,0 +1,1746 @@
+{
+  "options": {
+    "java_multiple_files": true,
+    "java_package": "io.grpc.examples.routeguide",
+    "java_outer_classname": "RouteGuideProto",
+    "objc_class_prefix": "RTG"
+  },
+  "nested": {
+    "helloworld": {
+      "nested": {
+        "Greeter": {
+          "methods": {
+            "SayHello": {
+              "requestType": "HelloRequest",
+              "responseType": "HelloReply",
+              "comment": "Sends a greeting for specific name."
+            },
+            "SayRepeatHello": {
+              "requestType": "RepeatHelloRequest",
+              "responseType": "HelloReply",
+              "responseStream": true,
+              "comment": "Sends a greeting for specific name repeatedly."
+            },
+            "TestInputTypes": {
+              "requestType": "TestRequest",
+              "responseType": "HelloReply",
+              "responseStream": true,
+              "comment": "Test Input Types"
+            }
+          },
+          "comment": "Greeter is a service that greets you."
+        },
+        "HelloRequest": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1,
+              "comment": "The name to greet."
+            }
+          },
+          "comment": "A HelloRequest is a request message you can send to a server."
+        },
+        "RepeatHelloRequest": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1,
+              "comment": "The name to greet."
+            },
+            "count": {
+              "type": "int32",
+              "id": 2,
+              "comment": "The number of times to repeat the greeting."
+            }
+          },
+          "comment": "A RepeatHelloRequest is a request message you can send to a server."
+        },
+        "TestRequest": {
+          "oneofs": {
+            "oneoffield": {
+              "oneof": [
+                "oneofString",
+                "oneofNumber_1",
+                "oneofNumber_2"
+              ],
+              "comment": "One Of comment"
+            }
+          },
+          "fields": {
+            "string": {
+              "type": "string",
+              "id": 1,
+              "options": {
+                "(validate.rules).enum.defined_only": true,
+                "(validate.rules).enum.not_in": 0,
+                "(validate.rules).enum.in": "azuread"
+              },
+              "comment": "String"
+            },
+            "number": {
+              "type": "int32",
+              "id": 2,
+              "comment": "Number"
+            },
+            "bool": {
+              "type": "bool",
+              "id": 14,
+              "comment": "Boolean"
+            },
+            "bytes": {
+              "type": "bytes",
+              "id": 15,
+              "comment": "Bytes"
+            },
+            "enum": {
+              "type": "Corpus",
+              "id": 3,
+              "comment": "Enum"
+            },
+            "enumAlias": {
+              "type": "EnumAllowingAlias",
+              "id": 4,
+              "comment": "Enum with alias"
+            },
+            "oneofString": {
+              "type": "string",
+              "id": 5,
+              "comment": "One Of String"
+            },
+            "oneofNumber_1": {
+              "type": "int32",
+              "id": 6,
+              "comment": "One Of Number"
+            },
+            "oneofNumber_2": {
+              "type": "int32",
+              "id": 7,
+              "comment": "One Of Number"
+            },
+            "map": {
+              "keyType": "string",
+              "type": "google.protobuf.Any",
+              "id": 8,
+              "comment": "Map"
+            },
+            "repeatedString": {
+              "rule": "repeated",
+              "type": "string",
+              "id": 10,
+              "comment": "Repeated String"
+            },
+            "repeatedNumber": {
+              "rule": "repeated",
+              "type": "int32",
+              "id": 11,
+              "comment": "Repeated Number"
+            },
+            "repeatedEnum": {
+              "rule": "repeated",
+              "type": "Corpus",
+              "id": 12,
+              "comment": "Repeated Enum"
+            },
+            "any": {
+              "type": "google.protobuf.Any",
+              "id": 13,
+              "comment": "Any"
+            }
+          },
+          "comment": "A Test Request Type"
+        },
+        "HelloReply": {
+          "fields": {
+            "message": {
+              "type": "string",
+              "id": 1,
+              "comment": "The greeting."
+            }
+          },
+          "reserved": [
+            "foo",
+            "bar",
+            [
+              8,
+              8
+            ],
+            [
+              2,
+              5
+            ]
+          ],
+          "comment": "A HelloReply is a response message from a server."
+        },
+        "HelloReplyWithInner": {
+          "fields": {
+            "message": {
+              "type": "string",
+              "id": 1,
+              "comment": null
+            },
+            "inner": {
+              "type": "MiddleAA.Inner",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "nested": {
+            "MiddleAA": {
+              "fields": {},
+              "nested": {
+                "Inner": {
+                  "fields": {
+                    "ival": {
+                      "type": "int64",
+                      "id": 1,
+                      "comment": null
+                    },
+                    "booly": {
+                      "type": "bool",
+                      "id": 2,
+                      "comment": null
+                    }
+                  },
+                  "comment": null
+                }
+              },
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "_stringName": {
+          "oneof": [
+            "stringName"
+          ]
+        },
+        "stringName": {
+          "type": "string",
+          "id": 123456789,
+          "extend": "google.protobuf.EnumValueOptions",
+          "options": {
+            "proto3_optional": true
+          },
+          "comment": null
+        },
+        "Corpus": {
+          "valuesOptions": {
+            "CORPUS_UNIVERSAL": {
+              "deprecated": true
+            },
+            "CORPUS_PRODUCTS": {
+              "(string_name)": "Products",
+              "deprecated": false
+            }
+          },
+          "values": {
+            "CORPUS_UNSPECIFIED": 0,
+            "CORPUS_UNIVERSAL": 1,
+            "CORPUS_WEB": 2,
+            "CORPUS_IMAGES": 3,
+            "CORPUS_LOCAL": 4,
+            "CORPUS_NEWS": 5,
+            "CORPUS_PRODUCTS": 6,
+            "CORPUS_VIDEO": 7
+          },
+          "comment": "A test enum containing value options",
+          "comments": {
+            "CORPUS_UNSPECIFIED": null,
+            "CORPUS_UNIVERSAL": null,
+            "CORPUS_WEB": null,
+            "CORPUS_IMAGES": null,
+            "CORPUS_LOCAL": null,
+            "CORPUS_NEWS": null,
+            "CORPUS_PRODUCTS": null,
+            "CORPUS_VIDEO": null
+          }
+        },
+        "SearchRequest": {
+          "fields": {
+            "query": {
+              "type": "string",
+              "id": 1,
+              "comment": null
+            },
+            "pageNumber": {
+              "type": "int32",
+              "id": 2,
+              "comment": null
+            },
+            "resultsPerPage": {
+              "type": "int32",
+              "id": 3,
+              "comment": null
+            },
+            "corpus": {
+              "type": "Corpus",
+              "id": 4,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "EnumAllowingAlias": {
+          "options": {
+            "allow_alias": true
+          },
+          "values": {
+            "EAA_UNSPECIFIED": 0,
+            "EAA_STARTED": 1,
+            "EAA_RUNNING": 1,
+            "EAA_FINISHED": 2
+          },
+          "comment": null,
+          "comments": {
+            "EAA_UNSPECIFIED": null,
+            "EAA_STARTED": null,
+            "EAA_RUNNING": null,
+            "EAA_FINISHED": null
+          }
+        }
+      }
+    },
+    "otherprotos": {
+      "nested": {
+        "SearchResponse": {
+          "fields": {
+            "results": {
+              "rule": "repeated",
+              "type": "Result",
+              "id": 1,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "Result": {
+          "fields": {
+            "url": {
+              "type": "string",
+              "id": 1,
+              "comment": null
+            },
+            "title": {
+              "type": "string",
+              "id": 2,
+              "comment": null
+            },
+            "snippets": {
+              "rule": "repeated",
+              "type": "string",
+              "id": 3,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "ErrorStatus": {
+          "fields": {
+            "message": {
+              "type": "string",
+              "id": 1,
+              "comment": null
+            },
+            "details": {
+              "rule": "repeated",
+              "type": "google.protobuf.Any",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "SampleMessage": {
+          "oneofs": {
+            "testOneof": {
+              "oneof": [
+                "name",
+                "subMessage"
+              ],
+              "comment": null
+            }
+          },
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 4,
+              "comment": null
+            },
+            "subMessage": {
+              "type": "SubMessage",
+              "id": 9,
+              "comment": null
+            },
+            "subMessages": {
+              "keyType": "int32",
+              "type": "SubMessage",
+              "id": 3,
+              "comment": null
+            }
+          },
+          "nested": {
+            "SubMessage": {
+              "fields": {
+                "message": {
+                  "type": "string",
+                  "id": 4,
+                  "comment": null
+                }
+              },
+              "comment": null
+            }
+          },
+          "comment": null
+        }
+      }
+    },
+    "google": {
+      "nested": {
+        "protobuf": {
+          "nested": {
+            "Any": {
+              "fields": {
+                "type_url": {
+                  "type": "string",
+                  "id": 1
+                },
+                "value": {
+                  "type": "bytes",
+                  "id": 2
+                }
+              },
+              "comment": null
+            },
+            "FileDescriptorSet": {
+              "fields": {
+                "file": {
+                  "rule": "repeated",
+                  "type": "FileDescriptorProto",
+                  "id": 1,
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "FileDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "package": {
+                  "type": "string",
+                  "id": 2,
+                  "comment": null
+                },
+                "dependency": {
+                  "rule": "repeated",
+                  "type": "string",
+                  "id": 3,
+                  "comment": null
+                },
+                "publicDependency": {
+                  "rule": "repeated",
+                  "type": "int32",
+                  "id": 10,
+                  "options": {
+                    "packed": false
+                  },
+                  "comment": null
+                },
+                "weakDependency": {
+                  "rule": "repeated",
+                  "type": "int32",
+                  "id": 11,
+                  "options": {
+                    "packed": false
+                  },
+                  "comment": null
+                },
+                "messageType": {
+                  "rule": "repeated",
+                  "type": "DescriptorProto",
+                  "id": 4,
+                  "comment": null
+                },
+                "enumType": {
+                  "rule": "repeated",
+                  "type": "EnumDescriptorProto",
+                  "id": 5,
+                  "comment": null
+                },
+                "service": {
+                  "rule": "repeated",
+                  "type": "ServiceDescriptorProto",
+                  "id": 6,
+                  "comment": null
+                },
+                "extension": {
+                  "rule": "repeated",
+                  "type": "FieldDescriptorProto",
+                  "id": 7,
+                  "comment": null
+                },
+                "options": {
+                  "type": "FileOptions",
+                  "id": 8,
+                  "comment": null
+                },
+                "sourceCodeInfo": {
+                  "type": "SourceCodeInfo",
+                  "id": 9,
+                  "comment": null
+                },
+                "syntax": {
+                  "type": "string",
+                  "id": 12,
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "DescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "field": {
+                  "rule": "repeated",
+                  "type": "FieldDescriptorProto",
+                  "id": 2,
+                  "comment": null
+                },
+                "extension": {
+                  "rule": "repeated",
+                  "type": "FieldDescriptorProto",
+                  "id": 6,
+                  "comment": null
+                },
+                "nestedType": {
+                  "rule": "repeated",
+                  "type": "DescriptorProto",
+                  "id": 3,
+                  "comment": null
+                },
+                "enumType": {
+                  "rule": "repeated",
+                  "type": "EnumDescriptorProto",
+                  "id": 4,
+                  "comment": null
+                },
+                "extensionRange": {
+                  "rule": "repeated",
+                  "type": "ExtensionRange",
+                  "id": 5,
+                  "comment": null
+                },
+                "oneofDecl": {
+                  "rule": "repeated",
+                  "type": "OneofDescriptorProto",
+                  "id": 8,
+                  "comment": null
+                },
+                "options": {
+                  "type": "MessageOptions",
+                  "id": 7,
+                  "comment": null
+                },
+                "reservedRange": {
+                  "rule": "repeated",
+                  "type": "ReservedRange",
+                  "id": 9,
+                  "comment": null
+                },
+                "reservedName": {
+                  "rule": "repeated",
+                  "type": "string",
+                  "id": 10,
+                  "comment": null
+                }
+              },
+              "nested": {
+                "ExtensionRange": {
+                  "fields": {
+                    "start": {
+                      "type": "int32",
+                      "id": 1,
+                      "comment": null
+                    },
+                    "end": {
+                      "type": "int32",
+                      "id": 2,
+                      "comment": null
+                    }
+                  },
+                  "comment": null
+                },
+                "ReservedRange": {
+                  "fields": {
+                    "start": {
+                      "type": "int32",
+                      "id": 1,
+                      "comment": null
+                    },
+                    "end": {
+                      "type": "int32",
+                      "id": 2,
+                      "comment": null
+                    }
+                  },
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "FieldDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "number": {
+                  "type": "int32",
+                  "id": 3,
+                  "comment": null
+                },
+                "label": {
+                  "type": "Label",
+                  "id": 4,
+                  "comment": null
+                },
+                "type": {
+                  "type": "Type",
+                  "id": 5,
+                  "comment": null
+                },
+                "typeName": {
+                  "type": "string",
+                  "id": 6,
+                  "comment": null
+                },
+                "extendee": {
+                  "type": "string",
+                  "id": 2,
+                  "comment": null
+                },
+                "defaultValue": {
+                  "type": "string",
+                  "id": 7,
+                  "comment": null
+                },
+                "oneofIndex": {
+                  "type": "int32",
+                  "id": 9,
+                  "comment": null
+                },
+                "jsonName": {
+                  "type": "string",
+                  "id": 10,
+                  "comment": null
+                },
+                "options": {
+                  "type": "FieldOptions",
+                  "id": 8,
+                  "comment": null
+                }
+              },
+              "nested": {
+                "Type": {
+                  "values": {
+                    "TYPE_DOUBLE": 1,
+                    "TYPE_FLOAT": 2,
+                    "TYPE_INT64": 3,
+                    "TYPE_UINT64": 4,
+                    "TYPE_INT32": 5,
+                    "TYPE_FIXED64": 6,
+                    "TYPE_FIXED32": 7,
+                    "TYPE_BOOL": 8,
+                    "TYPE_STRING": 9,
+                    "TYPE_GROUP": 10,
+                    "TYPE_MESSAGE": 11,
+                    "TYPE_BYTES": 12,
+                    "TYPE_UINT32": 13,
+                    "TYPE_ENUM": 14,
+                    "TYPE_SFIXED32": 15,
+                    "TYPE_SFIXED64": 16,
+                    "TYPE_SINT32": 17,
+                    "TYPE_SINT64": 18
+                  },
+                  "comment": null,
+                  "comments": {
+                    "TYPE_DOUBLE": null,
+                    "TYPE_FLOAT": null,
+                    "TYPE_INT64": null,
+                    "TYPE_UINT64": null,
+                    "TYPE_INT32": null,
+                    "TYPE_FIXED64": null,
+                    "TYPE_FIXED32": null,
+                    "TYPE_BOOL": null,
+                    "TYPE_STRING": null,
+                    "TYPE_GROUP": null,
+                    "TYPE_MESSAGE": null,
+                    "TYPE_BYTES": null,
+                    "TYPE_UINT32": null,
+                    "TYPE_ENUM": null,
+                    "TYPE_SFIXED32": null,
+                    "TYPE_SFIXED64": null,
+                    "TYPE_SINT32": null,
+                    "TYPE_SINT64": null
+                  }
+                },
+                "Label": {
+                  "values": {
+                    "LABEL_OPTIONAL": 1,
+                    "LABEL_REQUIRED": 2,
+                    "LABEL_REPEATED": 3
+                  },
+                  "comment": null,
+                  "comments": {
+                    "LABEL_OPTIONAL": null,
+                    "LABEL_REQUIRED": null,
+                    "LABEL_REPEATED": null
+                  }
+                }
+              },
+              "comment": null
+            },
+            "OneofDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "options": {
+                  "type": "OneofOptions",
+                  "id": 2,
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "EnumDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "value": {
+                  "rule": "repeated",
+                  "type": "EnumValueDescriptorProto",
+                  "id": 2,
+                  "comment": null
+                },
+                "options": {
+                  "type": "EnumOptions",
+                  "id": 3,
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "EnumValueDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "number": {
+                  "type": "int32",
+                  "id": 2,
+                  "comment": null
+                },
+                "options": {
+                  "type": "EnumValueOptions",
+                  "id": 3,
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "ServiceDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "method": {
+                  "rule": "repeated",
+                  "type": "MethodDescriptorProto",
+                  "id": 2,
+                  "comment": null
+                },
+                "options": {
+                  "type": "ServiceOptions",
+                  "id": 3,
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "MethodDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "inputType": {
+                  "type": "string",
+                  "id": 2,
+                  "comment": null
+                },
+                "outputType": {
+                  "type": "string",
+                  "id": 3,
+                  "comment": null
+                },
+                "options": {
+                  "type": "MethodOptions",
+                  "id": 4,
+                  "comment": null
+                },
+                "clientStreaming": {
+                  "type": "bool",
+                  "id": 5,
+                  "comment": null
+                },
+                "serverStreaming": {
+                  "type": "bool",
+                  "id": 6,
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "FileOptions": {
+              "fields": {
+                "javaPackage": {
+                  "type": "string",
+                  "id": 1,
+                  "comment": null
+                },
+                "javaOuterClassname": {
+                  "type": "string",
+                  "id": 8,
+                  "comment": null
+                },
+                "javaMultipleFiles": {
+                  "type": "bool",
+                  "id": 10,
+                  "comment": null
+                },
+                "javaGenerateEqualsAndHash": {
+                  "type": "bool",
+                  "id": 20,
+                  "options": {
+                    "deprecated": true
+                  },
+                  "comment": null
+                },
+                "javaStringCheckUtf8": {
+                  "type": "bool",
+                  "id": 27,
+                  "comment": null
+                },
+                "optimizeFor": {
+                  "type": "OptimizeMode",
+                  "id": 9,
+                  "options": {
+                    "default": "SPEED"
+                  },
+                  "comment": null
+                },
+                "goPackage": {
+                  "type": "string",
+                  "id": 11,
+                  "comment": null
+                },
+                "ccGenericServices": {
+                  "type": "bool",
+                  "id": 16,
+                  "comment": null
+                },
+                "javaGenericServices": {
+                  "type": "bool",
+                  "id": 17,
+                  "comment": null
+                },
+                "pyGenericServices": {
+                  "type": "bool",
+                  "id": 18,
+                  "comment": null
+                },
+                "deprecated": {
+                  "type": "bool",
+                  "id": 23,
+                  "comment": null
+                },
+                "ccEnableArenas": {
+                  "type": "bool",
+                  "id": 31,
+                  "comment": null
+                },
+                "objcClassPrefix": {
+                  "type": "string",
+                  "id": 36,
+                  "comment": null
+                },
+                "csharpNamespace": {
+                  "type": "string",
+                  "id": 37,
+                  "comment": null
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999,
+                  "comment": null
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "reserved": [
+                [
+                  38,
+                  38
+                ]
+              ],
+              "nested": {
+                "OptimizeMode": {
+                  "values": {
+                    "SPEED": 1,
+                    "CODE_SIZE": 2,
+                    "LITE_RUNTIME": 3
+                  },
+                  "comment": null,
+                  "comments": {
+                    "SPEED": null,
+                    "CODE_SIZE": null,
+                    "LITE_RUNTIME": null
+                  }
+                }
+              },
+              "comment": null
+            },
+            "MessageOptions": {
+              "fields": {
+                "messageSetWireFormat": {
+                  "type": "bool",
+                  "id": 1,
+                  "comment": null
+                },
+                "noStandardDescriptorAccessor": {
+                  "type": "bool",
+                  "id": 2,
+                  "comment": null
+                },
+                "deprecated": {
+                  "type": "bool",
+                  "id": 3,
+                  "comment": null
+                },
+                "mapEntry": {
+                  "type": "bool",
+                  "id": 7,
+                  "comment": null
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999,
+                  "comment": null
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "reserved": [
+                [
+                  8,
+                  8
+                ]
+              ],
+              "comment": null
+            },
+            "FieldOptions": {
+              "fields": {
+                "ctype": {
+                  "type": "CType",
+                  "id": 1,
+                  "options": {
+                    "default": "STRING"
+                  },
+                  "comment": null
+                },
+                "packed": {
+                  "type": "bool",
+                  "id": 2,
+                  "comment": null
+                },
+                "jstype": {
+                  "type": "JSType",
+                  "id": 6,
+                  "options": {
+                    "default": "JS_NORMAL"
+                  },
+                  "comment": null
+                },
+                "lazy": {
+                  "type": "bool",
+                  "id": 5,
+                  "comment": null
+                },
+                "deprecated": {
+                  "type": "bool",
+                  "id": 3,
+                  "comment": null
+                },
+                "weak": {
+                  "type": "bool",
+                  "id": 10,
+                  "comment": null
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999,
+                  "comment": null
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "reserved": [
+                [
+                  4,
+                  4
+                ]
+              ],
+              "nested": {
+                "CType": {
+                  "values": {
+                    "STRING": 0,
+                    "CORD": 1,
+                    "STRING_PIECE": 2
+                  },
+                  "comment": null,
+                  "comments": {
+                    "STRING": null,
+                    "CORD": null,
+                    "STRING_PIECE": null
+                  }
+                },
+                "JSType": {
+                  "values": {
+                    "JS_NORMAL": 0,
+                    "JS_STRING": 1,
+                    "JS_NUMBER": 2
+                  },
+                  "comment": null,
+                  "comments": {
+                    "JS_NORMAL": null,
+                    "JS_STRING": null,
+                    "JS_NUMBER": null
+                  }
+                }
+              },
+              "comment": null
+            },
+            "OneofOptions": {
+              "fields": {
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999,
+                  "comment": null
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "comment": null
+            },
+            "EnumOptions": {
+              "fields": {
+                "allowAlias": {
+                  "type": "bool",
+                  "id": 2,
+                  "comment": null
+                },
+                "deprecated": {
+                  "type": "bool",
+                  "id": 3,
+                  "comment": null
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999,
+                  "comment": null
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "comment": null
+            },
+            "EnumValueOptions": {
+              "fields": {
+                "deprecated": {
+                  "type": "bool",
+                  "id": 1,
+                  "comment": null
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999,
+                  "comment": null
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "comment": null
+            },
+            "ServiceOptions": {
+              "fields": {
+                "deprecated": {
+                  "type": "bool",
+                  "id": 33,
+                  "comment": null
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999,
+                  "comment": null
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "comment": null
+            },
+            "MethodOptions": {
+              "fields": {
+                "deprecated": {
+                  "type": "bool",
+                  "id": 33,
+                  "comment": null
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999,
+                  "comment": null
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "comment": null
+            },
+            "UninterpretedOption": {
+              "fields": {
+                "name": {
+                  "rule": "repeated",
+                  "type": "NamePart",
+                  "id": 2,
+                  "comment": null
+                },
+                "identifierValue": {
+                  "type": "string",
+                  "id": 3,
+                  "comment": null
+                },
+                "positiveIntValue": {
+                  "type": "uint64",
+                  "id": 4,
+                  "comment": null
+                },
+                "negativeIntValue": {
+                  "type": "int64",
+                  "id": 5,
+                  "comment": null
+                },
+                "doubleValue": {
+                  "type": "double",
+                  "id": 6,
+                  "comment": null
+                },
+                "stringValue": {
+                  "type": "bytes",
+                  "id": 7,
+                  "comment": null
+                },
+                "aggregateValue": {
+                  "type": "string",
+                  "id": 8,
+                  "comment": null
+                }
+              },
+              "nested": {
+                "NamePart": {
+                  "fields": {
+                    "namePart": {
+                      "rule": "required",
+                      "type": "string",
+                      "id": 1,
+                      "comment": null
+                    },
+                    "isExtension": {
+                      "rule": "required",
+                      "type": "bool",
+                      "id": 2,
+                      "comment": null
+                    }
+                  },
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "SourceCodeInfo": {
+              "fields": {
+                "location": {
+                  "rule": "repeated",
+                  "type": "Location",
+                  "id": 1,
+                  "comment": null
+                }
+              },
+              "nested": {
+                "Location": {
+                  "fields": {
+                    "path": {
+                      "rule": "repeated",
+                      "type": "int32",
+                      "id": 1,
+                      "comment": null
+                    },
+                    "span": {
+                      "rule": "repeated",
+                      "type": "int32",
+                      "id": 2,
+                      "comment": null
+                    },
+                    "leadingComments": {
+                      "type": "string",
+                      "id": 3,
+                      "comment": null
+                    },
+                    "trailingComments": {
+                      "type": "string",
+                      "id": 4,
+                      "comment": null
+                    },
+                    "leadingDetachedComments": {
+                      "rule": "repeated",
+                      "type": "string",
+                      "id": 6,
+                      "comment": null
+                    }
+                  },
+                  "comment": null
+                }
+              },
+              "comment": null
+            },
+            "GeneratedCodeInfo": {
+              "fields": {
+                "annotation": {
+                  "rule": "repeated",
+                  "type": "Annotation",
+                  "id": 1,
+                  "comment": null
+                }
+              },
+              "nested": {
+                "Annotation": {
+                  "fields": {
+                    "path": {
+                      "rule": "repeated",
+                      "type": "int32",
+                      "id": 1,
+                      "comment": null
+                    },
+                    "sourceFile": {
+                      "type": "string",
+                      "id": 2,
+                      "comment": null
+                    },
+                    "begin": {
+                      "type": "int32",
+                      "id": 3,
+                      "comment": null
+                    },
+                    "end": {
+                      "type": "int32",
+                      "id": 4,
+                      "comment": null
+                    }
+                  },
+                  "comment": null
+                }
+              },
+              "comment": null
+            }
+          }
+        }
+      }
+    },
+    "routeguide": {
+      "nested": {
+        "RouteGuide": {
+          "methods": {
+            "GetFeature": {
+              "requestType": "Point",
+              "responseType": "Feature",
+              "comment": "A simple RPC.\n\nObtains the feature at a given position.\n\nA feature with an empty name is returned if there's no feature at the given\nposition."
+            },
+            "ListFeatures": {
+              "requestType": "Rectangle",
+              "responseType": "Feature",
+              "responseStream": true,
+              "comment": "A server-to-client streaming RPC.\n\nObtains the Features available within the given Rectangle.  Results are\nstreamed rather than returned at once (e.g. in a response message with a\nrepeated field), as the rectangle may cover a large area and contain a\nhuge number of features."
+            },
+            "RecordRoute": {
+              "requestType": "Point",
+              "requestStream": true,
+              "responseType": "RouteSummary",
+              "comment": "A client-to-server streaming RPC.\n\nAccepts a stream of Points on a route being traversed, returning a\nRouteSummary when traversal is completed."
+            },
+            "RouteChat": {
+              "requestType": "RouteNote",
+              "requestStream": true,
+              "responseType": "RouteNote",
+              "responseStream": true,
+              "comment": "A Bidirectional streaming RPC.\n\nAccepts a stream of RouteNotes sent while a route is being traversed,\nwhile receiving other RouteNotes (e.g. from other users)."
+            }
+          },
+          "comment": "Interface exported by the server."
+        },
+        "Point": {
+          "fields": {
+            "latitude": {
+              "type": "int32",
+              "id": 1,
+              "comment": null
+            },
+            "longitude": {
+              "type": "int32",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "comment": "Points are represented as latitude-longitude pairs in the E7 representation\n(degrees multiplied by 10**7 and rounded to the nearest integer).\nLatitudes should be in the range +/- 90 degrees and longitude should be in\nthe range +/- 180 degrees (inclusive)."
+        },
+        "Rectangle": {
+          "fields": {
+            "lo": {
+              "type": "Point",
+              "id": 1,
+              "comment": "One corner of the rectangle."
+            },
+            "hi": {
+              "type": "Point",
+              "id": 2,
+              "comment": "The other corner of the rectangle."
+            }
+          },
+          "comment": "A latitude-longitude rectangle, represented as two diagonally opposite\npoints \"lo\" and \"hi\"."
+        },
+        "Feature": {
+          "fields": {
+            "name": {
+              "type": "string",
+              "id": 1,
+              "comment": "The name of the feature."
+            },
+            "location": {
+              "type": "Point",
+              "id": 2,
+              "comment": "The point where the feature is detected."
+            }
+          },
+          "comment": "A feature names something at a given point.\n\nIf a feature could not be named, the name is empty."
+        },
+        "FeatureDatabase": {
+          "fields": {
+            "feature": {
+              "rule": "repeated",
+              "type": "Feature",
+              "id": 1,
+              "comment": null
+            }
+          },
+          "comment": "Not used in the RPC.  Instead, this is here for the form serialized to disk."
+        },
+        "RouteNote": {
+          "fields": {
+            "location": {
+              "type": "Point",
+              "id": 1,
+              "comment": "The location from which the message is sent."
+            },
+            "message": {
+              "type": "string",
+              "id": 2,
+              "comment": "The message to be sent."
+            }
+          },
+          "comment": "A RouteNote is a message sent while at a given point."
+        },
+        "RouteSummary": {
+          "fields": {
+            "pointCount": {
+              "type": "int32",
+              "id": 1,
+              "comment": "The number of points received."
+            },
+            "featureCount": {
+              "type": "int32",
+              "id": 2,
+              "comment": "The number of known features passed while traversing the route."
+            },
+            "distance": {
+              "type": "int32",
+              "id": 3,
+              "comment": "The distance covered in metres."
+            },
+            "elapsedTime": {
+              "type": "int32",
+              "id": 4,
+              "comment": "The duration of the traversal in seconds."
+            }
+          },
+          "comment": "A RouteSummary is received in response to a RecordRoute rpc.\n\nIt contains the number of individual points received, the number of\ndetected features, and the total distance covered as the cumulative sum of\nthe distance between each point."
+        }
+      }
+    },
+    "test": {
+      "nested": {
+        "foRepInt": {
+          "rule": "repeated",
+          "type": "int32",
+          "id": 50000,
+          "extend": "google.protobuf.FieldOptions",
+          "comment": null
+        },
+        "foSingleInt": {
+          "type": "int32",
+          "id": 50001,
+          "extend": "google.protobuf.FieldOptions",
+          "comment": null
+        },
+        "moRepInt": {
+          "rule": "repeated",
+          "type": "int32",
+          "id": 50000,
+          "extend": "google.protobuf.MessageOptions",
+          "comment": null
+        },
+        "moSingleInt": {
+          "type": "int32",
+          "id": 50001,
+          "extend": "google.protobuf.MessageOptions",
+          "comment": null
+        },
+        "TestFieldOptionsInt": {
+          "fields": {
+            "field1": {
+              "type": "string",
+              "id": 2,
+              "options": {
+                "(fo_rep_int)": 2
+              },
+              "comment": null
+            },
+            "field2": {
+              "type": "string",
+              "id": 1,
+              "options": {
+                "(fo_single_int)": 3
+              },
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "TestMessageOptionsInt": {
+          "options": {
+            "(mo_rep_int)": 2,
+            "(mo_single_int)": 3
+          },
+          "fields": {},
+          "comment": null
+        },
+        "Msg": {
+          "fields": {
+            "value": {
+              "type": "int32",
+              "id": 1,
+              "comment": null
+            },
+            "repValue": {
+              "rule": "repeated",
+              "type": "int32",
+              "id": 2,
+              "comment": null
+            },
+            "nested": {
+              "type": "SubMsg",
+              "id": 3,
+              "comment": null
+            },
+            "repNested": {
+              "rule": "repeated",
+              "type": "SubMsg",
+              "id": 4,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "SubMsg": {
+          "fields": {
+            "value": {
+              "type": "string",
+              "id": 1,
+              "comment": null
+            },
+            "nested": {
+              "type": "SubMsg",
+              "id": 2,
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "foRepMsg": {
+          "rule": "repeated",
+          "type": "Msg",
+          "id": 50002,
+          "extend": "google.protobuf.FieldOptions",
+          "comment": null
+        },
+        "foSingleMsg": {
+          "type": "Msg",
+          "id": 50003,
+          "extend": "google.protobuf.FieldOptions",
+          "comment": null
+        },
+        "moRepMsg": {
+          "rule": "repeated",
+          "type": "Msg",
+          "id": 50002,
+          "extend": "google.protobuf.MessageOptions",
+          "comment": null
+        },
+        "moSingleMsg": {
+          "type": "Msg",
+          "id": 50003,
+          "extend": "google.protobuf.MessageOptions",
+          "comment": null
+        },
+        "methodRepMsg": {
+          "rule": "repeated",
+          "type": "Msg",
+          "id": 50002,
+          "extend": "google.protobuf.MethodOptions",
+          "comment": null
+        },
+        "methodSingleMsg": {
+          "type": "Msg",
+          "id": 50003,
+          "extend": "google.protobuf.MethodOptions",
+          "comment": null
+        },
+        "TestFieldOptionsMsg": {
+          "fields": {
+            "field1": {
+              "type": "string",
+              "id": 1,
+              "options": {
+                "(fo_rep_msg).value": 4,
+                "(fo_rep_msg).rep_value": 6
+              },
+              "comment": null
+            },
+            "field2": {
+              "type": "string",
+              "id": 2,
+              "options": {
+                "(fo_single_msg).value": 7,
+                "(fo_single_msg).rep_value": 9
+              },
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "TestMessageOptionsMsg": {
+          "options": {
+            "(mo_rep_msg).value": 5,
+            "(mo_rep_msg).rep_value": 8,
+            "(mo_single_msg).value": 7,
+            "(mo_single_msg).rep_value": 9
+          },
+          "fields": {},
+          "comment": null
+        },
+        "TestFieldOptionsNested": {
+          "fields": {
+            "field1": {
+              "type": "string",
+              "id": 1,
+              "options": {
+                "(fo_rep_msg).value": 1,
+                "(fo_rep_msg).nested.nested.value": "x",
+                "(fo_rep_msg).rep_nested.value": "z",
+                "(fo_rep_msg).rep_value": 3,
+                "(fo_rep_msg).nested.value": "w"
+              },
+              "comment": null
+            },
+            "field2": {
+              "type": "string",
+              "id": 2,
+              "options": {
+                "(fo_single_msg).nested.value": "x",
+                "(fo_single_msg).rep_nested.value": "y"
+              },
+              "comment": null
+            },
+            "field3": {
+              "type": "string",
+              "id": 3,
+              "options": {
+                "(fo_single_msg).nested.value": "x",
+                "(fo_single_msg).nested.nested.nested.value": "y"
+              },
+              "comment": null
+            }
+          },
+          "comment": null
+        },
+        "TestMessageOptionsNested": {
+          "options": {
+            "(mo_rep_msg).value": 1,
+            "(mo_rep_msg).nested.nested.value": "x",
+            "(mo_rep_msg).rep_nested.value": "z",
+            "(mo_rep_msg).rep_value": 3,
+            "(mo_rep_msg).nested.value": "w",
+            "(mo_single_msg).nested.value": "x",
+            "(mo_single_msg).rep_nested.value": "y",
+            "(mo_single_msg).rep_nested.nested.nested.value": "y"
+          },
+          "fields": {},
+          "comment": null
+        },
+        "TestOptionsService": {
+          "methods": {
+            "TestOptionsRpc": {
+              "requestType": "Msg",
+              "responseType": "Msg",
+              "options": {
+                "(method_rep_msg).value": 1,
+                "(method_rep_msg).nested.nested.value": "x",
+                "(method_rep_msg).rep_nested.value": "z",
+                "(method_rep_msg).rep_value": 3,
+                "(method_rep_msg).nested.value": "w",
+                "(method_single_msg).nested.value": "x",
+                "(method_single_msg).rep_nested.value": "y",
+                "(method_single_msg).rep_nested.nested.nested.value": "y"
+              },
+              "comment": null,
+              "parsedOptions": [
+                {
+                  "(method_rep_msg)": {
+                    "value": 1,
+                    "nested": {
+                      "nested": {
+                        "value": "x"
+                      }
+                    },
+                    "rep_nested": [
+                      {
+                        "value": "y"
+                      },
+                      {
+                        "value": "z"
+                      }
+                    ],
+                    "rep_value": 3
+                  }
+                },
+                {
+                  "(method_rep_msg)": {
+                    "nested": {
+                      "value": "w"
+                    }
+                  }
+                },
+                {
+                  "(method_single_msg)": {
+                    "nested": {
+                      "value": "x"
+                    },
+                    "rep_nested": [
+                      {
+                        "value": "x",
+                        "nested": {
+                          "nested": {
+                            "value": "y"
+                          }
+                        }
+                      },
+                      {
+                        "value": "y"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "comment": null
+        }
+      }
+    }
+  }
+}

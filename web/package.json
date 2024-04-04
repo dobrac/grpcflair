@@ -36,7 +36,7 @@
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.5",
-    "@types/react": "^18",
+    "@types/react": "^18.2.74",
     "@types/react-dom": "^18",
     "@types/react-syntax-highlighter": "^15.5.11",
     "cross-env": "^7.0.3",
