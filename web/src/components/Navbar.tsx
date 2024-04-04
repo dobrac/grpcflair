@@ -16,9 +16,9 @@ enum FileSource {
 
 export default function Navbar() {
   const searchParams = useSearchParams();
-  const url = searchParams.get("url");
+  const urlParam = searchParams.get("url");
 
-  const [search, setSearch] = useState(url ?? DEFAULT_URL);
+  const [url, setUrl] = useState(urlParam ?? DEFAULT_URL);
   const [file, setFile] = useState<File | null>(null);
 
   const { setContext, setError } = useSourceContext();
@@ -26,33 +26,42 @@ export default function Navbar() {
   const [fileSource, setFileSource] = useState<FileSource>(FileSource.URL);
 
   const processRequest = async (url: string, extension: string) => {
-    const source = await fetch(url);
-    if (!source.ok) {
-      throw new Error(`Failed to fetch the data (${source.status})`);
-    }
+    try {
+      setError(undefined);
 
-    switch (extension) {
-      case "json": {
-        const sourceJson = await source.json();
-        const content = protobuf.Root.fromJSON(sourceJson);
-        setContext(content);
-        break;
+      const source = await fetch(url);
+      if (!source.ok) {
+        throw new Error(`Failed to fetch the data (${source.status})`);
       }
-      case "bin": {
-        const sourceBin = await source.arrayBuffer();
-        const uint8View = new Uint8Array(sourceBin);
 
-        const decodedSource = descriptor.FileDescriptorSet.decode(uint8View);
-        const content = (
-          protobuf.Root as unknown as ProtobufjsRootDescriptor
-        ).fromDescriptor(decodedSource);
-        setContext(content);
-        break;
+      switch (extension) {
+        case "json": {
+          const sourceJson = await source.json();
+          const content = protobuf.Root.fromJSON(sourceJson);
+          setContext(content);
+          break;
+        }
+        case "bin": {
+          const sourceBin = await source.arrayBuffer();
+          const uint8View = new Uint8Array(sourceBin);
+
+          const decodedSource = descriptor.FileDescriptorSet.decode(uint8View);
+          const content = (
+            protobuf.Root as unknown as ProtobufjsRootDescriptor
+          ).fromDescriptor(decodedSource);
+          setContext(content);
+          break;
+        }
+        default:
+          throw new Error(
+            `Invalid file type (${extension}). Supported types are: .json, .bin`,
+          );
       }
-      default:
-        throw new Error(
-          `Invalid file type (${extension}). Supported types are: .json, .bin`,
-        );
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        setError(error);
+      }
     }
   };
 
@@ -75,35 +84,30 @@ export default function Navbar() {
     await processRequest(url, extension);
   };
 
-  const handleSubmit = async (event?: FormEvent<HTMLFormElement>) => {
-    event?.preventDefault();
-    setContext(undefined);
-
-    try {
-      setError(undefined);
-
-      switch (fileSource) {
-        case FileSource.URL:
-          await processUrl(search);
-          break;
-        case FileSource.FILE:
-          if (!file) {
-            return;
-          }
-          await processFile(file);
-          break;
-      }
-    } catch (error) {
-      console.error(error);
-      if (error instanceof Error) {
-        setError(error);
-      }
+  const process = async (fileSource: FileSource) => {
+    switch (fileSource) {
+      case FileSource.URL:
+        await processUrl(url);
+        break;
+      case FileSource.FILE:
+        if (!file) {
+          return;
+        }
+        await processFile(file);
+        break;
     }
   };
 
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+    setContext(undefined);
+
+    await process(fileSource);
+  };
+
   useEffect(() => {
-    if (search) {
-      processUrl(search);
+    if (url) {
+      processUrl(url);
     }
   }, []);
 
@@ -133,7 +137,7 @@ export default function Navbar() {
                 <Dropdown.Item
                   onClick={() => {
                     setFileSource(FileSource.URL);
-                    handleSubmit();
+                    process(FileSource.URL);
                   }}
                 >
                   URL
@@ -141,30 +145,33 @@ export default function Navbar() {
                 <Dropdown.Item
                   onClick={() => {
                     setFileSource(FileSource.FILE);
-                    handleSubmit();
+                    if (file !== null) {
+                      process(FileSource.FILE);
+                    }
                   }}
                 >
                   File
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            {fileSource === FileSource.URL && (
-              <Form.Control
-                as="input"
-                onChange={(e) => setSearch(e.target.value)}
-                value={search}
-              />
-            )}
-            {fileSource === FileSource.FILE && (
-              <Form.Control
-                type="file"
-                accept=".json"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setFile(e.target.files?.[0] ?? null);
-                  handleSubmit();
-                }}
-              />
-            )}
+            <Form.Control
+              as="input"
+              onChange={(e) => setUrl(e.target.value)}
+              value={url}
+              className={fileSource === FileSource.URL ? "d-block" : "d-none"}
+            />
+            <Form.Control
+              type="file"
+              accept=".json"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                const file = e.target.files?.[0] ?? null;
+                setFile(file);
+                if (file !== null) {
+                  processFile(file);
+                }
+              }}
+              className={fileSource === FileSource.FILE ? "d-block" : "d-none"}
+            />
             <Button variant="primary" type="submit">
               Explore
             </Button>
