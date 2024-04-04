@@ -21,12 +21,15 @@ export default function Navbar() {
   const [search, setSearch] = useState(url ?? DEFAULT_URL);
   const [file, setFile] = useState<File | null>(null);
 
-  const { setContext } = useSourceContext();
+  const { setContext, setError } = useSourceContext();
 
   const [fileSource, setFileSource] = useState<FileSource>(FileSource.URL);
 
   const processRequest = async (url: string, extension: string) => {
     const source = await fetch(url);
+    if (!source.ok) {
+      throw new Error(`Failed to fetch the data (${source.status})`);
+    }
 
     switch (extension) {
       case "json": {
@@ -47,7 +50,9 @@ export default function Navbar() {
         break;
       }
       default:
-        return;
+        throw new Error(
+          `Invalid file type (${extension}). Supported types are: .json, .bin`,
+        );
     }
   };
 
@@ -70,20 +75,29 @@ export default function Navbar() {
     await processRequest(url, extension);
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
     setContext(undefined);
 
-    switch (fileSource) {
-      case FileSource.URL:
-        await processUrl(search);
-        break;
-      case FileSource.FILE:
-        if (!file) {
-          return;
-        }
-        await processFile(file);
-        break;
+    try {
+      setError(undefined);
+
+      switch (fileSource) {
+        case FileSource.URL:
+          await processUrl(search);
+          break;
+        case FileSource.FILE:
+          if (!file) {
+            return;
+          }
+          await processFile(file);
+          break;
+      }
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        setError(error);
+      }
     }
   };
 
@@ -116,10 +130,20 @@ export default function Navbar() {
               <Dropdown.Toggle>{fileSource}</Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setFileSource(FileSource.URL)}>
+                <Dropdown.Item
+                  onClick={() => {
+                    setFileSource(FileSource.URL);
+                    handleSubmit();
+                  }}
+                >
                   URL
                 </Dropdown.Item>
-                <Dropdown.Item onClick={() => setFileSource(FileSource.FILE)}>
+                <Dropdown.Item
+                  onClick={() => {
+                    setFileSource(FileSource.FILE);
+                    handleSubmit();
+                  }}
+                >
                   File
                 </Dropdown.Item>
               </Dropdown.Menu>
@@ -137,6 +161,7 @@ export default function Navbar() {
                 accept=".json"
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setFile(e.target.files?.[0] ?? null);
+                  handleSubmit();
                 }}
               />
             )}

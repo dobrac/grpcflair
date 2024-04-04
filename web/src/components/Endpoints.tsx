@@ -10,9 +10,23 @@ import Type from "@/components/parts/Type";
 import EnumType from "@/components/parts/EnumType";
 import { Spinner } from "react-bootstrap";
 import { FILTERED_NAMESPACES } from "@/types/constants";
+import JSONBlock from "@/components/JSONBlock";
 
 export default function Endpoints() {
-  const { context, setHostname } = useSourceContext();
+  const { context, error } = useSourceContext();
+
+  if (!!error) {
+    return (
+      <div className="d-grid justify-content-center text-center alert alert-danger">
+        <div>
+          An Error has occurred while fetching the data, please try it again.
+        </div>
+        <div className="mt-2">
+          <JSONBlock>{error.message}</JSONBlock>
+        </div>
+      </div>
+    );
+  }
 
   if (!context) {
     return (

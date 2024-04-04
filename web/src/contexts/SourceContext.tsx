@@ -8,6 +8,8 @@ interface SourceContextData {
   setHostname: (hostname: string) => void;
   context?: Root;
   setContext: (context: Root | undefined) => void;
+  error?: Error;
+  setError: (error: Error | undefined) => void;
 }
 
 const SourceContext = createContext<SourceContextData>({
@@ -15,6 +17,8 @@ const SourceContext = createContext<SourceContextData>({
   setHostname: () => {},
   context: undefined,
   setContext: () => {},
+  error: undefined,
+  setError: () => {},
 });
 
 export function useSourceContext() {
@@ -27,6 +31,7 @@ export default function SourceContextProvider({
   children: ReactNode;
 }) {
   const [hostname, setHostname] = useState<string>(DEFAULT_HOSTNAME);
+  const [error, setError] = useState<Error>();
   const [context, setContext] = useState<Root>();
 
   const contextValue = useMemo(
@@ -35,8 +40,10 @@ export default function SourceContextProvider({
       setHostname,
       context,
       setContext,
+      error,
+      setError,
     }),
-    [hostname, context, setContext],
+    [hostname, context, error],
   );
 
   return (
