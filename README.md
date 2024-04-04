@@ -47,3 +47,29 @@ grpcurl -protoset-out descriptors.bin -plaintext localhost:8980 describe
 ```bash
 gf-reflection-to-json ${SOURCE_BIN_FILE} > ${EXPORTED_NAME}.json
 ```
+
+## Testing Server
+To test the application, you can use the example testing server and Envoy proxy. It is a simple gRPC server that has a few endpoints and types.
+Source: https://github.com/grpc/grpc-web/tree/master/net/grpc/gateway/examples/helloworld
+
+1) Go to the example folder.
+
+```bash
+cd example
+```
+
+2) Start the Envoy proxy.
+
+(Linux users: Use address: localhost instead of address: host.docker.internal in the bottom section.)
+
+```bash
+docker run -d -v "$(pwd)"/envoy-proxy.yaml:/etc/envoy/envoy.yaml:ro -p 8080:8080 -p 9901:9901 envoyproxy/envoy:v1.22.0
+```
+
+3) Run the gRPC server.
+
+```bash
+node server.js
+```
+
+4) Access the (already running) website and set the server URL to http://localhost:8080.
