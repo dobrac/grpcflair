@@ -22,6 +22,8 @@ import "google/protobuf/any.proto";
 
 package helloworld;
 
+option java_package = "com.example.tutorial";
+
 /**
  Greeter is a service that greets you.
  */

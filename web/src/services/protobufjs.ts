@@ -139,3 +139,11 @@ export function transformTypeValues(
   }
   return result;
 }
+
+export const exportedForTesting = {
+  isNamespaceBase,
+  isType,
+  isEnum,
+  isService,
+  traverseStructure,
+};

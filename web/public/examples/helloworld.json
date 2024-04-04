@@ -7,6 +7,9 @@
   },
   "nested": {
     "helloworld": {
+      "options": {
+        "java_package": "com.example.tutorial"
+      },
       "nested": {
         "Greeter": {
           "methods": {
