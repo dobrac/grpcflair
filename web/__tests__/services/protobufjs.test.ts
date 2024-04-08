@@ -6,6 +6,7 @@ import {
   getMethodType,
   getOptionsFromReflectionObject,
   getRequestType,
+  getRequestTypeDisplayName,
   getServicesFromContext,
   getTypesFromContext,
   RequestType,
@@ -237,6 +238,30 @@ describe("protobufjs Service - getMethodType", () => {
     method.resolve();
 
     const methodType = getMethodType(method);
+    expect(methodType).toEqual("Unary");
+  });
+});
+
+describe("protobufjs Service - getRequestTypeDisplayName", () => {
+  it("should return Bi-directional streaming", () => {
+    const methodType = getRequestTypeDisplayName(
+      RequestType.BIDIRECTIONAL_STREAMING,
+    );
+    expect(methodType).toEqual("Bi-directional streaming");
+  });
+
+  it("should return Server streaming", () => {
+    const methodType = getRequestTypeDisplayName(RequestType.SERVER_STREAMING);
+    expect(methodType).toEqual("Server streaming");
+  });
+
+  it("should return Client streaming", () => {
+    const methodType = getRequestTypeDisplayName(RequestType.CLIENT_STREAMING);
+    expect(methodType).toEqual("Client streaming");
+  });
+
+  it("should return Unary", () => {
+    const methodType = getRequestTypeDisplayName(RequestType.UNARY);
     expect(methodType).toEqual("Unary");
   });
 });

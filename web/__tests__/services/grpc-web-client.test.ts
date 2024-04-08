@@ -1,4 +1,7 @@
-import { makeGrpcCall, makeGrpcServerStreamingCall } from "@/services/grpc-web";
+import {
+  makeGrpcCall,
+  makeGrpcServerStreamingCall,
+} from "@/services/grpc-web-client";
 import { context } from "../../tests/protobufjs-source";
 import { RpcError, StatusCode } from "grpc-web";
 import { GrpcWebFormat } from "@/types/grpc-web";

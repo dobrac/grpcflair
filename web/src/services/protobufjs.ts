@@ -109,8 +109,8 @@ export function getColorFromMethodType(method: protobuf.Method): string {
   }
 }
 
-export function getMethodType(method: protobuf.Method) {
-  switch (getRequestType(method)) {
+export function getRequestTypeDisplayName(type: RequestType) {
+  switch (type) {
     case RequestType.BIDIRECTIONAL_STREAMING:
       return "Bi-directional streaming";
     case RequestType.CLIENT_STREAMING:
@@ -120,6 +120,10 @@ export function getMethodType(method: protobuf.Method) {
     case RequestType.UNARY:
       return "Unary";
   }
+}
+
+export function getMethodType(method: protobuf.Method) {
+  return getRequestTypeDisplayName(getRequestType(method));
 }
 
 export function transformTypeValues(

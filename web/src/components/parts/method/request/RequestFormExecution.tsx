@@ -1,18 +1,21 @@
 import { Button, Spinner } from "react-bootstrap";
 import protobuf from "protobufjs";
-import PCancelable, { CancelError } from "p-cancelable";
-import {
-  makeGrpcCall,
-  makeGrpcServerStreamingCall,
-  UnaryResponse,
-} from "@/services/grpc-web";
+import { CancelError } from "p-cancelable";
 import { useMethodContext } from "@/contexts/MethodContext";
 import { useSourceContext } from "@/contexts/SourceContext";
 import { useFormContext } from "react-hook-form";
 import { cleanEmptyValues } from "@/services/json";
 import { useMetadataContext } from "@/contexts/MetadataContext";
+import { backends, BackendType } from "@/services/backends/common";
+import {
+  getRequestType,
+  getRequestTypeDisplayName,
+  RequestType,
+} from "@/services/protobufjs";
 
-const errorDelimiter = ": ";
+const ERROR_DELIMITER = ": ";
+
+const SELECTED_BACKEND = BackendType.GRPC_WEB;
 
 export default function RequestFormExecution({
   service,
@@ -39,92 +42,32 @@ export default function RequestFormExecution({
     return <div>Unable to resolve request/response type</div>;
   }
 
-  const handleUnaryRequest = async (message: protobuf.Message<{}>) => {
-    const cancellablePromise = new PCancelable<UnaryResponse>(
-      (resolve, reject, onCancel) => {
-        const promise = makeGrpcCall(
-          hostname,
-          service,
-          method,
-          requestType,
-          responseType,
-          message,
-          {
-            metadata,
-            format: request.format,
-          },
-        );
-
-        promise.then(resolve).catch(reject);
+  const handleRequest = async (
+    type: RequestType,
+    message: protobuf.Message<{}>,
+  ) => {
+    const backend = backends[SELECTED_BACKEND][type];
+    if (!backend) {
+      functions.setResponse({
+        error: new Error(
+          `${getRequestTypeDisplayName(type)} is not supported yet`,
+        ),
+      });
+      return;
+    }
+    await backend(
+      hostname,
+      service,
+      method,
+      requestType,
+      responseType,
+      message,
+      metadata,
+      functions,
+      {
+        format: request.format,
       },
     );
-
-    const onCancel = () => {
-      cancellablePromise.cancel();
-    };
-    functions.setCancelFunction(() => onCancel);
-
-    const response = await cancellablePromise;
-
-    functions.setResponse((it) => ({
-      ...it,
-      headers: response.headers,
-      trailers: response.trailers,
-      data: response.data?.map((it) => responseType.toObject(it, {})),
-    }));
-  };
-
-  const handleServerStreaming = (message: protobuf.Message<{}>) => {
-    return new Promise<void>((resolve, reject) => {
-      const stream = makeGrpcServerStreamingCall(
-        hostname,
-        service,
-        method,
-        requestType,
-        responseType,
-        message,
-        {
-          metadata,
-          format: request.format,
-        },
-      );
-      const onCancel = () => {
-        stream.cancel();
-        reject(new CancelError("Canceled"));
-      };
-
-      functions.setCancelFunction(() => onCancel);
-
-      stream.on("data", (data) => {
-        const response = responseType.toObject(data, {});
-        functions.setResponse((it) => ({
-          ...it,
-          data: [...(it?.data ?? []), response],
-        }));
-      });
-
-      stream.on("metadata", (metadata) => {
-        functions.setResponse((it) => ({
-          ...it,
-          headers: metadata,
-        }));
-      });
-
-      stream.on("status", (status) => {
-        functions.setResponse((it) => ({
-          ...it,
-          trailers: status.metadata,
-        }));
-      });
-
-      stream.on("error", (error) => {
-        reject(error);
-      });
-
-      stream.on("end", () => {
-        resolve();
-      });
-    });
   };
 
   const handleExecute = async (data: Record<string, unknown>) => {
@@ -143,12 +86,12 @@ export default function RequestFormExecution({
       // Validate model data
       const err = requestType.verify(dataTransformed);
       if (err) {
-        const [fieldName, ...error] = err.split(errorDelimiter);
+        const [fieldName, ...error] = err.split(ERROR_DELIMITER);
         setError(fieldName, {
           type: "manual",
           message:
             'Protobuf type or value is invalid: "' +
-            error.join(errorDelimiter) +
+            error.join(ERROR_DELIMITER) +
             '"',
         });
         return;
@@ -157,23 +100,8 @@ export default function RequestFormExecution({
       // Construct protobufjs message
       const message = requestType.create(dataTransformed);
 
-      // TODO: Support request streaming
-      if (method.requestStream) {
-        functions.setResponse({
-          error: new Error(
-            "Request streaming is not supported yet (client or bi-directional)",
-          ),
-        });
-        return;
-      }
-
-      if (method.responseStream) {
-        await handleServerStreaming(message);
-      }
-
-      if (!method.requestStream && !method.responseStream) {
-        await handleUnaryRequest(message);
-      }
+      const type = getRequestType(method);
+      await handleRequest(type, message);
     } catch (e) {
       console.error(e);
       if (e instanceof Error) {

@@ -33,7 +33,7 @@ interface MethodResponse {
   data?: unknown[];
 }
 
-interface MethodFunctions {
+export interface MethodFunctions {
   setRequest: Dispatch<SetStateAction<MethodRequest>>;
   setResponse: Dispatch<SetStateAction<MethodResponse | undefined>>;
   cancel?: CancelFunction;
