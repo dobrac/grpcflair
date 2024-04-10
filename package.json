@@ -6,8 +6,8 @@
     "clean": "lerna clean --yes && rimraf node_modules",
     "proto-to-json": "gf-proto-to-json",
     "reflection-to-json": "gf-reflection-to-json",
-    "generateExample": "gf-proto-to-json example/definitions/protos/helloworld.proto > web/public/examples/helloworld.json",
-    "generateExampleReflection": "gf-reflection-to-json example/definitions/reflection/helloworld-reflection.bin > web/public/examples/helloworld.json"
+    "generateExample": "gf-proto-to-json example/definitions/protos/helloworld.proto > web/public/definitions.json",
+    "generateExampleReflection": "gf-reflection-to-json example/definitions/reflection/helloworld-reflection.bin > web/public/definitions.json"
   },
   "dependencies": {
     "@grpcflair/proto-to-json": "*",
