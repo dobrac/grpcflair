@@ -9,6 +9,8 @@ import { useSearchParams } from "next/navigation";
 import { ProtobufjsRootDescriptor } from "@/types/protobufjs-types";
 import descriptor from "protobufjs/ext/descriptor";
 
+const URL_PARAM = "url";
+
 enum FileSource {
   URL = "URL",
   FILE = "File",
@@ -16,7 +18,7 @@ enum FileSource {
 
 export default function Navbar() {
   const searchParams = useSearchParams();
-  const urlParam = searchParams.get("url");
+  const urlParam = searchParams.get(URL_PARAM);
 
   const [url, setUrl] = useState(urlParam ?? DEFAULT_URL);
   const [file, setFile] = useState<File | null>(null);
@@ -162,7 +164,7 @@ export default function Navbar() {
             />
             <Form.Control
               type="file"
-              accept=".json"
+              accept=".json,.bin"
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 const file = e.target.files?.[0] ?? null;
                 setFile(file);
