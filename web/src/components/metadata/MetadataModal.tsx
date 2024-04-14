@@ -11,7 +11,14 @@ export default function MetadataModal(props: MetadataModalProps) {
   const { show, onHide } = props;
 
   return (
-    <Modal show={show} size="lg" centered animation={false} onHide={onHide}>
+    <Modal
+      show={show}
+      size="lg"
+      centered
+      animation={false}
+      onHide={onHide}
+      data-testid="metadata-modal"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Metadata</Modal.Title>
       </Modal.Header>

@@ -19,7 +19,10 @@ export default function Options({
   }
 
   return (
-    <div className={["small text-secondary fst-italic", className].join(" ")}>
+    <div
+      data-testid={"options-" + reflectionObject.fullName}
+      className={["small text-secondary fst-italic", className].join(" ")}
+    >
       {options.map(([key, value]) => (
         <div key={key}>
           {key}: {JSON.stringify(value)}

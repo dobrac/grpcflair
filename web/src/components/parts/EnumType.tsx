@@ -15,7 +15,7 @@ export default function EnumType({ enumType, dark, expanded }: EnumProps) {
   const [open, setOpen] = useState(expanded ?? false);
 
   return (
-    <div className="card px-2 py-1 d-inline-block">
+    <div className="card px-2 py-1 d-inline-block" data-testid="enum">
       <button
         className={[
           "p-0 border-0 rounded-1 text-start btn bg-transparent hover-bg-darken",
@@ -42,7 +42,7 @@ export default function EnumType({ enumType, dark, expanded }: EnumProps) {
           <div className="ps-3">
             <Options reflectionObject={enumType} className="mb-2" />
             {Object.entries(enumType.values).map(([key, value]) => (
-              <div key={key}>
+              <div key={key} data-testid={"enum-value-" + key}>
                 {key} = {value}{" "}
                 {!!enumType.valuesOptions?.[key] && (
                   <span>

@@ -41,13 +41,19 @@ export default function HeadersTable({}: MetadataTableProps) {
         <div>&nbsp;</div>
         {Object.entries(metadata).map(([key, value]) => (
           <Fragment key={key}>
-            <div className="border px-2 bg-light-subtle text-secondary">
+            <div
+              className="border px-2 bg-light-subtle text-secondary"
+              test-dataid={"metadata-key-" + key}
+            >
               {key}
             </div>
-            <div className="border px-2 bg-light-subtle text-secondary">
+            <div
+              className="border px-2 bg-light-subtle text-secondary"
+              test-dataid={"metadata-key-" + value}
+            >
               {value}
             </div>
-            <div className="">
+            <div>
               <Button
                 variant="outline-danger"
                 onClick={() => handleMetadataRemove(key)}
@@ -61,15 +67,21 @@ export default function HeadersTable({}: MetadataTableProps) {
           <InputGroup>
             <Form.Control
               type="input"
+              data-testid="metadata-input-key"
               value={key}
               onChange={(e) => setKey(e.target.value)}
             />
             <Form.Control
               type="input"
+              data-testid="metadata-input-value"
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
-            <Button variant="light" type="submit">
+            <Button
+              variant="light"
+              type="submit"
+              data-testid="metadata-input-add"
+            >
               <FontAwesomeIcon icon={faPlus} />
             </Button>
           </InputGroup>

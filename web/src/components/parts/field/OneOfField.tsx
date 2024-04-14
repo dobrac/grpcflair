@@ -11,7 +11,7 @@ export interface FieldProps {
 
 export default function OneOfField({ field, dark }: FieldProps) {
   return (
-    <div>
+    <div data-testid={"oneof-" + field.fullName}>
       <div>
         <FieldComment field={field} dark={dark} />
         <FieldOptions field={field} dark={dark} />

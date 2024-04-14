@@ -16,7 +16,7 @@ export default function Service({ service }: ServiceProps) {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="d-grid pb-2">
+    <div className="d-grid pb-2" data-testid="service-detail">
       <button
         className="p-0 border-0 rounded-bottom-0 text-start btn hover-bg-darken py-2 "
         onClick={() => setOpen((open) => !open)}

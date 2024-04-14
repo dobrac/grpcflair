@@ -44,6 +44,7 @@ export default function Type({ type, dark, expanded }: TypeProps) {
         "card px-2 py-1 d-inline-block",
         dark ? "bg-dark text-light" : "",
       ].join(" ")}
+      data-testid="type-detail"
     >
       <button
         className={[

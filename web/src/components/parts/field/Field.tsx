@@ -10,7 +10,7 @@ export interface FieldProps {
 
 export default function Field({ field, dark }: FieldProps) {
   return (
-    <div>
+    <div data-testid={"field-" + field.id}>
       <div>
         <FieldComment field={field} dark={dark} />
         <FieldOptions field={field} dark={dark} />
