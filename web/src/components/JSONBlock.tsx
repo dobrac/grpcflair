@@ -21,7 +21,11 @@ export default function JSONBlock({
   ].join(" ");
 
   if (typeof children !== "string") {
-    return <div className={classes}>{children}</div>;
+    return (
+      <div className={classes} data-testid="react-block">
+        {children}
+      </div>
+    );
   }
 
   return (
@@ -29,6 +33,7 @@ export default function JSONBlock({
       language={isJSON(children) ? "json" : "dns"}
       style={docco}
       className={classes}
+      data-testid="json-block"
     >
       {children}
     </SyntaxHighlighter>

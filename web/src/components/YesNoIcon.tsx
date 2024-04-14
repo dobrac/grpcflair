@@ -9,7 +9,7 @@ export interface YesNoIconProps {
 
 export default function YesNoIcon({ value, className }: YesNoIconProps) {
   return (
-    <span className={className}>
+    <span className={className} data-testid="yesno-icon">
       {value ? (
         <FontAwesomeIcon icon={faCheck} />
       ) : (
