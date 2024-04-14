@@ -7,7 +7,7 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import YesNoIcon from "@/components/YesNoIcon";
 import {
   getColorFromMethodType,
-  getMethodType,
+  getMethodTypeDisplayName,
   getOptionsFromReflectionObject,
 } from "@/services/protobufjs";
 import { useSourceContext } from "@/contexts/SourceContext";
@@ -80,7 +80,7 @@ export default function Method({ service, method }: ServiceProps) {
         onClick={() => setOpen((open) => !open)}
       >
         <div className="d-flex align-items-center gap-2">
-          <Badge bg={color}>{getMethodType(method)}</Badge>
+          <Badge bg={color}>{getMethodTypeDisplayName(method)}</Badge>
           <div className="fw-bold fs-6">
             {method.name}
             {!!method.requestStream && (

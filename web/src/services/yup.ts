@@ -1,7 +1,12 @@
 import protobuf from "protobufjs";
 import * as yup from "yup";
 
-export function getFieldYupType(field: protobuf.Field) {
+/**
+ * Returns the yup type for a field.
+ * @param field the field to get the yup type for
+ * @returns the yup type for the field
+ */
+export function getFieldYupType(field: protobuf.Field): yup.Schema {
   if (field.map) {
     return yup
       .object()

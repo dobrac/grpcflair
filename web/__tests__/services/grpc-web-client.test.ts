@@ -1,125 +1,30 @@
+import "../../tests/mocks/grpc-web";
 import {
   makeGrpcCall,
   makeGrpcServerStreamingCall,
 } from "@/services/grpc-web-client";
 import { context } from "../../tests/protobufjs-source";
-import { RpcError, StatusCode } from "grpc-web";
 import { GrpcWebFormat } from "@/types/grpc-web";
+import {
+  grpcWebMockHeaders,
+  GrpcWebMockMetadataResultError,
+  grpcWebMockResponseData,
+  grpcWebMockTrailers,
+} from "../../tests/mocks/grpc-web";
 
-const headers = { header: "header" };
-const responseData = { message: "Hello world!" };
-const trailers = { trailer: "trailer" };
+const hostname = "http://localhost:8080";
+const service = context.lookupService("helloworld.Greeter");
+const method = service.methods["SayHello"];
+method.resolve();
 
-const MetadataResultError = "error";
+const typeEncode = method.resolvedRequestType!;
+const typeDecode = method.resolvedResponseType!;
 
-jest.mock("grpc-web", () => {
-  return {
-    ...jest.requireActual("grpc-web"),
-    GrpcWebClientBase: jest.fn().mockImplementation(() => {
-      return {
-        rpcCall: (
-          _method: string,
-          _request: unknown,
-          metadata: { expectedResult?: typeof MetadataResultError },
-          methodDescriptor: {
-            a: () => Uint8Array;
-            b: (bytes: Uint8Array) => unknown;
-          },
-          fnCallback: (err: RpcError | undefined, response: unknown) => void,
-        ) => {
-          // Request serialize function
-          methodDescriptor.a();
-
-          // Response deserialize function
-          methodDescriptor.b(new Uint8Array());
-
-          return {
-            on: (eventType: string, callback: (value?: unknown) => void) => {
-              if (eventType === "metadata") {
-                callback(headers);
-              }
-              if (eventType === "status") {
-                callback({ metadata: trailers });
-              }
-
-              if (metadata.expectedResult === MetadataResultError) {
-                fnCallback(
-                  new RpcError(StatusCode.UNKNOWN, "response is error", {}),
-                  undefined,
-                );
-              } else {
-                if (eventType === "data") {
-                  callback(responseData);
-                }
-                fnCallback(undefined, responseData);
-              }
-
-              if (eventType === "end") {
-                callback();
-              }
-            },
-          };
-        },
-        serverStreaming: (
-          _method: string,
-          _request: unknown,
-          metadata: { expectedResult?: typeof MetadataResultError },
-          methodDescriptor: {
-            a: () => Uint8Array;
-            b: (bytes: Uint8Array) => unknown;
-          },
-        ) => {
-          // Request serialize function
-          methodDescriptor.a();
-
-          // Response deserialize function
-          methodDescriptor.b(new Uint8Array());
-
-          return {
-            on: (eventType: string, callback: (value?: unknown) => void) => {
-              if (eventType === "metadata") {
-                callback(headers);
-              }
-              if (eventType === "status") {
-                callback({ metadata: trailers });
-              }
-
-              if (metadata.expectedResult === MetadataResultError) {
-                if (eventType === "error") {
-                  callback(
-                    new RpcError(StatusCode.UNKNOWN, "response is error", {}),
-                  );
-                }
-              } else {
-                if (eventType === "data") {
-                  callback(responseData);
-                }
-              }
-
-              if (eventType === "end") {
-                callback();
-              }
-            },
-          };
-        },
-      };
-    }),
-  };
+const message = typeEncode.create({
+  name: "world",
 });
 
 describe("grpc-web Service - makeGrpcCall", () => {
-  const hostname = "http://localhost:8080";
-  const service = context.lookupService("helloworld.Greeter");
-  const method = service.methods["SayHello"];
-  method.resolve();
-
-  const typeEncode = method.resolvedRequestType!;
-  const typeDecode = method.resolvedResponseType!;
-
-  const message = typeEncode.create({
-    name: "world",
-  });
-
   it("should return a promise", () => {
     const result = makeGrpcCall(
       hostname,
@@ -145,9 +50,9 @@ describe("grpc-web Service - makeGrpcCall", () => {
       },
     );
 
-    expect(result.data).toEqual([responseData]);
-    expect(result.headers).toEqual(headers);
-    expect(result.trailers).toEqual(trailers);
+    expect(result.data).toEqual([grpcWebMockResponseData]);
+    expect(result.headers).toEqual(grpcWebMockHeaders);
+    expect(result.trailers).toEqual(grpcWebMockTrailers);
   });
   it("should return a promise with data in BINARY mode", async () => {
     const result = await makeGrpcCall(
@@ -162,9 +67,9 @@ describe("grpc-web Service - makeGrpcCall", () => {
       },
     );
 
-    expect(result.data).toEqual([responseData]);
-    expect(result.headers).toEqual(headers);
-    expect(result.trailers).toEqual(trailers);
+    expect(result.data).toEqual([grpcWebMockResponseData]);
+    expect(result.headers).toEqual(grpcWebMockHeaders);
+    expect(result.trailers).toEqual(grpcWebMockTrailers);
   });
   it("should return a promise with error", async () => {
     const result = makeGrpcCall(
@@ -176,7 +81,7 @@ describe("grpc-web Service - makeGrpcCall", () => {
       message,
       {
         metadata: {
-          expectedResult: MetadataResultError,
+          expectedResult: GrpcWebMockMetadataResultError,
         },
       },
     );
@@ -186,18 +91,6 @@ describe("grpc-web Service - makeGrpcCall", () => {
 });
 
 describe("grpc-web Service - makeGrpcServerStreamingCall", () => {
-  const hostname = "http://localhost:8080";
-  const service = context.lookupService("helloworld.Greeter");
-  const method = service.methods["SayHello"];
-  method.resolve();
-
-  const typeEncode = method.resolvedRequestType!;
-  const typeDecode = method.resolvedResponseType!;
-
-  const message = typeEncode.create({
-    name: "world",
-  });
-
   it("should return a data", () => {
     const stream = makeGrpcServerStreamingCall(
       hostname,
@@ -212,15 +105,15 @@ describe("grpc-web Service - makeGrpcServerStreamingCall", () => {
     );
 
     stream.on("data", (data) => {
-      expect(data).toEqual(responseData);
+      expect(data).toEqual(grpcWebMockResponseData);
     });
 
     stream.on("metadata", (metadata) => {
-      expect(metadata).toEqual(headers);
+      expect(metadata).toEqual(grpcWebMockHeaders);
     });
 
     stream.on("status", (status) => {
-      expect(status.metadata).toEqual(trailers);
+      expect(status.metadata).toEqual(grpcWebMockTrailers);
     });
 
     const resultFn = jest.fn();
@@ -237,18 +130,18 @@ describe("grpc-web Service - makeGrpcServerStreamingCall", () => {
       message,
       {
         metadata: {
-          expectedResult: MetadataResultError,
+          expectedResult: GrpcWebMockMetadataResultError,
         },
         format: GrpcWebFormat.TEXT,
       },
     );
 
     stream.on("metadata", (metadata) => {
-      expect(metadata).toEqual(headers);
+      expect(metadata).toEqual(grpcWebMockHeaders);
     });
 
     stream.on("status", (status) => {
-      expect(status.metadata).toEqual(trailers);
+      expect(status.metadata).toEqual(grpcWebMockTrailers);
     });
 
     const errorFn = jest.fn();

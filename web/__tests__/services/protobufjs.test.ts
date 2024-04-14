@@ -3,7 +3,7 @@ import {
   exportedForTesting,
   getColorFromMethodType,
   getEnumsFromContext,
-  getMethodType,
+  getMethodTypeDisplayName,
   getOptionsFromReflectionObject,
   getRequestType,
   getRequestTypeDisplayName,
@@ -210,7 +210,7 @@ describe("protobufjs Service - getMethodType", () => {
     const method = service.methods["RouteChat"];
     method.resolve();
 
-    const methodType = getMethodType(method);
+    const methodType = getMethodTypeDisplayName(method);
     expect(methodType).toEqual("Bi-directional streaming");
   });
 
@@ -219,7 +219,7 @@ describe("protobufjs Service - getMethodType", () => {
     const method = service.methods["ListFeatures"];
     method.resolve();
 
-    const methodType = getMethodType(method);
+    const methodType = getMethodTypeDisplayName(method);
     expect(methodType).toEqual("Server streaming");
   });
 
@@ -228,7 +228,7 @@ describe("protobufjs Service - getMethodType", () => {
     const method = service.methods["RecordRoute"];
     method.resolve();
 
-    const methodType = getMethodType(method);
+    const methodType = getMethodTypeDisplayName(method);
     expect(methodType).toEqual("Client streaming");
   });
 
@@ -237,7 +237,7 @@ describe("protobufjs Service - getMethodType", () => {
     const method = service.methods["GetFeature"];
     method.resolve();
 
-    const methodType = getMethodType(method);
+    const methodType = getMethodTypeDisplayName(method);
     expect(methodType).toEqual("Unary");
   });
 });

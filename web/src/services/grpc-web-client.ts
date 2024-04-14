@@ -8,21 +8,40 @@ import {
 } from "grpc-web";
 import { GrpcWebFormat } from "@/types/grpc-web";
 
+/**
+ * Dummy class to be used in the MethodDescriptor.
+ */
 class DummyRPCType {
   constructor(...args: unknown[]) {}
 }
 
+/**
+ * Options for a gRPC call.
+ */
 export interface GrpcWebOptions {
   metadata?: Metadata;
   format?: GrpcWebFormat;
 }
 
+/**
+ * The response of a unary gRPC call.
+ */
 export interface UnaryResponse<MessageData extends object = object> {
   headers?: Metadata;
   trailers?: Metadata;
   data?: protobuf.Message<MessageData>[];
 }
 
+/**
+ * makeGrpcCall makes a unary gRPC call to the given service and method.
+ * @param hostname The hostname of the gRPC server.
+ * @param service The protobuf service.
+ * @param method The protobuf method.
+ * @param typeEncode The protobuf type to encode the message.
+ * @param typeDecode The protobuf type to decode the response.
+ * @param message The message to send.
+ * @param options The request options.
+ */
 export function makeGrpcCall<MessageData extends object = object>(
   hostname: string,
   service: protobuf.Service,
@@ -84,6 +103,16 @@ export function makeGrpcCall<MessageData extends object = object>(
   });
 }
 
+/**
+ * makeGrpcServerStreamingCall makes a server streaming gRPC call to the given service and method.
+ * @param hostname The hostname of the gRPC server.
+ * @param service The protobuf service.
+ * @param method The protobuf method.
+ * @param typeEncode The protobuf type to encode the message.
+ * @param typeDecode The protobuf type to decode the response.
+ * @param message The message to send.
+ * @param options The request options.
+ */
 export function makeGrpcServerStreamingCall<
   MessageData extends object = object,
 >(
