@@ -29,10 +29,15 @@ export default function Authorization() {
         <InputGroup>
           <Form.Control
             type="input"
+            data-testid="metadata-authorization-input"
             value={value}
             onChange={(e) => setValue(e.target.value)}
           />
-          <Button variant="light" type="submit">
+          <Button
+            variant="light"
+            type="submit"
+            data-testid="metadata-authorization-set"
+          >
             Set
           </Button>
         </InputGroup>

@@ -11,7 +11,7 @@ import {
 
 export type Metadata = Record<string, string>;
 
-interface MetadataContextData {
+export interface MetadataContextData {
   metadata: Metadata;
   setMetadata: Dispatch<SetStateAction<Metadata>>;
 }
@@ -21,7 +21,8 @@ const defaultValues: MetadataContextData = {
   setMetadata: () => {},
 };
 
-const MetadataContext = createContext<MetadataContextData>(defaultValues);
+export const MetadataContext =
+  createContext<MetadataContextData>(defaultValues);
 
 export function useMetadataContext() {
   return useContext(MetadataContext);

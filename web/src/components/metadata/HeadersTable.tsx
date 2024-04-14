@@ -43,13 +43,13 @@ export default function HeadersTable({}: MetadataTableProps) {
           <Fragment key={key}>
             <div
               className="border px-2 bg-light-subtle text-secondary"
-              test-dataid={"metadata-key-" + key}
+              data-testid={"metadata-key-" + key}
             >
               {key}
             </div>
             <div
               className="border px-2 bg-light-subtle text-secondary"
-              test-dataid={"metadata-key-" + value}
+              data-testid={"metadata-key-" + value}
             >
               {value}
             </div>
@@ -67,21 +67,15 @@ export default function HeadersTable({}: MetadataTableProps) {
           <InputGroup>
             <Form.Control
               type="input"
-              data-testid="metadata-input-key"
               value={key}
               onChange={(e) => setKey(e.target.value)}
             />
             <Form.Control
               type="input"
-              data-testid="metadata-input-value"
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
-            <Button
-              variant="light"
-              type="submit"
-              data-testid="metadata-input-add"
-            >
+            <Button variant="light" type="submit">
               <FontAwesomeIcon icon={faPlus} />
             </Button>
           </InputGroup>
