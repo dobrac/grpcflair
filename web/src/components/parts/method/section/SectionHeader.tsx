@@ -1,5 +1,8 @@
 import { ReactNode } from "react";
 
+/**
+ * Method header section wrapper
+ */
 export default function SectionHeader({ children }: { children: ReactNode }) {
   return (
     <>

@@ -83,7 +83,7 @@ export default function Method({ service, method }: ServiceProps) {
           <Badge bg={color}>{getMethodTypeDisplayName(method)}</Badge>
           <div className="fw-bold fs-6">
             {method.name}
-            {!!method.requestStream && (
+            {method.requestStream && (
               <span className="fw-normal small text-secondary fst-italic ms-1">
                 (Not supported yet)
               </span>
@@ -121,7 +121,7 @@ export default function Method({ service, method }: ServiceProps) {
           <SectionHeader>
             <div>
               <span className="fw-bolder">Parameters</span>
-              {!!method.requestStream && (
+              {method.requestStream && (
                 <span className="ms-1">
                   streaming: <YesNoIcon value={true} className="ms-1" />
                 </span>
@@ -135,7 +135,7 @@ export default function Method({ service, method }: ServiceProps) {
           <SectionHeader>
             <div>
               <span className="fw-bolder">Responses</span>
-              {!!method.responseStream && (
+              {method.responseStream && (
                 <span className="ms-1">
                   streaming: <YesNoIcon value={true} className="ms-1" />
                 </span>

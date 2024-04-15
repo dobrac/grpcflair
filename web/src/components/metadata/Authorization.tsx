@@ -5,6 +5,9 @@ import { AUTHORIZATION_METADATA_KEY } from "@/types/constants";
 
 const VALUE_PREFIX = "Bearer ";
 
+/**
+ * Authorization input form
+ */
 export default function Authorization() {
   const [value, setValue] = useState("");
 

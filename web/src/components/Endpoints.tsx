@@ -12,6 +12,9 @@ import { Spinner } from "react-bootstrap";
 import { FILTERED_NAMESPACES } from "@/types/constants";
 import JSONBlock from "@/components/JSONBlock";
 
+/**
+ * List of services, types and enums
+ */
 export default function Endpoints() {
   const { context, error } = useSourceContext();
 
