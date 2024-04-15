@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSourceContext } from "@/contexts/SourceContext";
 
-const HOSTNAME_PARAM = "hostname";
+export const HOSTNAME_PARAM = "hostname";
 
 export default function HandleUrlHostnameParam() {
   const searchParams = useSearchParams();
