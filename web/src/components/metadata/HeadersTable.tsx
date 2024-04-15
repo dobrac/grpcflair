@@ -49,7 +49,7 @@ export default function HeadersTable({}: MetadataTableProps) {
             </div>
             <div
               className="border px-2 bg-light-subtle text-secondary"
-              data-testid={"metadata-key-" + value}
+              data-testid={"metadata-value-" + value}
             >
               {value}
             </div>
@@ -57,6 +57,7 @@ export default function HeadersTable({}: MetadataTableProps) {
               <Button
                 variant="outline-danger"
                 onClick={() => handleMetadataRemove(key)}
+                data-testid={`metadata-remove-${key}`}
               >
                 <FontAwesomeIcon icon={faRemove} />
               </Button>
@@ -69,13 +70,19 @@ export default function HeadersTable({}: MetadataTableProps) {
               type="input"
               value={key}
               onChange={(e) => setKey(e.target.value)}
+              data-testid="metadata-input-key"
             />
             <Form.Control
               type="input"
               value={value}
               onChange={(e) => setValue(e.target.value)}
+              data-testid="metadata-input-value"
             />
-            <Button variant="light" type="submit">
+            <Button
+              variant="light"
+              type="submit"
+              data-testid="metadata-input-add"
+            >
               <FontAwesomeIcon icon={faPlus} />
             </Button>
           </InputGroup>

@@ -46,8 +46,116 @@ describe("Metadata", () => {
 
     Object.entries(contextMetadata.metadata).forEach(([key, value]) => {
       expect(screen.queryByTestId(`metadata-key-${key}`)).toBeInTheDocument();
-      expect(screen.queryByTestId(`metadata-key-${value}`)).toBeInTheDocument();
+      expect(
+        screen.queryByTestId(`metadata-value-${value}`),
+      ).toBeInTheDocument();
     });
+  });
+
+  it("renders - add metadata", async () => {
+    const metadataToAddKey = "MYek";
+    const metadataToAddValue = "MEulav";
+    let metadata: Metadata = {};
+    const contextMetadata: MetadataContextData = {
+      metadata: metadata,
+      setMetadata: (fun) => {
+        if (typeof fun !== "function") {
+          metadata = { ...metadata, ...fun };
+        } else {
+          metadata = { ...fun(metadata) };
+        }
+        return metadata;
+      },
+    };
+
+    const { rerender } = await act(async () => {
+      return render(
+        <MetadataContext.Provider value={contextMetadata}>
+          <MetadataModal show={true} onHide={() => {}} />
+        </MetadataContext.Provider>,
+      );
+    });
+
+    const element = screen.getByTestId("metadata-modal");
+    expect(element).toBeInTheDocument();
+
+    const inputKey = screen.getByTestId("metadata-input-key");
+    const inputValue = screen.getByTestId("metadata-input-value");
+    const button = screen.getByTestId("metadata-input-add");
+
+    await act(async () => {
+      fireEvent.change(inputKey, { target: { value: metadataToAddKey } });
+      fireEvent.change(inputValue, { target: { value: metadataToAddValue } });
+      button.click();
+    });
+
+    await act(async () => {
+      contextMetadata.metadata = metadata;
+      rerender(
+        <MetadataContext.Provider value={contextMetadata}>
+          <MetadataModal show={true} onHide={() => {}} />
+        </MetadataContext.Provider>,
+      );
+    });
+
+    expect(
+      screen.queryByTestId(`metadata-key-${metadataToAddKey}`),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByTestId(`metadata-value-${metadataToAddValue}`),
+    ).toBeInTheDocument();
+  });
+
+  it("renders - remove metadata", async () => {
+    const metadataToRemoveKey = "MYek";
+    let metadata: Metadata = {
+      [metadataToRemoveKey]: "MEulav",
+    };
+    const contextMetadata: MetadataContextData = {
+      metadata: metadata,
+      setMetadata: (fun) => {
+        if (typeof fun !== "function") {
+          metadata = { ...metadata, ...fun };
+        } else {
+          metadata = { ...fun(metadata) };
+        }
+        return metadata;
+      },
+    };
+
+    const { rerender } = await act(async () => {
+      return render(
+        <MetadataContext.Provider value={contextMetadata}>
+          <MetadataModal show={true} onHide={() => {}} />
+        </MetadataContext.Provider>,
+      );
+    });
+
+    const element = screen.getByTestId("metadata-modal");
+    expect(element).toBeInTheDocument();
+
+    expect(
+      screen.queryByTestId(`metadata-key-${metadataToRemoveKey}`),
+    ).toBeInTheDocument();
+
+    const button = screen.getByTestId(`metadata-remove-${metadataToRemoveKey}`);
+
+    await act(async () => {
+      button.click();
+    });
+
+    await act(async () => {
+      contextMetadata.metadata = metadata;
+      rerender(
+        <MetadataContext.Provider value={contextMetadata}>
+          <MetadataModal show={true} onHide={() => {}} />
+        </MetadataContext.Provider>,
+      );
+    });
+
+    expect(
+      screen.queryByTestId(`metadata-key-${metadataToRemoveKey}`),
+    ).not.toBeInTheDocument();
   });
 
   it("renders - add authorization", async () => {
