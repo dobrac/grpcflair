@@ -42,12 +42,14 @@ export default function Home() {
             className="w-100"
             onChange={(e) => setHostname(e.target.value)}
             value={hostname}
+            data-testid="hostname-input"
           />
         </div>
         <div>
           <Button
             variant="outline-primary"
             onClick={() => setShowMetadataModal(true)}
+            data-testid="metadata-button"
           >
             Metadata
           </Button>
