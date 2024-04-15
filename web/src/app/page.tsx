@@ -2,18 +2,15 @@
 import { Button, Form } from "react-bootstrap";
 import { useSourceContext } from "../contexts/SourceContext";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import MetadataModal from "../components/metadata/MetadataModal";
-import { useSearchParams } from "next/navigation";
-
-const HOSTNAME_PARAM = "hostname";
+import HandleUrlHostnameParam from "@/components/HandleUrlHostnameParam";
 
 const Endpoints = dynamic(() => import("../components/Endpoints"), {
   ssr: false,
 });
 
 export default function Home() {
-  const searchParams = useSearchParams();
   const { hostname, setHostname } = useSourceContext();
   const title = "gRPCFlair";
   const description =
@@ -21,16 +18,11 @@ export default function Home() {
 
   const [showMetadataModal, setShowMetadataModal] = useState(false);
 
-  const hostnameParam = searchParams?.get(HOSTNAME_PARAM);
-
-  useEffect(() => {
-    if (hostnameParam) {
-      setHostname(hostnameParam);
-    }
-  }, [hostnameParam]);
-
   return (
     <main>
+      <Suspense>
+        <HandleUrlHostnameParam />
+      </Suspense>
       <div className="py-5" style={{ backgroundColor: "whitesmoke" }}>
         <div className="container">
           <h1>{title}</h1>

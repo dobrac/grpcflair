@@ -111,6 +111,8 @@ export default function Navbar() {
     if (url) {
       processUrl(url);
     }
+    // run only on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
