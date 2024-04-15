@@ -2,20 +2,34 @@
 import { Button, Form } from "react-bootstrap";
 import { useSourceContext } from "../contexts/SourceContext";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MetadataModal from "../components/metadata/MetadataModal";
+
+const HOSTNAME_PARAM = "hostname";
 
 const Endpoints = dynamic(() => import("../components/Endpoints"), {
   ssr: false,
 });
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams?: { [HOSTNAME_PARAM]: string | undefined };
+}) {
   const { hostname, setHostname } = useSourceContext();
   const title = "gRPCFlair";
   const description =
     "This is a tool to help you interact with gRPC services. You can use it to explore the service's endpoints and make requests to them, browse types and enums, and preview options.";
 
   const [showMetadataModal, setShowMetadataModal] = useState(false);
+
+  const hostnameParam = searchParams?.[HOSTNAME_PARAM];
+
+  useEffect(() => {
+    if (hostnameParam) {
+      setHostname(hostnameParam);
+    }
+  }, [hostnameParam]);
 
   return (
     <main>

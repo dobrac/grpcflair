@@ -2,9 +2,6 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from "react";
 import { Root } from "protobufjs";
 import { DEFAULT_HOSTNAME } from "@/types/constants";
-import { useSearchParams } from "next/navigation";
-
-const HOSTNAME_PARAM = "hostname";
 
 export interface SourceContextData {
   hostname: string;
@@ -33,12 +30,7 @@ export default function SourceContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const searchParams = useSearchParams();
-  const hostnameParam = searchParams.get(HOSTNAME_PARAM);
-
-  const [hostname, setHostname] = useState<string>(
-    hostnameParam ?? DEFAULT_HOSTNAME,
-  );
+  const [hostname, setHostname] = useState<string>(DEFAULT_HOSTNAME);
   const [error, setError] = useState<Error>();
   const [context, setContext] = useState<Root>();
 
