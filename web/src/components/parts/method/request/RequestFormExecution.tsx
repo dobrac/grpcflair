@@ -146,6 +146,7 @@ export default function RequestFormExecution({
           onClick={() => {
             functions.cancel?.();
           }}
+          data-testid="method-cancel-button"
         >
           Cancel
         </Button>

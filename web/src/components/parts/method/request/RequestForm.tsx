@@ -27,7 +27,7 @@ export default function RequestForm({ method }: RequestFormProps) {
           <th>Description</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody data-testid="request-form-table-body">
         {oneofsArray.map((oneOf) => (
           <Fragment key={oneOf.name}>
             <tr>

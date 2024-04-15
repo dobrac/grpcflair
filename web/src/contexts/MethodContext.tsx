@@ -59,7 +59,7 @@ const defaultValues: MethodContextData = {
   },
 };
 
-const SourceContext = createContext<MethodContextData>(defaultValues);
+export const SourceContext = createContext<MethodContextData>(defaultValues);
 
 export function useMethodContext() {
   return useContext(SourceContext);
