@@ -3,7 +3,6 @@ import Type from "@/components/parts/Type";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import EnumType from "@/components/parts/EnumType";
-import FieldComment from "@/components/parts/field/FieldComment";
 
 export interface FieldTypeProps {
   field: protobuf.Field;

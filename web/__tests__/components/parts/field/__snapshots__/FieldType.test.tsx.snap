@@ -1,0 +1,160 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FieldType renders any - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    google.protobuf.Any
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders bool - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    bool
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders bytes - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    bytes
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders enum - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    Corpus
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders enumAlias - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    EnumAllowingAlias
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders map - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    map&lt;string, 
+    google.protobuf.Any
+    &gt;
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders number - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    int32
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders oneofNumber_1 - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    int32
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders oneofNumber_2 - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    int32
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders oneofString - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    string
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders repeatedEnum - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    Corpus
+    []
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders repeatedNumber - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    int32
+    []
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders repeatedString - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    string
+    []
+  </span>
+  <div />
+</span>
+`;
+
+exports[`FieldType renders string - expanded false 1`] = `
+<span>
+  <span
+    class="text-secondary"
+  >
+    string
+  </span>
+  <div />
+</span>
+`;

@@ -5,7 +5,7 @@ export interface FieldCommentProps {
   dark?: boolean;
 }
 
-export default function FieldComment({ field, dark }: FieldCommentProps) {
+export default function FieldComment({ field }: FieldCommentProps) {
   if (!field.comment) {
     return null;
   }
