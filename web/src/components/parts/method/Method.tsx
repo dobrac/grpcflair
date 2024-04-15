@@ -54,15 +54,20 @@ function splitCommentToTwoParts(comment: string) {
 export interface ServiceProps {
   service: protobuf.Service;
   method: protobuf.Method;
+  expanded?: boolean;
 }
 
-export default function Method({ service, method }: ServiceProps) {
+export default function Method({
+  service,
+  method,
+  expanded = false,
+}: ServiceProps) {
   method.resolve();
 
   const { hostname } = useSourceContext();
   const { processing, response, request } = useMethodContext();
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(expanded);
 
   const responseType = method.resolvedResponseType;
   const options = Object.entries(getOptionsFromReflectionObject(method));
@@ -150,7 +155,10 @@ export default function Method({ service, method }: ServiceProps) {
             <div className="d-grid gap-4">
               {!!response && (
                 <>
-                  <div className="d-grid gap-2">
+                  <div
+                    className="d-grid gap-2"
+                    data-testid="response-request-data"
+                  >
                     <div className="fw-bolder small">Request JSON</div>
                     <div>
                       <JSONBlock dark={false} className="rounded-bottom-0">
@@ -164,11 +172,17 @@ export default function Method({ service, method }: ServiceProps) {
                       {JSON.stringify(request.message, null, 2)}
                     </JSONBlock>
                   </div>
-                  <div className="d-grid gap-2">
+                  <div
+                    className="d-grid gap-2"
+                    data-testid="response-request-hostname"
+                  >
                     <div className="fw-bolder small">Request server</div>
                     <JSONBlock>{hostname}</JSONBlock>
                   </div>
-                  <div className="d-grid gap-2">
+                  <div
+                    className="d-grid gap-2"
+                    data-testid="response-responses"
+                  >
                     <div className="fw-bolder small">Server responses</div>
                     {!response && (
                       <span className="small">No response yet</span>

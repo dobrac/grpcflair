@@ -131,6 +131,7 @@ export default function RequestFormExecution({
         variant={isValid ? "primary" : "danger"}
         disabled={processing || !isValid}
         onClick={handleSubmit(handleExecute)}
+        data-testid="method-execute-button"
       >
         <Spinner
           size="sm"

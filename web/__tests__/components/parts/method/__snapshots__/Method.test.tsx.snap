@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Method renders - execution 1`] = `
+<div
+  class="d-grid gap-2"
+  data-testid="response-request-data"
+>
+  <div
+    class="fw-bolder small"
+  >
+    Request JSON
+  </div>
+  <div>
+    <div
+      class="bg-body text-dark rounded-1 m-0 py-1 px-2 rounded-bottom-0"
+      data-testid="react-block"
+    >
+      <span
+        class="small"
+      >
+        Metadata
+      </span>
+    </div>
+    <pre
+      class="bg-body text-dark rounded-1 m-0 py-1 px-2 rounded-top-0"
+      data-testid="json-block"
+      style="display: block; overflow-x: auto; padding: 0.5em; color: rgb(0, 0, 0); background: rgb(248, 248, 255);"
+    >
+      <code
+        class="language-json"
+        style="white-space: pre;"
+      >
+        <span>
+          {}
+        </span>
+      </code>
+    </pre>
+  </div>
+  <pre
+    class="bg-dark text-light rounded-1 m-0 py-1 px-2 "
+    data-testid="json-block"
+    style="display: block; overflow-x: auto; padding: 0.5em; color: rgb(0, 0, 0); background: rgb(248, 248, 255);"
+  >
+    <code
+      class="language-json"
+      style="white-space: pre;"
+    >
+      <span>
+        {}
+      </span>
+    </code>
+  </pre>
+</div>
+`;
