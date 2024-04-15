@@ -5,7 +5,15 @@
   "bin": {
     "gf-reflection-to-json": "bin/index.js"
   },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci"
+  },
   "dependencies": {
     "protobufjs": "^7.2.6"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
