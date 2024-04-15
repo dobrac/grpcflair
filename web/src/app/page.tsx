@@ -21,7 +21,7 @@ export default function Home() {
 
   const [showMetadataModal, setShowMetadataModal] = useState(false);
 
-  const hostnameParam = searchParams.get(HOSTNAME_PARAM);
+  const hostnameParam = searchParams?.get(HOSTNAME_PARAM);
 
   useEffect(() => {
     if (hostnameParam) {
