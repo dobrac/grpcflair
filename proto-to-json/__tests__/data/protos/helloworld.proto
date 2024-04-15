@@ -1,0 +1,168 @@
+// Copyright 2018 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+import "other_protos.proto";
+import "hello_streaming.proto";
+import "options_test.proto";
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/any.proto";
+
+package helloworld;
+
+option java_package = "com.example.tutorial";
+
+/**
+ Greeter is a service that greets you.
+ */
+service Greeter {
+  /**
+    Sends a greeting for specific name.
+   */
+  rpc SayHello(HelloRequest) returns (HelloReply);
+  /**
+    Sends a greeting for specific name repeatedly.
+   */
+  rpc SayRepeatHello(RepeatHelloRequest) returns (stream HelloReply);
+  /**
+    Test Input Types
+   */
+  rpc TestInputTypes(TestRequest) returns (stream HelloReply);
+}
+
+/**
+  A HelloRequest is a request message you can send to a server.
+ */
+message HelloRequest {
+
+  /**
+   The name to greet.
+   */
+  string name = 1;
+}
+
+/**
+  A RepeatHelloRequest is a request message you can send to a server.
+ */
+message RepeatHelloRequest {
+  // The name to greet.
+  string name = 1;
+  // The number of times to repeat the greeting.
+  int32 count = 2;
+}
+
+/**
+  A Test Request Type
+ */
+message TestRequest {
+  // String
+  string string = 1 [ (validate.rules).enum = {
+    defined_only: true,
+    not_in: [ 0 ],
+    in: ["google","github","azuread"]
+  } ];
+
+  // Number
+  int32 number = 2;
+  // Boolean
+  bool bool = 14;
+  // Bytes
+  bytes bytes = 15;
+  // Enum
+  Corpus enum = 3;
+  // Enum with alias
+  EnumAllowingAlias enum_alias = 4;
+
+  // One Of comment
+  oneof oneoffield {
+    // One Of String
+    string oneof_string = 5;
+    // One Of Number
+    int32 oneof_number_1 = 6;
+    // One Of Number
+    int32 oneof_number_2 = 7;
+  }
+
+  // Map
+  map<string, google.protobuf.Any> map = 8;
+
+  // Repeated String
+  repeated string repeated_string = 10;
+  // Repeated Number
+  repeated int32 repeated_number = 11;
+  // Repeated Enum
+  repeated Corpus repeated_enum = 12;
+
+  // Any
+  google.protobuf.Any any = 13;
+}
+
+/**
+  A HelloReply is a response message from a server.
+ */
+message HelloReply {
+  reserved "foo", "bar";
+  reserved 8, 2 to 5;
+  // The greeting.
+  string message = 1;
+}
+
+message HelloReplyWithInner {
+  string message = 1;
+  MiddleAA.Inner inner = 2;
+
+  message MiddleAA {  // Level 1
+    message Inner {   // Level 2
+      int64 ival = 1;
+      bool  booly = 2;
+    }
+  }
+}
+
+extend google.protobuf.EnumValueOptions {
+  optional string string_name = 123456789;
+}
+
+/**
+  A test enum containing value options
+ */
+enum Corpus {
+  CORPUS_UNSPECIFIED = 0;
+  CORPUS_UNIVERSAL = 1 [deprecated = true];
+  CORPUS_WEB = 2;
+  CORPUS_IMAGES = 3;
+  CORPUS_LOCAL = 4;
+  CORPUS_NEWS = 5;
+  CORPUS_PRODUCTS = 6 [
+    (string_name) = "Products",
+    deprecated = false
+  ];
+  CORPUS_VIDEO = 7;
+}
+
+message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 results_per_page = 3;
+  Corpus corpus = 4;
+}
+
+enum EnumAllowingAlias {
+  option allow_alias = true;
+  EAA_UNSPECIFIED = 0;
+  EAA_STARTED = 1;
+  EAA_RUNNING = 1;
+  EAA_FINISHED = 2;
+}

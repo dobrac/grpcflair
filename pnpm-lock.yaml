@@ -35,12 +35,20 @@ importers:
       protobufjs-cli:
         specifier: ^1.1.2
         version: 1.1.2(patch_hash=o2jb624aw5fhjq5d57re7ubrmy)(protobufjs@7.2.6)
+    devDependencies:
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@20.11.19)
 
   reflection-to-json:
     dependencies:
       protobufjs:
         specifier: ^7.2.6
         version: 7.2.6(patch_hash=w3ykozoa7ouem5orn4hzqwremu)
+    devDependencies:
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@20.11.19)
 
   web:
     dependencies:
@@ -5079,7 +5087,7 @@ packages:
     resolution: {integrity: sha512-GBEV4GRADeP+qtB2+6u61stea8mGcOT4mCtrYISZwfu9/ISHFJ/5zOMXYbpBE9RsS5+Gb63DW4FgmnKJ79Kf6w==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@babel/code-frame': 7.23.5
+      '@babel/code-frame': 7.24.2
       '@jest/types': 29.6.3
       '@types/stack-utils': 2.0.3
       chalk: 4.1.2
@@ -5208,7 +5216,7 @@ packages:
       '@babel/generator': 7.24.4
       '@babel/plugin-syntax-jsx': 7.24.1(@babel/core@7.24.4)
       '@babel/plugin-syntax-typescript': 7.24.1(@babel/core@7.24.4)
-      '@babel/types': 7.23.9
+      '@babel/types': 7.24.0
       '@jest/expect-utils': 29.7.0
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
