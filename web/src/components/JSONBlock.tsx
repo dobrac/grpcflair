@@ -33,6 +33,7 @@ export default function JSONBlock({
       language={isJSON(children) ? "json" : "dns"}
       style={docco}
       className={classes}
+      wrapLongLines={true}
       data-testid="json-block"
     >
       {children}

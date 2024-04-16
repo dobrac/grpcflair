@@ -42,13 +42,13 @@ export default function HeadersTable({}: MetadataTableProps) {
         {Object.entries(metadata).map(([key, value]) => (
           <Fragment key={key}>
             <div
-              className="border px-2 bg-light-subtle text-secondary"
+              className="border px-2 bg-light-subtle text-secondary text-break"
               data-testid={"metadata-key-" + key}
             >
               {key}
             </div>
             <div
-              className="border px-2 bg-light-subtle text-secondary"
+              className="border px-2 bg-light-subtle text-secondary text-break"
               data-testid={"metadata-value-" + value}
             >
               {value}
