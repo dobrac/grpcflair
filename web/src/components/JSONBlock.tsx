@@ -16,7 +16,7 @@ export default function JSONBlock({
 }: JSONBlockProps) {
   const classes = [
     dark ? "bg-dark text-light" : "bg-body text-dark",
-    "rounded-1 m-0 py-1 px-2",
+    "rounded-1 m-0 py-1 px-2 text-break",
     className,
   ].join(" ");
 

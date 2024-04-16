@@ -10,9 +10,11 @@ exports[`Method renders - execution 1`] = `
   >
     Request JSON
   </div>
-  <div>
+  <div
+    class="d-grid"
+  >
     <div
-      class="bg-body text-dark rounded-1 m-0 py-1 px-2 rounded-bottom-0"
+      class="bg-body text-dark rounded-1 m-0 py-1 px-2 text-break rounded-bottom-0"
       data-testid="react-block"
     >
       <span
@@ -22,31 +24,35 @@ exports[`Method renders - execution 1`] = `
       </span>
     </div>
     <pre
-      class="bg-body text-dark rounded-1 m-0 py-1 px-2 rounded-top-0"
+      class="bg-body text-dark rounded-1 m-0 py-1 px-2 text-break rounded-top-0"
       data-testid="json-block"
       style="display: block; overflow-x: auto; padding: 0.5em; color: rgb(0, 0, 0); background: rgb(248, 248, 255);"
     >
       <code
         class="language-json"
-        style="white-space: pre;"
+        style="white-space: pre-wrap;"
       >
         <span>
-          {}
+          <span>
+            {}
+          </span>
         </span>
       </code>
     </pre>
   </div>
   <pre
-    class="bg-dark text-light rounded-1 m-0 py-1 px-2 "
+    class="bg-dark text-light rounded-1 m-0 py-1 px-2 text-break "
     data-testid="json-block"
     style="display: block; overflow-x: auto; padding: 0.5em; color: rgb(0, 0, 0); background: rgb(248, 248, 255);"
   >
     <code
       class="language-json"
-      style="white-space: pre;"
+      style="white-space: pre-wrap;"
     >
       <span>
-        {}
+        <span>
+          {}
+        </span>
       </span>
     </code>
   </pre>

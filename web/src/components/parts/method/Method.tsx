@@ -160,7 +160,7 @@ export default function Method({
                     data-testid="response-request-data"
                   >
                     <div className="fw-bolder small">Request JSON</div>
-                    <div>
+                    <div className="d-grid">
                       <JSONBlock dark={false} className="rounded-bottom-0">
                         <span className="small">Metadata</span>
                       </JSONBlock>

@@ -41,7 +41,7 @@ export default function Type({ type, dark, expanded }: TypeProps) {
   return (
     <div
       className={[
-        "card px-2 py-1 d-inline-block",
+        "card px-2 py-1 d-inline-block text-break",
         dark ? "bg-dark text-light" : "",
       ].join(" ")}
       data-testid="type-detail"
