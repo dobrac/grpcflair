@@ -58,6 +58,7 @@ export default function Authorization() {
         onChange={(e) => {
           setAuthorizationType(e.target.value as AuthorizationType);
         }}
+        className="mb-2"
       >
         {authorizationTypes.map((type) => (
           <option key={type} value={type}>
@@ -80,7 +81,7 @@ export default function Authorization() {
             onChange={(e) => setValue(e.target.value)}
           />
           <Button
-            variant="light"
+            variant="primary"
             type="submit"
             data-testid="metadata-authorization-set"
           >
