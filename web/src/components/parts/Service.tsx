@@ -1,12 +1,10 @@
 import Method from "@/components/parts/method/Method";
 import { Collapse } from "react-bootstrap";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
 import protobuf from "protobufjs";
 import MethodContextProvider from "@/contexts/MethodContext";
 import Options from "@/components/parts/helpers/Options";
+import CollapsibleHeader from "@/components/CollapsibleHeader";
 
 export interface ServiceProps {
   service: protobuf.Service;
@@ -17,11 +15,12 @@ export default function Service({ service }: ServiceProps) {
 
   return (
     <div className="d-grid pb-2" data-testid="service-detail">
-      <button
-        className="p-0 border-0 rounded-bottom-0 text-start btn hover-bg-darken py-2 "
+      <CollapsibleHeader
+        open={open}
         onClick={() => setOpen((open) => !open)}
+        className="border-0 rounded-bottom-0 px-2"
       >
-        <div className="d-flex justify-content-between align-items-center py-1 px-2">
+        <div className="d-flex justify-content-between align-items-center py-1">
           <div>
             <div className="fw-bold fs-5">
               {service.fullName.replace(".", "")}
@@ -31,15 +30,8 @@ export default function Service({ service }: ServiceProps) {
           <div className="flex-grow-1 small text-secondary whitespace-pre ms-3">
             {service.comment}
           </div>
-          <div>
-            {open ? (
-              <FontAwesomeIcon icon={faChevronUp} />
-            ) : (
-              <FontAwesomeIcon icon={faChevronDown} />
-            )}
-          </div>
         </div>
-      </button>
+      </CollapsibleHeader>
       <hr className="m-0" />
       <Collapse in={open}>
         <div>

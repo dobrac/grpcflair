@@ -7,7 +7,7 @@ import { context } from "../../tests/protobufjs-source";
 describe("Endpoints", () => {
   beforeEach(async () => {
     await act(async () => {
-      render(
+      return render(
         <SourceContext.Provider
           value={{
             hostname: DEFAULT_HOSTNAME,
@@ -37,5 +37,142 @@ describe("Endpoints", () => {
   it("renders enums", async () => {
     const services = screen.getByTestId("enums");
     expect(services).toBeInTheDocument();
+  });
+
+  it("collapse services", async () => {
+    const services = screen.getByTestId("services");
+
+    const button = services.querySelector("button");
+    expect(button).toBeInTheDocument();
+    if (!button) {
+      throw new Error("Button not found");
+    }
+
+    const detailsVisible = screen.queryAllByTestId("service-detail");
+    detailsVisible.forEach((detail) => {
+      expect(detail).toBeVisible();
+    });
+
+    await act(async () => {
+      button.click();
+    });
+
+    new Promise((resolve) => {
+      setTimeout(() => {
+        const detailsHidden = screen.queryAllByTestId("service-detail");
+        detailsHidden.forEach((detail) => {
+          expect(detail).not.toBeVisible();
+        });
+        resolve(undefined);
+      }, 1000);
+    });
+  });
+
+  it("collapse types", async () => {
+    const services = screen.getByTestId("types");
+
+    const button = services.querySelector("button");
+    expect(button).toBeInTheDocument();
+    if (!button) {
+      throw new Error("Button not found");
+    }
+
+    const detailsVisible = screen.queryAllByTestId("type-detail");
+    detailsVisible.forEach((detail) => {
+      expect(detail).toBeVisible();
+    });
+
+    await act(async () => {
+      button.click();
+    });
+
+    new Promise((resolve) => {
+      setTimeout(() => {
+        const detailsHidden = screen.queryAllByTestId("type-detail");
+        detailsHidden.forEach((detail) => {
+          expect(detail).not.toBeVisible();
+        });
+        resolve(undefined);
+      }, 1000);
+    });
+  });
+
+  it("collapse enums", async () => {
+    const services = screen.getByTestId("enums");
+
+    const button = services.querySelector("button");
+    expect(button).toBeInTheDocument();
+    if (!button) {
+      throw new Error("Button not found");
+    }
+
+    const detailsVisible = screen.queryAllByTestId("enum-detail");
+    detailsVisible.forEach((detail) => {
+      expect(detail).toBeVisible();
+    });
+
+    await act(async () => {
+      button.click();
+    });
+
+    new Promise((resolve) => {
+      setTimeout(() => {
+        const detailsHidden = screen.queryAllByTestId("enum-detail");
+        detailsHidden.forEach((detail) => {
+          expect(detail).not.toBeVisible();
+        });
+        resolve(undefined);
+      }, 1000);
+    });
+  });
+});
+
+describe("Endpoints Errors", () => {
+  it("renders error", async () => {
+    const errorMessage = "Test error";
+    const rendered = await act(async () => {
+      return render(
+        <SourceContext.Provider
+          value={{
+            hostname: DEFAULT_HOSTNAME,
+            setHostname: jest.fn(),
+            context: undefined,
+            setContext: jest.fn(),
+            error: new Error(errorMessage),
+            setError: jest.fn(),
+          }}
+        >
+          <Endpoints />
+        </SourceContext.Provider>,
+      );
+    });
+
+    const containerElement = rendered.container.firstChild;
+    expect(containerElement).toHaveTextContent(errorMessage);
+
+    const services = rendered.queryByTestId("services");
+    expect(services).not.toBeInTheDocument();
+  });
+
+  it("renders no context", async () => {
+    const rendered = await act(async () => {
+      return render(
+        <SourceContext.Provider
+          value={{
+            hostname: DEFAULT_HOSTNAME,
+            setHostname: jest.fn(),
+            context: undefined,
+            setContext: jest.fn(),
+            error: undefined,
+            setError: jest.fn(),
+          }}
+        >
+          <Endpoints />
+        </SourceContext.Provider>,
+      );
+    });
+
+    const services = rendered.queryByTestId("services");
+    expect(services).not.toBeInTheDocument();
   });
 });
