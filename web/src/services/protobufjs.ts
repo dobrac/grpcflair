@@ -156,8 +156,9 @@ export function getRequestType(method: protobuf.Method): RequestType {
 export function getColorFromMethodType(method: protobuf.Method): string {
   switch (getRequestType(method)) {
     case RequestType.BIDIRECTIONAL_STREAMING:
-    case RequestType.CLIENT_STREAMING:
       return "danger";
+    case RequestType.CLIENT_STREAMING:
+      return "warning";
     case RequestType.SERVER_STREAMING:
       return "dark";
     case RequestType.UNARY:

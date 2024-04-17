@@ -1,6 +1,6 @@
 import { Badge, Collapse, ProgressBar, Spinner } from "react-bootstrap";
 import protobuf from "protobufjs";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
@@ -78,8 +78,19 @@ export default function Method({
     method.comment ?? "",
   );
 
+  const style = { "--bs-bg-opacity": 0.1 } as CSSProperties;
+
   return (
-    <div key={method.name} className={"card bg-" + color + "-subtle"}>
+    <div
+      key={method.name}
+      className={[
+        "card",
+        `bg-${color}`,
+        `border-${color}-subtle`,
+        "shadow-sm",
+      ].join(" ")}
+      style={style}
+    >
       <button
         className="p-0 border-0 rounded-bottom-0 text-start btn hover-bg-darken py-2 px-3"
         onClick={() => setOpen((open) => !open)}
