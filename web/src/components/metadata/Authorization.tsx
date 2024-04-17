@@ -58,6 +58,7 @@ export default function Authorization() {
         onChange={(e) => {
           setAuthorizationType(e.target.value as AuthorizationType);
         }}
+        data-testid="metadata-authorization-select"
         className="mb-2"
       >
         {authorizationTypes.map((type) => (
