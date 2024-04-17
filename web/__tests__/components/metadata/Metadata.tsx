@@ -6,7 +6,11 @@ import {
   MetadataContext,
   MetadataContextData,
 } from "@/contexts/MetadataContext";
-import { AUTHORIZATION_METADATA_KEY } from "@/types/constants";
+import {
+  AuthorizationType,
+  typeToKey,
+  typeToPrefix,
+} from "@/components/metadata/Authorization";
 
 describe("Metadata", () => {
   const service = context.lookupService("helloworld.Greeter");
@@ -193,8 +197,8 @@ describe("Metadata", () => {
       button.click();
     });
 
-    expect(metadata[AUTHORIZATION_METADATA_KEY]).toBe(
-      `Bearer ${myPrivateToken}`,
+    expect(metadata[typeToKey[AuthorizationType.BEARER]]).toBe(
+      `${typeToPrefix[AuthorizationType.BEARER]} ${myPrivateToken}`,
     );
   });
 });
