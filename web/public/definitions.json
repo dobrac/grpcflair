@@ -1322,10 +1322,7 @@
     },
     "routeguide": {
       "options": {
-        "java_multiple_files": true,
-        "java_package": "io.grpc.examples.routeguide",
-        "java_outer_classname": "RouteGuideProto",
-        "objc_class_prefix": "RTG"
+        "java_package": "io.grpc.examples.routeguide"
       },
       "nested": {
         "RouteGuide": {
