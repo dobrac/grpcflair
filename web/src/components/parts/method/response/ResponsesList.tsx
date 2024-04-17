@@ -9,9 +9,17 @@ export default function ResponsesList({ responses }: { responses: unknown[] }) {
     <div className="d-grid gap-2">
       {responses.map((response, index) => (
         <div key={index}>
-          <JSONBlock>{JSON.stringify(response, null, 2)}</JSONBlock>
+          <JSONBlock>
+            <div className="text-secondary small">Response {index + 1}</div>
+            <JSONBlock>{JSON.stringify(response, null, 2)}</JSONBlock>
+          </JSONBlock>
         </div>
       ))}
+      <JSONBlock>
+        <span className="text-secondary small">
+          Total messages: {responses.length}
+        </span>
+      </JSONBlock>
     </div>
   );
 }
