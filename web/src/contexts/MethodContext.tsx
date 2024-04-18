@@ -20,13 +20,13 @@ import { Metadata } from "@/contexts/MetadataContext";
 
 type CancelFunction = () => void;
 
-interface MethodRequest {
+export interface MethodRequest {
   format: GrpcWebFormat;
   metadata?: Metadata;
   message?: object;
 }
 
-interface MethodResponse {
+export interface MethodResponse {
   error?: Error;
   headers?: Metadata;
   trailers?: Metadata;
@@ -40,14 +40,14 @@ export interface MethodFunctions {
   setCancelFunction: Dispatch<SetStateAction<CancelFunction | undefined>>;
 }
 
-interface MethodContextData {
+export interface MethodContextData {
   functions: MethodFunctions;
   request: MethodRequest;
   response?: MethodResponse;
   processing: boolean;
 }
 
-const defaultValues: MethodContextData = {
+export const defaultMethodContextData: MethodContextData = {
   processing: false,
   request: {
     format: GrpcWebFormat.TEXT,
@@ -59,7 +59,9 @@ const defaultValues: MethodContextData = {
   },
 };
 
-export const SourceContext = createContext<MethodContextData>(defaultValues);
+export const SourceContext = createContext<MethodContextData>(
+  defaultMethodContextData,
+);
 
 export function useMethodContext() {
   return useContext(SourceContext);
@@ -78,13 +80,13 @@ export default function MethodContextProvider({
 
   const [cancelFunction, setCancelFunction] = useState<
     CancelFunction | undefined
-  >(defaultValues.functions.cancel);
+  >(defaultMethodContextData.functions.cancel);
 
   const [request, setRequest] = useState<MethodRequest>({
-    ...defaultValues.request,
+    ...defaultMethodContextData.request,
   });
   const [response, setResponse] = useState<MethodResponse | undefined>(
-    defaultValues.response,
+    defaultMethodContextData.response,
   );
 
   const processing = !!cancelFunction;
