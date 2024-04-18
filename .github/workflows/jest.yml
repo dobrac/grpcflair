@@ -42,7 +42,7 @@ jobs:
         run: pnpm install
 
       - name: Run Jest
-        run: cd web && pnpm test:ci
+        run: pnpm --filter web test:ci
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
