@@ -42,7 +42,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Jest
-        run: pnpm --filter web test:ci
+        run: pnpm --filter web test
 
       - name: Upload Web Coverage
         uses: actions/upload-artifact@v3
