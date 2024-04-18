@@ -7,7 +7,7 @@ export default function ResponseError({ error }: { error: Error | undefined }) {
   }
 
   return (
-    <div className="text-white bg-danger p-2 rounded-1">
+    <div className="text-white bg-danger p-2 rounded-1 small">
       {error instanceof RpcError && (
         <>
           <div>Error {error.code}</div>

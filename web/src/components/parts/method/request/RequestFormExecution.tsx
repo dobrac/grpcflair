@@ -50,11 +50,12 @@ export default function RequestFormExecution({
   ) => {
     const backend = backends[SELECTED_BACKEND][type];
     if (!backend) {
-      functions.setResponse({
+      functions.setResponse((it) => ({
+        ...it,
         error: new Error(
           `${getRequestTypeDisplayName(type)} is not supported yet`,
         ),
-      });
+      }));
       return;
     }
     await backend(
@@ -107,14 +108,17 @@ export default function RequestFormExecution({
     } catch (e) {
       console.error(e);
       if (e instanceof Error) {
-        functions.setResponse({
-          error: e,
-        });
+        const error = e;
+        functions.setResponse((it) => ({
+          ...it,
+          error,
+        }));
       }
       if (e instanceof CancelError) {
-        functions.setResponse({
+        functions.setResponse((it) => ({
+          ...it,
           error: new Error("Request canceled"),
-        });
+        }));
       }
     } finally {
       functions.setCancelFunction(undefined);
