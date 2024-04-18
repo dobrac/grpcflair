@@ -28,3 +28,15 @@ $primary: green;
     align-items: center;
   }
 }
+
+.grid-settings-global {
+  grid-template-columns: auto auto 1fr;
+
+  @include media-breakpoint-down(lg) {
+    grid-template-columns: auto;
+
+    button, input {
+      width: 100% !important;
+    }
+  }
+}
