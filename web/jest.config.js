@@ -21,7 +21,10 @@ const customJestConfig = {
   coveragePathIgnorePatterns: ["/node_modules/", "/tests/", "/src/contexts/"],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  coverageProvider: "babel",
+
+  // A list of reporter names that Jest uses when writing coverage reports
+  coverageReporters: ["json", "lcov", "text", "clover", "text", "cobertura"],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
