@@ -1,4 +1,5 @@
 # gRPCFlair
+[![codecov](https://codecov.io/gh/dobrac/grpcflair/graph/badge.svg?token=GzeSiZBZNg)](https://codecov.io/gh/dobrac/grpcflair)
 
 This is a tool to help you interact with gRPC services. You can use it to explore the service's endpoints and make requests to them, browse types and enums, and preview options.
 

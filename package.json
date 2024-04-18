@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "clean": "lerna clean --yes && rimraf node_modules",
+    "test": "lerna run test",
     "proto-to-json": "gf-proto-to-json",
     "reflection-to-json": "gf-reflection-to-json",
     "generateExample": "gf-proto-to-json example/definitions/protos/helloworld.proto > web/public/definitions.json",
