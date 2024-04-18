@@ -1,25 +1,49 @@
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { FormEvent, useState } from "react";
 import { useMetadataContext } from "@/contexts/MetadataContext";
-import { AUTHORIZATION_METADATA_KEY } from "@/types/constants";
 
-const VALUE_PREFIX = "Bearer ";
+export enum AuthorizationType {
+  BEARER = "BEARER",
+  BASIC = "BASIC",
+  API_KEY = "API_KEY",
+}
+
+export const typeToKey: Record<AuthorizationType, string> = {
+  [AuthorizationType.BEARER]: "authorization",
+  [AuthorizationType.BASIC]: "authorization",
+  [AuthorizationType.API_KEY]: "api_key",
+};
+
+export const typeToPrefix: Record<AuthorizationType, string> = {
+  [AuthorizationType.BEARER]: "Bearer",
+  [AuthorizationType.BASIC]: "Basic",
+  [AuthorizationType.API_KEY]: "",
+};
 
 /**
  * Authorization input form
  */
 export default function Authorization() {
   const [value, setValue] = useState("");
+  const authorizationTypes = Object.values(AuthorizationType);
+  const [authorizationType, setAuthorizationType] = useState(
+    AuthorizationType.BEARER,
+  );
 
   const { setMetadata } = useMetadataContext();
 
-  const handleMetadataAdd = async (event: FormEvent<HTMLFormElement>) => {
+  const handleMetadataAdd = async (
+    type: AuthorizationType,
+    event: FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
+
+    const key = typeToKey[type];
+    const prefix = typeToPrefix[type];
 
     setMetadata((metadata) => ({
       ...metadata,
-      [AUTHORIZATION_METADATA_KEY]:
-        VALUE_PREFIX + value.replace(VALUE_PREFIX, ""),
+      [key]: (prefix + " " + value.replace(prefix, "")).trim(),
     }));
 
     setValue("");
@@ -28,7 +52,28 @@ export default function Authorization() {
   return (
     <div>
       <div className="fw-bolder">Authorization</div>
-      <Form onSubmit={handleMetadataAdd} style={{ gridColumn: "span 3" }}>
+      <Form.Select
+        size="sm"
+        value={authorizationType}
+        onChange={(e) => {
+          setAuthorizationType(e.target.value as AuthorizationType);
+        }}
+        data-testid="metadata-authorization-select"
+        className="mb-2"
+      >
+        {authorizationTypes.map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
+      </Form.Select>
+      <Form
+        onSubmit={handleMetadataAdd.bind(null, authorizationType)}
+        className="d-flex align-items-center gap-1"
+        style={{ gridColumn: "span 3" }}
+      >
+        <div>{typeToKey[authorizationType]}:</div>
+        <div>{typeToPrefix[authorizationType]}</div>
         <InputGroup>
           <Form.Control
             type="input"
@@ -37,7 +82,7 @@ export default function Authorization() {
             onChange={(e) => setValue(e.target.value)}
           />
           <Button
-            variant="light"
+            variant="primary"
             type="submit"
             data-testid="metadata-authorization-set"
           >

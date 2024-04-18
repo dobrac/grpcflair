@@ -29,33 +29,39 @@ export default function Home() {
           <p className="mt-4 text-secondary">{description}</p>
         </div>
       </div>
-      <div className="container py-3 d-flex flex-wrap column-gap-5 row-gap-2 align-items-end">
-        <div className="d-inline-block">
+      <div className="container py-3 d-grid column-gap-4 row-gap-4 align-items-center grid-settings-global">
+        <div>
           Method
-          <Form.Select aria-label="Method selection">
+          <Form.Select
+            aria-label="Method selection"
+            style={{ width: "10rem" }}
+            size="sm"
+          >
             <option value="web">grpc-web</option>
             <option value="server" disabled={true}>
               grpc-server (NOT IMPLEMENTED)
             </option>
           </Form.Select>
         </div>
-        <div className="flex-grow-1">
+        <div>
           <div>Base gRPC Url</div>
           <Form.Control
             as="input"
-            className="w-100"
             onChange={(e) => setHostname(e.target.value)}
             value={hostname}
+            size="sm"
+            style={{ width: "20rem" }}
             data-testid="hostname-input"
           />
         </div>
-        <div>
+        <hr className="d-block d-lg-none" />
+        <div className="ms-lg-auto">
           <Button
             variant="outline-primary"
             onClick={() => setShowMetadataModal(true)}
             data-testid="metadata-button"
           >
-            Metadata
+            Metadata & Authorization
           </Button>
           <MetadataModal
             show={showMetadataModal}

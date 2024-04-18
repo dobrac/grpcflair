@@ -1,6 +1,6 @@
 import { Badge, Collapse, ProgressBar, Spinner } from "react-bootstrap";
 import protobuf from "protobufjs";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons/faChevronUp";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
@@ -22,6 +22,7 @@ import SectionBody from "./section/SectionBody";
 import SectionHeader from "@/components/parts/method/section/SectionHeader";
 import RequestForm from "@/components/parts/method/request/RequestForm";
 import Options from "@/components/parts/helpers/Options";
+import CollapsibleHeader from "@/components/CollapsibleHeader";
 
 const COMMENT_DELIMITER = "\n";
 
@@ -78,10 +79,22 @@ export default function Method({
     method.comment ?? "",
   );
 
+  const style = { "--bs-bg-opacity": 0.1 } as CSSProperties;
+
   return (
-    <div key={method.name} className={"card bg-" + color + "-subtle"}>
-      <button
-        className="p-0 border-0 rounded-bottom-0 text-start btn hover-bg-darken py-2 px-3"
+    <div
+      key={method.name}
+      className={[
+        "card",
+        `bg-${color}`,
+        `border-${color}-subtle`,
+        "shadow-sm",
+      ].join(" ")}
+      style={style}
+    >
+      <CollapsibleHeader
+        className="border-0 rounded-bottom-0 px-3"
+        open={open}
         onClick={() => setOpen((open) => !open)}
       >
         <div className="d-flex align-items-center gap-2">
@@ -98,21 +111,14 @@ export default function Method({
             {/* Show only first line in the collapsed state */}
             {commentFirstLine}
           </div>
-          <div>
-            {open ? (
-              <FontAwesomeIcon icon={faChevronUp} />
-            ) : (
-              <FontAwesomeIcon icon={faChevronDown} />
-            )}
-          </div>
         </div>
-      </button>
+      </CollapsibleHeader>
       <Collapse in={open}>
         <div>
           <div className="d-grid gap-2">
             {!!commentRest && (
               <SectionBody>
-                <div className="small text-secondary whitespace-pre">
+                <div className="small text-secondary whitespace-pre-wrap">
                   {commentRest}
                 </div>
               </SectionBody>
@@ -168,7 +174,7 @@ export default function Method({
                         {JSON.stringify(request.metadata, null, 2)}
                       </JSONBlock>
                     </div>
-                    <JSONBlock>
+                    <JSONBlock dark={false}>
                       {JSON.stringify(request.message, null, 2)}
                     </JSONBlock>
                   </div>

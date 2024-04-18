@@ -79,7 +79,7 @@ export default function HeadersTable({}: MetadataTableProps) {
               data-testid="metadata-input-value"
             />
             <Button
-              variant="light"
+              variant="primary"
               type="submit"
               data-testid="metadata-input-add"
             >

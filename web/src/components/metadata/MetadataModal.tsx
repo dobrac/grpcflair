@@ -27,7 +27,9 @@ export default function MetadataModal(props: MetadataModalProps) {
         <Authorization />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onHide}>Close</Button>
+        <Button variant="secondary" onClick={onHide}>
+          Close
+        </Button>
       </Modal.Footer>
     </Modal>
   );

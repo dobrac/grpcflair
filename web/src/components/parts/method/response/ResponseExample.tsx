@@ -1,5 +1,6 @@
 import Type from "@/components/parts/Type";
 import protobuf from "protobufjs";
+import { StatusCode } from "grpc-web";
 
 export default function ResponseExample({
   responseType,
@@ -16,8 +17,10 @@ export default function ResponseExample({
       </thead>
       <tbody>
         <tr>
-          <td className="align-top">0</td>
-          <td className="py-2">
+          <td className="align-top">{StatusCode.OK}</td>
+          <td>
+            OK
+            <div className="small text-secondary">Response message type</div>
             {!responseType && (
               <div className="text-secondary">No response type</div>
             )}
