@@ -17,7 +17,7 @@ export default function ResponsesList({ responses }: { responses: unknown[] }) {
       ))}
       <JSONBlock>
         <span className="text-secondary small">
-          Total messages: {responses.length}
+          Total responses: {responses.length}
         </span>
       </JSONBlock>
     </div>
