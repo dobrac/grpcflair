@@ -41,7 +41,7 @@ exports[`Method renders - execution 1`] = `
     </pre>
   </div>
   <pre
-    class="bg-dark text-light rounded-1 m-0 py-1 px-2 text-break "
+    class="bg-body text-dark rounded-1 m-0 py-1 px-2 text-break "
     data-testid="json-block"
     style="display: block; overflow-x: auto; padding: 0.5em; color: rgb(0, 0, 0); background: rgb(248, 248, 255);"
   >

@@ -174,7 +174,7 @@ export default function Method({
                         {JSON.stringify(request.metadata, null, 2)}
                       </JSONBlock>
                     </div>
-                    <JSONBlock>
+                    <JSONBlock dark={false}>
                       {JSON.stringify(request.message, null, 2)}
                     </JSONBlock>
                   </div>
