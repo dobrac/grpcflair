@@ -44,6 +44,12 @@ jobs:
       - name: Run Jest
         run: pnpm --filter web test:ci
 
+      - name: Upload Web Coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-web
+          path: web/coverage
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
