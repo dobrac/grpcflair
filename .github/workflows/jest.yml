@@ -23,6 +23,10 @@ jobs:
         name: Install pnpm
         with:
           version: 8
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile, --strict-peer-dependencies]
+            - args: [--global, gulp, prettier, typescript]
 #          run_install: false
 #
 #      - name: Get pnpm store directory
