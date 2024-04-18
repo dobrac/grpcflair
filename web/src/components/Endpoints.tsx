@@ -82,7 +82,7 @@ export default function Endpoints() {
 
   return (
     <div>
-      <div data-testid="services">
+      <div>
         <CollapsibleHeader
           className={categoryClasses}
           open={openState[Category.SERVICES]}
@@ -93,7 +93,7 @@ export default function Endpoints() {
           <span className="h4 mb-0">Services</span>
         </CollapsibleHeader>
         <Collapse in={openState[Category.SERVICES]}>
-          <div>
+          <div data-testid="services">
             {services.map((service) => (
               <Service key={service.fullName} service={service} />
             ))}
@@ -103,7 +103,7 @@ export default function Endpoints() {
           </div>
         </Collapse>
       </div>
-      <div data-testid="types" className="mt-5">
+      <div className="mt-5">
         <CollapsibleHeader
           className={categoryClasses + " mb-2"}
           open={openState[Category.TYPES]}
@@ -114,7 +114,7 @@ export default function Endpoints() {
           <span className="h4 mb-0">Types</span>
         </CollapsibleHeader>
         <Collapse in={openState[Category.TYPES]}>
-          <div>
+          <div data-testid="types">
             <div className="d-grid gap-2">
               {types.map((type) => (
                 <Type key={type.fullName} type={type} />
@@ -126,7 +126,7 @@ export default function Endpoints() {
           </div>
         </Collapse>
       </div>
-      <div data-testid="enums" className="mt-5">
+      <div className="mt-5">
         <CollapsibleHeader
           className={categoryClasses + " mb-2"}
           open={openState[Category.ENUMS]}
@@ -137,7 +137,7 @@ export default function Endpoints() {
           <span className="h4 mb-0">Enums</span>
         </CollapsibleHeader>
         <Collapse in={openState[Category.ENUMS]}>
-          <div>
+          <div data-testid="enums">
             <div className="d-grid gap-2">
               {enums.map((enumType) => (
                 <EnumType key={enumType.fullName} enumType={enumType} />

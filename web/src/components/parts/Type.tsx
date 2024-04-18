@@ -45,6 +45,7 @@ export default function Type({ type, dark, expanded }: TypeProps) {
         dark ? "bg-dark text-light" : "",
       ].join(" ")}
       data-testid="type-detail"
+      data-type-name={type.fullName}
     >
       <button
         className={[

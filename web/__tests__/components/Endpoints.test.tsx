@@ -1,10 +1,9 @@
+import "../../tests/mocks/react-bootstrap";
 import { act, render, screen } from "@testing-library/react";
 import Endpoints from "@/components/Endpoints";
 import { SourceContext } from "@/contexts/SourceContext";
 import { DEFAULT_HOSTNAME } from "@/types/constants";
 import { context } from "../../tests/protobufjs-source";
-
-const COLLAPSE_TIMEOUT = 2000;
 
 describe("Endpoints", () => {
   beforeEach(async () => {
@@ -43,89 +42,53 @@ describe("Endpoints", () => {
 
   it("collapse services", async () => {
     const services = screen.getByTestId("services");
+    expect(services).toBeVisible();
 
-    const button = services.querySelector("button");
+    const button = screen.getByText("Services");
     expect(button).toBeInTheDocument();
     if (!button) {
       throw new Error("Button not found");
     }
 
-    const detailsVisible = screen.queryAllByTestId("service-detail");
-    detailsVisible.forEach((detail) => {
-      expect(detail).toBeVisible();
-    });
-
     await act(async () => {
       button.click();
     });
 
-    new Promise((resolve) => {
-      setTimeout(() => {
-        const detailsHidden = screen.queryAllByTestId("service-detail");
-        detailsHidden.forEach((detail) => {
-          expect(detail).not.toBeVisible();
-        });
-        resolve(undefined);
-      }, COLLAPSE_TIMEOUT);
-    });
+    expect(services).not.toBeVisible();
   });
 
   it("collapse types", async () => {
-    const services = screen.getByTestId("types");
+    const types = screen.getByTestId("types");
+    expect(types).toBeVisible();
 
-    const button = services.querySelector("button");
+    const button = screen.getByText("Types");
     expect(button).toBeInTheDocument();
     if (!button) {
       throw new Error("Button not found");
     }
 
-    const detailsVisible = screen.queryAllByTestId("type-detail");
-    detailsVisible.forEach((detail) => {
-      expect(detail).toBeVisible();
-    });
-
     await act(async () => {
       button.click();
     });
 
-    new Promise((resolve) => {
-      setTimeout(() => {
-        const detailsHidden = screen.queryAllByTestId("type-detail");
-        detailsHidden.forEach((detail) => {
-          expect(detail).not.toBeVisible();
-        });
-        resolve(undefined);
-      }, COLLAPSE_TIMEOUT);
-    });
+    expect(types).not.toBeVisible();
   });
 
   it("collapse enums", async () => {
-    const services = screen.getByTestId("enums");
+    const enums = screen.getByTestId("enums");
+    expect(enums).toBeVisible();
 
-    const button = services.querySelector("button");
+    const button = screen.getByText("Enums");
     expect(button).toBeInTheDocument();
     if (!button) {
       throw new Error("Button not found");
     }
 
-    const detailsVisible = screen.queryAllByTestId("enum-detail");
-    detailsVisible.forEach((detail) => {
-      expect(detail).toBeVisible();
-    });
-
     await act(async () => {
       button.click();
     });
 
-    new Promise((resolve) => {
-      setTimeout(() => {
-        const detailsHidden = screen.queryAllByTestId("enum-detail");
-        detailsHidden.forEach((detail) => {
-          expect(detail).not.toBeVisible();
-        });
-        resolve(undefined);
-      }, COLLAPSE_TIMEOUT);
-    });
+    expect(enums).not.toBeVisible();
   });
 });
 
