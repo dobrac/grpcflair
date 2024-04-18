@@ -12,6 +12,8 @@ import {
   getRequestTypeDisplayName,
   RequestType,
 } from "@/services/protobufjs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay } from "@fortawesome/free-solid-svg-icons/faPlay";
 
 const ERROR_DELIMITER = ": ";
 
@@ -126,31 +128,43 @@ export default function RequestFormExecution({
           Problems found in the request. Please fix them before executing.
         </div>
       )}
-      <Button
-        size="sm"
-        variant={isValid ? "primary" : "danger"}
-        disabled={processing || !isValid}
-        onClick={handleSubmit(handleExecute)}
-        data-testid="method-execute-button"
+      <div
+        className="d-grid gap-1"
+        style={{
+          gridTemplateColumns: "repeat(auto-fill, 1fr)",
+          gridAutoFlow: "column",
+        }}
       >
-        <Spinner
-          size="sm"
-          className={processing ? "visible" : "visually-hidden"}
-        />{" "}
-        Execute
-      </Button>
-      {processing && (
         <Button
           size="sm"
-          variant="danger"
-          onClick={() => {
-            functions.cancel?.();
-          }}
-          data-testid="method-cancel-button"
+          variant={isValid ? "success" : "danger"}
+          disabled={processing || !isValid}
+          onClick={handleSubmit(handleExecute)}
+          data-testid="method-execute-button"
+          className="border border-1 border-dark"
         >
-          Cancel
+          <span className="me-2">
+            {processing ? (
+              <Spinner size="sm" />
+            ) : (
+              <FontAwesomeIcon icon={faPlay} />
+            )}
+          </span>
+          Execute
         </Button>
-      )}
+        {processing && (
+          <Button
+            size="sm"
+            variant="danger"
+            onClick={() => {
+              functions.cancel?.();
+            }}
+            data-testid="method-cancel-button"
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
