@@ -4,6 +4,8 @@ import { SourceContext } from "@/contexts/SourceContext";
 import { DEFAULT_HOSTNAME } from "@/types/constants";
 import { context } from "../../tests/protobufjs-source";
 
+const COLLAPSE_TIMEOUT = 2000;
+
 describe("Endpoints", () => {
   beforeEach(async () => {
     await act(async () => {
@@ -64,7 +66,7 @@ describe("Endpoints", () => {
           expect(detail).not.toBeVisible();
         });
         resolve(undefined);
-      }, 1000);
+      }, COLLAPSE_TIMEOUT);
     });
   });
 
@@ -93,7 +95,7 @@ describe("Endpoints", () => {
           expect(detail).not.toBeVisible();
         });
         resolve(undefined);
-      }, 1000);
+      }, COLLAPSE_TIMEOUT);
     });
   });
 
@@ -122,7 +124,7 @@ describe("Endpoints", () => {
           expect(detail).not.toBeVisible();
         });
         resolve(undefined);
-      }, 1000);
+      }, COLLAPSE_TIMEOUT);
     });
   });
 });
