@@ -16,7 +16,7 @@ export default function FieldComment({ field }: FieldCommentProps) {
         "fst-italic",
         "small",
         "text-secondary",
-        "whitespace-pre",
+        "whitespace-pre-wrap",
       ].join(" ")}
     >
       {field.comment}

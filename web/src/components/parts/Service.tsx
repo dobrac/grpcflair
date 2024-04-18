@@ -20,16 +20,16 @@ export default function Service({ service }: ServiceProps) {
         onClick={() => setOpen((open) => !open)}
         className="border-0 rounded-bottom-0 px-2"
       >
-        <div className="d-flex justify-content-between align-items-center py-1">
+        <div className="py-1 d-grid gap-2">
           <div>
-            <div className="fw-bold fs-5">
+            <span className="fw-bold fs-5">
               {service.fullName.replace(".", "")}
-            </div>
-            <Options reflectionObject={service} />
+            </span>
+            <span className="small text-secondary whitespace-pre-wrap mx-3">
+              {service.comment}
+            </span>
           </div>
-          <div className="flex-grow-1 small text-secondary whitespace-pre ms-3">
-            {service.comment}
-          </div>
+          <Options reflectionObject={service} />
         </div>
       </CollapsibleHeader>
       <hr className="m-0" />

@@ -118,7 +118,7 @@ export default function Method({
           <div className="d-grid gap-2">
             {!!commentRest && (
               <SectionBody>
-                <div className="small text-secondary whitespace-pre">
+                <div className="small text-secondary whitespace-pre-wrap">
                   {commentRest}
                 </div>
               </SectionBody>

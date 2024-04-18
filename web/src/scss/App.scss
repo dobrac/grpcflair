@@ -15,6 +15,10 @@ $primary: green;
   white-space: pre;
 }
 
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
 .grid-metadata {
   display: grid;
   grid-template-columns: 1fr 1fr 38px;
