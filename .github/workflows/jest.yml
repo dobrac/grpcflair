@@ -49,4 +49,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: dobrac/grpcflair
+          verbose: true
+          files: ./web/coverage/cobertura-coverage.xml
 
