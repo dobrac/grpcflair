@@ -1,10 +1,11 @@
 "use client";
-import { Button, Form } from "react-bootstrap";
+import { Badge, Button, Form } from "react-bootstrap";
 import { useSourceContext } from "../contexts/SourceContext";
 import dynamic from "next/dynamic";
 import { Suspense, useState } from "react";
 import MetadataModal from "../components/metadata/MetadataModal";
 import HandleUrlHostnameParam from "@/components/HandleUrlHostnameParam";
+import { useMetadataContext } from "@/contexts/MetadataContext";
 
 const Endpoints = dynamic(() => import("../components/Endpoints"), {
   ssr: false,
@@ -17,6 +18,7 @@ export default function Home() {
     "This is a tool to help you interact with gRPC services. You can use it to explore the service's endpoints and make requests to them, browse types and enums, and preview options.";
 
   const [showMetadataModal, setShowMetadataModal] = useState(false);
+  const { metadata } = useMetadataContext();
 
   return (
     <main>
@@ -61,6 +63,11 @@ export default function Home() {
             onClick={() => setShowMetadataModal(true)}
             data-testid="metadata-button"
           >
+            {metadata && Object.keys(metadata).length > 0 && (
+              <Badge bg="dark" className="me-2">
+                {Object.keys(metadata).length}
+              </Badge>
+            )}
             Metadata & Authorization
           </Button>
           <MetadataModal

@@ -174,9 +174,14 @@ export default function Method({
                         {JSON.stringify(request.metadata, null, 2)}
                       </JSONBlock>
                     </div>
-                    <JSONBlock dark={false}>
-                      {JSON.stringify(request.message, null, 2)}
-                    </JSONBlock>
+                    <div className="d-grid">
+                      <JSONBlock dark={false} className="rounded-bottom-0">
+                        <span className="small">Request data</span>
+                      </JSONBlock>
+                      <JSONBlock dark={false}>
+                        {JSON.stringify(request.message, null, 2)}
+                      </JSONBlock>
+                    </div>
                   </div>
                   <div
                     className="d-grid gap-2"
