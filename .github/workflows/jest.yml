@@ -17,7 +17,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - uses: pnpm/action-setup@v3
         name: Install pnpm
@@ -45,7 +45,7 @@ jobs:
         run: pnpm --filter web test:ci
 
       - name: Upload Web Coverage
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-web
           path: web/coverage
