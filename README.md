@@ -3,6 +3,8 @@
 
 This is a tool to help you interact with gRPC services. You can use it to explore the service's endpoints and make requests to them, browse types and enums, and preview options.
 
+![preview](https://github.com/dobrac/diploma_thesis/blob/main/images/implementation/screenshots/fullpage.png?raw=true)
+
 ## Prerequisites
 To run this application, you need to have the libraries installed.
 
